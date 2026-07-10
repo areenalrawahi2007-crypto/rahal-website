@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>المعدات | رحّال</title>
+<title>لوحة الإدارة | رحّال</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -66,86 +66,128 @@
   <main>
 <section class="page-hero">
     <div class="container">
-      <div class="breadcrumb"><a href="index.html">الرئيسية</a> / المعدات</div>
-      <h1>المعدات</h1>
-      <p>معدات غوص وتخييم ورحلات براً وبحراً بأفضل الأسعار</p>
+      <div class="breadcrumb"><a href="index.html">الرئيسية</a> / لوحة الإدارة</div>
+      <h1>لوحة الإدارة</h1>
+      <p>نظرة عامة على كل المنتجات والرحلات والموردين المعروضين حاليًا على المنصة</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <div class="toolbar">
-        <div class="filter-chips" id="tagChips"></div>
-        <select class="sort-select" id="sortSelect">
-          <option value="default">الترتيب الافتراضي</option>
-          <option value="price-asc">السعر: من الأقل للأعلى</option>
-          <option value="price-desc">السعر: من الأعلى للأقل</option>
-          <option value="name">الاسم (أ-ي)</option>
-        </select>
+      <div class="disclaimer-box" style="background:rgba(217,164,65,.12);border-color:rgba(217,164,65,.4);color:#6b4f18">
+        <strong>ملاحظة:</strong>
+        هذي لوحة نظرة عامة على المحتوى الحالي بالموقع (`data.js`) فقط. تتبّع الطلبات والحجوزات الفعلية وتسويات الموردين يحتاج ربط قاعدة بيانات حقيقية — التفاصيل بملف <code>PRODUCTION-ROADMAP.md</code>.
       </div>
-      <div class="product-grid" id="grid"></div>
-      <div class="empty-state" id="emptyState" style="display:none">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <p>ما فيه نتائج مطابقة. جرّب كلمة ثانية أو امسح الفلتر.</p>
+
+      <div class="dash-stats" id="dashStats"></div>
+
+      <div class="section-head" style="text-align:right;margin:40px 0 16px">
+        <div class="eyebrow">المنتجات</div>
+        <h2>كل المنتجات المعروضة (<span id="productsCount">0</span>)</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>الاسم</th><th>القسم</th><th>السعر</th><th>الوحدة</th><th>الوسوم</th></tr>
+          </thead>
+          <tbody id="productsTable"></tbody>
+        </table>
+      </div>
+
+      <div class="section-head" style="text-align:right;margin:40px 0 16px">
+        <div class="eyebrow">الرحلات المجهزة</div>
+        <h2>كل الرحلات (<span id="tripsCount">0</span>)</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>الرحلة</th><th>المدة</th><th>عدد العناصر بالحزمة</th><th>السعر الأساسي</th></tr>
+          </thead>
+          <tbody id="tripsTable"></tbody>
+        </table>
+      </div>
+
+      <div class="section-head" style="text-align:right;margin:40px 0 16px">
+        <div class="eyebrow">الموردون</div>
+        <h2>كل الموردين (<span id="suppliersCount">0</span>)</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>المورد</th><th>القسم</th><th>المدينة</th><th>التقييم</th></tr>
+          </thead>
+          <tbody id="suppliersTable"></tbody>
+        </table>
       </div>
     </div>
   </section>
 
   <script>
-    const CAT_ID = 'equipment';
-    let activeTag = null;
-    const params = new URLSearchParams(location.search);
-    let searchTerm = (params.get('q') || '').toLowerCase();
+    function tripBasePrice(trip) {
+      return trip.items.reduce((sum, item) => {
+        const p = findProduct(item.id);
+        return sum + (p ? p.price * item.qty : 0);
+      }, 0);
+    }
 
-    const items = PRODUCTS.filter(p => p.category === CAT_ID);
-    const allTags = [...new Set(items.flatMap(p => p.tags))].slice(0,8);
-
-    document.getElementById('tagChips').innerHTML =
-      `<button class="chip active" data-tag="">الكل</button>` +
-      allTags.map(t => `<button class="chip" data-tag="${t}">${t}</button>`).join('');
-
-    function renderGrid(){
-      let list = items.filter(p => {
-        const matchesTag = !activeTag || p.tags.includes(activeTag);
-        const matchesSearch = !searchTerm || (p.name+p.desc+p.tags.join(' ')).toLowerCase().includes(searchTerm);
-        return matchesTag && matchesSearch;
+    function renderStats() {
+      const stats = [
+        { label: 'إجمالي المنتجات', value: PRODUCTS.length },
+        { label: 'الرحلات المجهزة', value: TRIPS.length },
+        { label: 'الموردون المعتمدون', value: SUPPLIERS.length },
+      ];
+      CATEGORIES.filter(c => c.id !== 'trips').forEach(c => {
+        stats.push({ label: c.name, value: PRODUCTS.filter(p => p.category === c.id).length });
       });
-      const sort = document.getElementById('sortSelect').value;
-      if(sort === 'price-asc') list = [...list].sort((a,b)=>a.price-b.price);
-      if(sort === 'price-desc') list = [...list].sort((a,b)=>b.price-a.price);
-      if(sort === 'name') list = [...list].sort((a,b)=>a.name.localeCompare(b.name,'ar'));
-
-      document.getElementById('emptyState').style.display = list.length ? 'none' : 'block';
-      document.getElementById('grid').innerHTML = list.map(p => `
-        <div class="product-card">
-          <div class="product-media">${p.emoji}</div>
-          <div class="product-body">
-            <div class="product-cat">${p.tags[0] || ''}</div>
-            <div class="product-name">${p.name}</div>
-            <p class="product-desc">${p.desc}</p>
-            <div class="product-foot">
-              <div class="price">${p.price} ر.ع <small>/ ${p.unit}</small></div>
-              <button class="add-btn" data-id="${p.id}">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                أضف
-              </button>
-            </div>
-          </div>
+      document.getElementById('dashStats').innerHTML = stats.map(s => `
+        <div class="dash-stat">
+          <div class="dash-stat-value">${s.value}</div>
+          <div class="dash-stat-label">${s.label}</div>
         </div>
       `).join('');
     }
 
-    document.getElementById('tagChips').addEventListener('click', (e)=>{
-      const btn = e.target.closest('.chip');
-      if(!btn) return;
-      document.querySelectorAll('#tagChips .chip').forEach(c=>c.classList.remove('active'));
-      btn.classList.add('active');
-      activeTag = btn.dataset.tag || null;
-      renderGrid();
-    });
-    document.getElementById('sortSelect').addEventListener('change', renderGrid);
+    function renderProductsTable() {
+      document.getElementById('productsCount').textContent = PRODUCTS.length;
+      document.getElementById('productsTable').innerHTML = PRODUCTS.map(p => `
+        <tr>
+          <td>${p.emoji} ${p.name}</td>
+          <td>${CATEGORIES.find(c => c.id === p.category)?.name || p.category}</td>
+          <td>${p.price} ر.ع</td>
+          <td>${p.unit}</td>
+          <td>${p.tags.join('، ')}</td>
+        </tr>
+      `).join('');
+    }
 
-    renderGrid();
+    function renderTripsTable() {
+      document.getElementById('tripsCount').textContent = TRIPS.length;
+      document.getElementById('tripsTable').innerHTML = TRIPS.map(t => `
+        <tr>
+          <td>${t.emoji} ${t.name}</td>
+          <td>${t.days} ${t.days === 1 ? 'يوم' : 'أيام'}</td>
+          <td>${t.items.length}</td>
+          <td>${tripBasePrice(t)} ر.ع</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderSuppliersTable() {
+      document.getElementById('suppliersCount').textContent = SUPPLIERS.length;
+      document.getElementById('suppliersTable').innerHTML = SUPPLIERS.map(s => `
+        <tr>
+          <td>${s.initials} ${s.name}</td>
+          <td>${CATEGORIES.find(c => c.id === s.category)?.name || s.category}</td>
+          <td>${s.city}</td>
+          <td>★ ${s.rating}</td>
+        </tr>
+      `).join('');
+    }
+
+    renderStats();
+    renderProductsTable();
+    renderTripsTable();
+    renderSuppliersTable();
   </script>
   </main>
 <footer class="site-footer">
@@ -166,7 +208,6 @@
         <a href="cart.html">سلتي</a>
         <a href="checkout.html">إتمام الطلب</a>
         <a href="suppliers.html">الموردون</a>
-        <a href="admin.html">لوحة الإدارة</a>
       </div>
       <div>
         <h4>الدعم والقانونية</h4>
@@ -177,6 +218,5 @@
     </div>
     <div class="footer-bottom container">© 2026 رحّال — جميع الحقوق محفوظة</div>
   </footer>
-
 </body>
 </html>
