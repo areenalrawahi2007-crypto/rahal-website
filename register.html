@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل حساب جديد | رحّال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="data.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+<header class="site-header">
+    <div class="nav-row">
+      <a href="index.html" class="brand">
+        <svg class="stamp" viewBox="0 0 24 24" fill="none" stroke="#D9A441" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+        <span>رحّال<span class="tag">دليلك لكل رحلة</span></span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html" data-nav="index">الرئيسية</a>
+        <a href="trips.html" data-nav="trips">الرحلات</a>
+        <a href="equipment.html" data-nav="equipment">المعدات</a>
+        <a href="vehicles.html" data-nav="vehicles">المركبات</a>
+        <a href="food.html" data-nav="food">التموين</a>
+        <a href="suppliers.html" data-nav="suppliers">الموردين</a>
+        <a href="contact.html" data-nav="contact">تواصل معنا</a>
+        <a href="admin.html" data-nav="admin">لوحة الإدارة</a>
+      </nav>
+      <div class="nav-search">
+        <input type="text" class="js-search-input" placeholder="ابحث: قناع غوص، دفع رباعي، مؤن...">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <div class="search-results"></div>
+      </div>
+      <div class="nav-actions">
+        <a href="register.html" class="btn btn-primary btn-sm">تسجيل / دخول</a>
+        <button class="menu-toggle icon-btn" aria-label="القائمة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <button class="cart-fab" onclick="location.href='cart.html'" aria-label="عرض السلة">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.8h8.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>
+    <span class="badge js-cart-badge" style="display:none">0</span>
+  </button>
+
+  <div class="mobile-drawer">
+    <div class="panel">
+      <button class="close-x" aria-label="إغلاق">×</button>
+      <div class="m-search">
+        <input type="text" class="js-search-input" placeholder="ابحث...">
+        <div class="search-results"></div>
+      </div>
+      <a href="index.html">الرئيسية</a>
+      <a href="trips.html">الرحلات</a>
+      <a href="equipment.html">المعدات</a>
+      <a href="vehicles.html">المركبات</a>
+      <a href="food.html">التموين</a>
+      <a href="suppliers.html">الموردين</a>
+      <a href="contact.html">تواصل معنا</a>
+      <a href="admin.html">لوحة الإدارة</a>
+      <a href="register.html">تسجيل / دخول</a>
+      <a href="cart.html">سلتي</a>
+    </div>
+  </div>
+  <main>
+<section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">الرئيسية</a> / تسجيل حساب</div>
+      <h1>تسجيل حساب جديد</h1>
+      <p>ندخل رقم جوالك ونرسل لك كود تحقق مباشرة على واتساب</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width:480px">
+      <div class="card-surface">
+
+        <!-- الخطوة 1: إدخال الاسم ورقم الجوال -->
+        <div id="stepPhone">
+          <h3>بياناتك</h3>
+          <div class="form-grid" style="grid-template-columns:1fr">
+            <div class="field">
+              <label>الاسم الكامل</label>
+              <input type="text" id="fullName" placeholder="مثال: سالم الرواحي">
+            </div>
+            <div class="field">
+              <label>رقم الجوال (مع رمز الدولة)</label>
+              <input type="tel" id="phoneInput" placeholder="96891234567">
+            </div>
+          </div>
+          <p id="phoneError" style="color:var(--rust);font-size:13px;display:none"></p>
+          <button class="btn btn-primary btn-block" id="sendOtpBtn" style="margin-top:16px">إرسال كود التحقق عبر واتساب</button>
+        </div>
+
+        <!-- الخطوة 2: إدخال الكود -->
+        <div id="stepCode" style="display:none">
+          <h3>أدخل كود التحقق</h3>
+          <p style="color:#6b7268;font-size:14px">أرسلنا كود مكوّن من 6 أرقام إلى واتساب على الرقم <strong id="phoneDisplay"></strong></p>
+          <div class="field">
+            <label>كود التحقق</label>
+            <input type="text" id="codeInput" maxlength="6" placeholder="000000" style="letter-spacing:6px;font-size:20px;text-align:center">
+          </div>
+          <p id="codeError" style="color:var(--rust);font-size:13px;display:none"></p>
+          <button class="btn btn-primary btn-block" id="verifyBtn" style="margin-top:16px">تأكيد وإنشاء الحساب</button>
+          <button class="btn btn-ghost btn-block" id="resendBtn" style="margin-top:10px">إعادة إرسال الكود</button>
+        </div>
+
+        <!-- نجاح -->
+        <div id="stepSuccess" style="display:none;text-align:center">
+          <h3>🎉 تم تسجيل حسابك بنجاح</h3>
+          <p style="color:#6b7268">مرحبًا <strong id="successName"></strong>، حسابك جاهز الآن.</p>
+          <a href="index.html" class="btn btn-primary" style="margin-top:10px">الرجوع للرئيسية</a>
+        </div>
+
+      </div>
+
+      <p style="text-align:center;font-size:12.5px;color:#8b9188;margin-top:16px">
+        هذا النموذج يتصل بخادم رحال المحلي (<code>localhost:3000</code>) لغرض التجربة. لازم تكون شغّل الخادم عندك أول.
+      </p>
+    </div>
+  </section>
+
+  <script>
+    const API_URL = 'http://localhost:3000'; // TODO: بدّله برابط الخادم الحقيقي بعد رفعه على استضافة
+
+    const stepPhone = document.getElementById('stepPhone');
+    const stepCode = document.getElementById('stepCode');
+    const stepSuccess = document.getElementById('stepSuccess');
+
+    const fullNameInput = document.getElementById('fullName');
+    const phoneInput = document.getElementById('phoneInput');
+    const phoneError = document.getElementById('phoneError');
+    const sendOtpBtn = document.getElementById('sendOtpBtn');
+
+    const codeInput = document.getElementById('codeInput');
+    const codeError = document.getElementById('codeError');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const resendBtn = document.getElementById('resendBtn');
+    const phoneDisplay = document.getElementById('phoneDisplay');
+
+    function showError(el, message) {
+      el.textContent = message;
+      el.style.display = 'block';
+    }
+    function hideError(el) {
+      el.style.display = 'none';
+    }
+
+    async function sendOtp() {
+      hideError(phoneError);
+      const phone = phoneInput.value.trim();
+      if (!fullNameInput.value.trim()) {
+        showError(phoneError, 'اكتب اسمك الكامل');
+        return;
+      }
+      if (!/^\+?\d{8,15}$/.test(phone)) {
+        showError(phoneError, 'رقم الجوال غير صحيح — اكتبه مع رمز الدولة، مثال: 96891234567');
+        return;
+      }
+
+      sendOtpBtn.disabled = true;
+      sendOtpBtn.textContent = 'جاري الإرسال...';
+      try {
+        const res = await fetch(`${API_URL}/otp/send`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'تعذّر إرسال الكود');
+
+        phoneDisplay.textContent = phone;
+        stepPhone.style.display = 'none';
+        stepCode.style.display = 'block';
+        codeInput.focus();
+        showToast('تم إرسال الكود على واتساب');
+      } catch (err) {
+        showError(phoneError, err.message || 'تعذّر الاتصال بالخادم — تأكد إن خادم رحال شغّال على جهازك');
+      } finally {
+        sendOtpBtn.disabled = false;
+        sendOtpBtn.textContent = 'إرسال كود التحقق عبر واتساب';
+      }
+    }
+
+    async function verifyOtp() {
+      hideError(codeError);
+      const phone = phoneInput.value.trim();
+      const code = codeInput.value.trim();
+      if (!/^\d{6}$/.test(code)) {
+        showError(codeError, 'اكتب الكود المكوّن من 6 أرقام');
+        return;
+      }
+
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = 'جاري التحقق...';
+      try {
+        const res = await fetch(`${API_URL}/otp/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, code }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'الكود غير صحيح');
+
+        localStorage.setItem('rahalUser', JSON.stringify({ name: fullNameInput.value.trim(), phone }));
+        document.getElementById('successName').textContent = fullNameInput.value.trim();
+        stepCode.style.display = 'none';
+        stepSuccess.style.display = 'block';
+      } catch (err) {
+        showError(codeError, err.message || 'تعذّر التحقق من الكود');
+      } finally {
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = 'تأكيد وإنشاء الحساب';
+      }
+    }
+
+    sendOtpBtn.addEventListener('click', sendOtp);
+    verifyBtn.addEventListener('click', verifyOtp);
+    resendBtn.addEventListener('click', sendOtp);
+  </script>
+  </main>
+<footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>رحّال</h4>
+        <p>منصتك لاستئجار كل ما يلزم رحلتك البرية والبحرية: معدات، مركبات، وتموين، من موردين موثوقين في كل ربوع عُمان.</p>
+      </div>
+      <div>
+        <h4>تصفح</h4>
+        <a href="trips.html">الرحلات المجهزة</a>
+        <a href="equipment.html">المعدات</a>
+        <a href="vehicles.html">المركبات</a>
+        <a href="food.html">التموين والطعام</a>
+      </div>
+      <div>
+        <h4>حسابي</h4>
+        <a href="register.html">تسجيل / دخول</a>
+        <a href="cart.html">سلتي</a>
+        <a href="checkout.html">إتمام الطلب</a>
+        <a href="suppliers.html">الموردون</a>
+        <a href="admin.html">لوحة الإدارة</a>
+      </div>
+      <div>
+        <h4>الدعم والقانونية</h4>
+        <a href="contact.html">تواصل معنا</a>
+        <a href="terms.html">الشروط والأحكام</a>
+        <a href="privacy.html">سياسة الخصوصية</a>
+      </div>
+    </div>
+    <div class="footer-bottom container">© 2026 رحّال — جميع الحقوق محفوظة</div>
+  </footer>
+</body>
+</html>
