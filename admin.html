@@ -89,10 +89,12 @@
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
           <div>
             <p style="margin:0 0 4px;font-weight:700">الحالة: <span id="waStatusText">جاري التحقق...</span></p>
-            <p style="margin:0;font-size:13px;color:#6b7268">يتصل بخادم رحال المحلي على <code>localhost:3000</code> — تأكد إنه شغّال.</p>
+            <p style="margin:0 0 4px;font-size:13.5px" id="waNumberRow"></p>
+            <p style="margin:0;font-size:13px;color:#6b7268">يتصل بخادم رحال المباشر على Railway.</p>
           </div>
           <button class="btn btn-outline btn-sm" id="waResetBtn">تغيير رقم واتساب</button>
         </div>
+        <div class="dash-stats" id="otpStats" style="margin-top:20px;padding-top:20px;border-top:1px solid var(--line)"></div>
         <div id="waQrBox" style="display:none;text-align:center;margin-top:20px;padding-top:20px;border-top:1px solid var(--line)">
           <p style="font-weight:700">امسح الرمز من واتساب الرقم الجديد</p>
           <p style="font-size:13px;color:#6b7268">الإعدادات ← الأجهزة المرتبطة ← ربط جهاز</p>
@@ -211,11 +213,13 @@
     renderSuppliersTable();
 
     // ---- إدارة اتصال واتساب ----
-    const WA_API_URL = 'http://localhost:3000'; // TODO: بدّله برابط الخادم الحقيقي بعد رفعه على استضافة
+    const WA_API_URL = 'https://rahal-backend-production.up.railway.app';
     const waStatusText = document.getElementById('waStatusText');
+    const waNumberRow = document.getElementById('waNumberRow');
     const waQrBox = document.getElementById('waQrBox');
     const waQrImage = document.getElementById('waQrImage');
     const waResetBtn = document.getElementById('waResetBtn');
+    const otpStats = document.getElementById('otpStats');
 
     const WA_STATUS_LABELS = {
       connected: '✅ متصل',
@@ -232,14 +236,33 @@
 
         if (data.status === 'connected') {
           waQrBox.style.display = 'none';
+          waNumberRow.textContent = data.connectedNumber ? `📱 الرقم المعتمد: ${data.connectedNumber}` : '';
         } else if (data.qrDataUrl) {
           waQrBox.style.display = 'block';
           waQrImage.src = data.qrDataUrl;
+          waNumberRow.textContent = '';
         } else {
           waQrBox.style.display = 'none';
+          waNumberRow.textContent = '';
         }
       } catch (err) {
         waStatusText.textContent = '⚠️ ما قدرت أتواصل مع الخادم — تأكد إنه شغّال';
+        waNumberRow.textContent = '';
+      }
+    }
+
+    async function refreshOtpStats() {
+      try {
+        const res = await fetch(`${WA_API_URL}/otp/stats`);
+        const data = await res.json();
+        otpStats.innerHTML = `
+          <div class="dash-stat"><div class="dash-stat-value">${data.sent}</div><div class="dash-stat-label">أكواد أُرسلت</div></div>
+          <div class="dash-stat"><div class="dash-stat-value">${data.verified}</div><div class="dash-stat-label">تحققات ناجحة</div></div>
+          <div class="dash-stat"><div class="dash-stat-value">${data.failed}</div><div class="dash-stat-label">محاولات خاطئة</div></div>
+          <div class="dash-stat"><div class="dash-stat-value">${data.activeCodes}</div><div class="dash-stat-label">أكواد قيد الانتظار</div></div>
+        `;
+      } catch (err) {
+        otpStats.innerHTML = '';
       }
     }
 
@@ -258,7 +281,9 @@
     });
 
     refreshWaStatus();
+    refreshOtpStats();
     setInterval(refreshWaStatus, 4000);
+    setInterval(refreshOtpStats, 4000);
   </script>
   </main>
 <footer class="site-footer">
