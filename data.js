@@ -16,18 +16,18 @@ const CATEGORY_SVG = {
 
 const PRODUCTS = [
   // ---- معدات (equipment) ----
-  { id: 'e1', category: 'equipment', name: 'قناع غوص + شنركل احترافي', desc: 'رؤية واسعة وزجاج مقاوم للبخار، مناسب للغوص السطحي والعميق.', price: 8, unit: 'اليوم', emoji: '🤿', tags: ['غوص', 'معدات سلامة'] },
-  { id: 'e2', category: 'equipment', name: 'بدلة غوص 3mm', desc: 'تحافظ على دفء الجسم في مياه عُمان طوال العام.', price: 12, unit: 'اليوم', emoji: '🥽', tags: ['غوص', 'بدلات'] },
-  { id: 'e3', category: 'equipment', name: 'اسطوانة أكسجين + منظم', desc: 'اسطوانة مفحوصة مع منظم غوص معتمد.', price: 18, unit: 'اليوم', emoji: '🫧', tags: ['غوص', 'معدات سلامة'] },
-  { id: 'e4', category: 'equipment', name: 'خيمة تخييم 4 أشخاص', desc: 'مقاومة للرياح والمطر، تركيب خلال دقائق.', price: 15, unit: 'اليوم', emoji: '⛺', tags: ['تخييم'] },
-  { id: 'e5', category: 'equipment', name: 'كيس نوم صحراوي', desc: 'مناسب لدرجات الحرارة الباردة ليلاً في الصحراء والجبال.', price: 6, unit: 'اليوم', emoji: '🛌', tags: ['تخييم'] },
-  { id: 'e6', category: 'equipment', name: 'موقد غاز محمول + وقود', desc: 'طبخ سريع أثناء الرحلة، يشمل أسطوانة غاز واحدة.', price: 7, unit: 'اليوم', emoji: '🔥', tags: ['تخييم', 'طبخ'] },
-  { id: 'e7', category: 'equipment', name: 'حبل تسلق معتمد 30م', desc: 'شهادة فحص سلامة سارية، مناسب لتسلق الجبال.', price: 10, unit: 'اليوم', emoji: '🧗', tags: ['تسلق', 'معدات سلامة'] },
-  { id: 'e8', category: 'equipment', name: 'حزام أمان + خوذة تسلق', desc: 'طقم كامل معتمد لأمان التسلق.', price: 9, unit: 'اليوم', emoji: '⛑️', tags: ['تسلق', 'معدات سلامة'] },
-  { id: 'e9', category: 'equipment', name: 'عدة صيد بحري كاملة', desc: 'سنارة، خيط، وطعم صناعي لرحلات الصيد الساحلي.', price: 11, unit: 'اليوم', emoji: '🎣', tags: ['صيد'] },
-  { id: 'e10', category: 'equipment', name: 'كشاف رأس LED', desc: 'إضاءة قوية بدون استخدام اليدين، بطارية تدوم 20 ساعة.', price: 4, unit: 'اليوم', emoji: '🔦', tags: ['تخييم', 'معدات سلامة'] },
-  { id: 'e11', category: 'equipment', name: 'حقيبة ظهر رحلات 60L', desc: 'مقاومة للماء مع دعم للظهر لرحلات المشي الطويلة.', price: 9, unit: 'اليوم', emoji: '🎒', tags: ['مشي', 'تخييم'] },
-  { id: 'e12', category: 'equipment', name: 'زعانف غوص احترافية', desc: 'دفع أقوى وجهد أقل تحت الماء.', price: 6, unit: 'اليوم', emoji: '🦶', tags: ['غوص'] },
+  { id: 'e1', category: 'equipment', name: 'قناع غوص + شنركل احترافي', desc: 'رؤية واسعة وزجاج مقاوم للبخار، مناسب للغوص السطحي والعميق.', price: 8, unit: 'القطعة', emoji: '🤿', tags: ['غوص', 'معدات سلامة'] },
+  { id: 'e2', category: 'equipment', name: 'بدلة غوص 3mm', desc: 'تحافظ على دفء الجسم في مياه عُمان طوال العام.', price: 12, unit: 'القطعة', emoji: '🥽', tags: ['غوص', 'بدلات'] },
+  { id: 'e3', category: 'equipment', name: 'اسطوانة أكسجين + منظم', desc: 'اسطوانة مفحوصة مع منظم غوص معتمد.', price: 18, unit: 'القطعة', emoji: '🫧', tags: ['غوص', 'معدات سلامة'] },
+  { id: 'e4', category: 'equipment', name: 'خيمة تخييم 4 أشخاص', desc: 'مقاومة للرياح والمطر، تركيب خلال دقائق.', price: 15, unit: 'القطعة', emoji: '⛺', tags: ['تخييم'] },
+  { id: 'e5', category: 'equipment', name: 'كيس نوم صحراوي', desc: 'مناسب لدرجات الحرارة الباردة ليلاً في الصحراء والجبال.', price: 6, unit: 'القطعة', emoji: '🛌', tags: ['تخييم'] },
+  { id: 'e6', category: 'equipment', name: 'موقد غاز محمول + وقود', desc: 'طبخ سريع أثناء الرحلة، يشمل أسطوانة غاز واحدة.', price: 7, unit: 'القطعة', emoji: '🔥', tags: ['تخييم', 'طبخ'] },
+  { id: 'e7', category: 'equipment', name: 'حبل تسلق معتمد 30م', desc: 'شهادة فحص سلامة سارية، مناسب لتسلق الجبال.', price: 10, unit: 'القطعة', emoji: '🧗', tags: ['تسلق', 'معدات سلامة'] },
+  { id: 'e8', category: 'equipment', name: 'حزام أمان + خوذة تسلق', desc: 'طقم كامل معتمد لأمان التسلق.', price: 9, unit: 'القطعة', emoji: '⛑️', tags: ['تسلق', 'معدات سلامة'] },
+  { id: 'e9', category: 'equipment', name: 'عدة صيد بحري كاملة', desc: 'سنارة، خيط، وطعم صناعي لرحلات الصيد الساحلي.', price: 11, unit: 'القطعة', emoji: '🎣', tags: ['صيد'] },
+  { id: 'e10', category: 'equipment', name: 'كشاف رأس LED', desc: 'إضاءة قوية بدون استخدام اليدين، بطارية تدوم 20 ساعة.', price: 4, unit: 'القطعة', emoji: '🔦', tags: ['تخييم', 'معدات سلامة'] },
+  { id: 'e11', category: 'equipment', name: 'حقيبة ظهر رحلات 60L', desc: 'مقاومة للماء مع دعم للظهر لرحلات المشي الطويلة.', price: 9, unit: 'القطعة', emoji: '🎒', tags: ['مشي', 'تخييم'] },
+  { id: 'e12', category: 'equipment', name: 'زعانف غوص احترافية', desc: 'دفع أقوى وجهد أقل تحت الماء.', price: 6, unit: 'القطعة', emoji: '🦶', tags: ['غوص'] },
 
   // ---- مركبات (vehicles) ----
   { id: 'v1', category: 'vehicles', name: 'جيب دفع رباعي 4x4', desc: 'مناسب للكثبان الرملية والطرق الجبلية الوعرة.', price: 45, unit: 'اليوم', emoji: '🚙', tags: ['صحراء', 'دفع رباعي'] },
