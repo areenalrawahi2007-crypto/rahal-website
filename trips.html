@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="styles.css">
 <script src="https://rahal-backend-production.up.railway.app/data.js"></script>
 <script src="app.js"></script>
+<script src="i18n.js"></script>
 </head>
 <body>
 <header class="site-header">
@@ -18,59 +19,61 @@
         <span>رحّال<span class="tag">دليلك لكل رحلة</span></span>
       </a>
       <nav class="main-nav">
-        <a href="index.html" data-nav="index">الرئيسية</a>
-        <a href="trips.html" data-nav="trips">الرحلات</a>
-        <a href="equipment.html" data-nav="equipment">المعدات</a>
-        <a href="vehicles.html" data-nav="vehicles">المركبات</a>
-        <a href="food.html" data-nav="food">التموين</a>
-        <a href="suppliers.html" data-nav="suppliers">الموردين</a>
-        <a href="contact.html" data-nav="contact">تواصل معنا</a>
-        <a href="admin.html" data-nav="admin">لوحة الإدارة</a>
+        <a href="index.html" data-nav="index" data-i18n="nav.home">الرئيسية</a>
+        <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الرحلات</a>
+        <a href="equipment.html" data-nav="equipment" data-i18n="nav.equipment">المعدات</a>
+        <a href="vehicles.html" data-nav="vehicles" data-i18n="nav.vehicles">المركبات</a>
+        <a href="food.html" data-nav="food" data-i18n="nav.food">التموين</a>
+        <a href="suppliers.html" data-nav="suppliers" data-i18n="nav.suppliers">الموردين</a>
+        <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
+        <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
       <div class="nav-search">
-        <input type="text" class="js-search-input" placeholder="ابحث: قناع غوص، دفع رباعي، مؤن...">
+        <input type="text" class="js-search-input" placeholder="ابحث: قناع غوص، دفع رباعي، مؤن..." data-i18n-placeholder="search.placeholder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         <div class="search-results"></div>
       </div>
       <div class="nav-actions">
-        <a href="register.html" class="btn btn-primary btn-sm">تسجيل / دخول</a>
-        <button class="menu-toggle icon-btn" aria-label="القائمة">
+        <button type="button" class="js-lang-toggle" data-i18n="lang.toggle">English</button>
+        <a href="register.html" class="btn btn-primary btn-sm" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+        <button class="menu-toggle icon-btn" aria-label="القائمة" data-i18n-aria="menu.aria">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
   </header>
 
-  <button class="cart-fab" onclick="location.href='cart.html'" aria-label="عرض السلة">
+  <button class="cart-fab" onclick="location.href='cart.html'" aria-label="عرض السلة" data-i18n-aria="cart.viewAria">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.8h8.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>
     <span class="badge js-cart-badge" style="display:none">0</span>
   </button>
 
   <div class="mobile-drawer">
     <div class="panel">
-      <button class="close-x" aria-label="إغلاق">×</button>
+      <button class="close-x" aria-label="إغلاق" data-i18n-aria="drawer.close">×</button>
+      <button type="button" class="js-lang-toggle" data-i18n="lang.toggle" style="margin-bottom:14px">English</button>
       <div class="m-search">
-        <input type="text" class="js-search-input" placeholder="ابحث...">
+        <input type="text" class="js-search-input" placeholder="ابحث..." data-i18n-placeholder="search.placeholderShort">
         <div class="search-results"></div>
       </div>
-      <a href="index.html">الرئيسية</a>
-      <a href="trips.html">الرحلات</a>
-      <a href="equipment.html">المعدات</a>
-      <a href="vehicles.html">المركبات</a>
-      <a href="food.html">التموين</a>
-      <a href="suppliers.html">الموردين</a>
-      <a href="contact.html">تواصل معنا</a>
-      <a href="admin.html">لوحة الإدارة</a>
-      <a href="register.html">تسجيل / دخول</a>
-      <a href="cart.html">سلتي</a>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="trips.html" data-i18n="nav.trips">الرحلات</a>
+      <a href="equipment.html" data-i18n="nav.equipment">المعدات</a>
+      <a href="vehicles.html" data-i18n="nav.vehicles">المركبات</a>
+      <a href="food.html" data-i18n="nav.food">التموين</a>
+      <a href="suppliers.html" data-i18n="nav.suppliers">الموردين</a>
+      <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
+      <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
+      <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+      <a href="cart.html" data-i18n="nav.cart">سلتي</a>
     </div>
   </div>
   <main>
 <section class="page-hero">
     <div class="container">
-      <div class="breadcrumb"><a href="index.html">الرئيسية</a> / الرحلات المجهزة</div>
-      <h1>الرحلات المجهزة</h1>
-      <p>حزم جاهزة تجمع لك المعدات والمركبة والمؤن المناسبة — واختر تعدّل عليها وتشيل أو تضيف قبل ما تحجز.</p>
+      <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / الرحلات المجهزة</div>
+      <h1 data-i18n="trips.title">الرحلات المجهزة</h1>
+      <p data-i18n="trips.lead">حزم جاهزة تجمع لك المعدات والمركبة والمؤن المناسبة — واختر تعدّل عليها وتشيل أو تضيف قبل ما تحجز.</p>
     </div>
   </section>
 
@@ -83,7 +86,7 @@
   <section class="section" style="background:#fff" id="builderSection" hidden>
     <div class="container">
       <div class="section-head" style="margin-bottom:24px">
-        <div class="eyebrow">تخصيص الرحلة</div>
+        <div class="eyebrow" data-i18n="trips.customizeEyebrow">تخصيص الرحلة</div>
         <h2 id="builderTitle"></h2>
         <p id="builderDesc" style="color:#6b7268"></p>
       </div>
@@ -91,13 +94,13 @@
       <div class="cart-layout">
         <div class="card-surface">
           <div id="builderItems"></div>
-          <button class="btn btn-outline btn-sm" id="resetBuilder" style="margin-top:16px">إعادة الحزمة لوضعها الأصلي</button>
+          <button class="btn btn-outline btn-sm" id="resetBuilder" style="margin-top:16px" data-i18n="trips.resetPackage">إعادة الحزمة لوضعها الأصلي</button>
         </div>
         <div class="summary-card">
-          <h3>ملخص الحزمة</h3>
-          <div class="summary-row"><span>عدد العناصر المختارة</span><span id="builderCount">0</span></div>
-          <div class="summary-row total"><span>الإجمالي</span><span id="builderTotal">0 ر.ع</span></div>
-          <button class="btn btn-primary btn-block" id="addTripToCart" style="margin-top:16px">أضف الحزمة للسلة</button>
+          <h3 data-i18n="trips.summaryHeading">ملخص الحزمة</h3>
+          <div class="summary-row"><span data-i18n="trips.itemCount">عدد العناصر المختارة</span><span id="builderCount">0</span></div>
+          <div class="summary-row total"><span data-i18n="trips.total">الإجمالي</span><span id="builderTotal">0 ر.ع</span></div>
+          <button class="btn btn-primary btn-block" id="addTripToCart" style="margin-top:16px" data-i18n="trips.addToCart">أضف الحزمة للسلة</button>
         </div>
       </div>
     </div>
@@ -124,7 +127,7 @@
             <p class="product-desc">${trip.desc}</p>
             <div class="product-foot">
               <div class="price">من ${tripBasePrice(trip)} ر.ع</div>
-              <button class="btn btn-primary btn-sm js-select-trip" data-id="${trip.id}">
+              <button class="btn btn-primary btn-sm js-select-trip" data-id="${trip.id}" data-i18n="trips.selectBtn">
                 خصّص واحجز
               </button>
             </div>
@@ -215,31 +218,31 @@
     <div class="container footer-grid">
       <div>
         <h4>رحّال</h4>
-        <p>منصتك لشراء معدات وتموين رحلتك البرية والبحرية، واستئجار المركبات، من موردين موثوقين في كل ربوع عُمان.</p>
+        <p data-i18n="footer.about">منصتك لشراء معدات وتموين رحلتك البرية والبحرية، واستئجار المركبات، من موردين موثوقين في كل ربوع عُمان.</p>
       </div>
       <div>
-        <h4>تصفح</h4>
-        <a href="trips.html">الرحلات المجهزة</a>
-        <a href="equipment.html">المعدات</a>
-        <a href="vehicles.html">المركبات</a>
-        <a href="food.html">التموين والطعام</a>
+        <h4 data-i18n="footer.browseHeading">تصفح</h4>
+        <a href="trips.html" data-i18n="footer.trips">الرحلات المجهزة</a>
+        <a href="equipment.html" data-i18n="nav.equipment">المعدات</a>
+        <a href="vehicles.html" data-i18n="nav.vehicles">المركبات</a>
+        <a href="food.html" data-i18n="footer.food">التموين والطعام</a>
       </div>
       <div>
-        <h4>حسابي</h4>
-        <a href="register.html">تسجيل / دخول</a>
-        <a href="cart.html">سلتي</a>
-        <a href="checkout.html">إتمام الطلب</a>
-        <a href="suppliers.html">الموردون</a>
-        <a href="admin.html">لوحة الإدارة</a>
+        <h4 data-i18n="footer.accountHeading">حسابي</h4>
+        <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+        <a href="cart.html" data-i18n="nav.cart">سلتي</a>
+        <a href="checkout.html" data-i18n="footer.checkout">إتمام الطلب</a>
+        <a href="suppliers.html" data-i18n="footer.suppliersLink">الموردون</a>
+        <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       </div>
       <div>
-        <h4>الدعم والقانونية</h4>
-        <a href="contact.html">تواصل معنا</a>
-        <a href="terms.html">الشروط والأحكام</a>
-        <a href="privacy.html">سياسة الخصوصية</a>
+        <h4 data-i18n="footer.supportHeading">الدعم والقانونية</h4>
+        <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
+        <a href="terms.html" data-i18n="footer.terms">الشروط والأحكام</a>
+        <a href="privacy.html" data-i18n="footer.privacy">سياسة الخصوصية</a>
       </div>
     </div>
-    <div class="footer-bottom container">© 2026 رحّال — جميع الحقوق محفوظة</div>
+    <div class="footer-bottom container" data-i18n="footer.copyright">© 2026 رحّال — جميع الحقوق محفوظة</div>
   </footer>
 </body>
 </html>
