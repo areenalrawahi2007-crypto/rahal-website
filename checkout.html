@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="styles.css">
 <script src="https://rahal-backend-production.up.railway.app/data.js"></script>
 <script src="app.js"></script>
+<script src="i18n.js"></script>
 </head>
 <body>
 <header class="site-header">
@@ -18,59 +19,61 @@
         <span>رحّال<span class="tag">دليلك لكل رحلة</span></span>
       </a>
       <nav class="main-nav">
-        <a href="index.html" data-nav="index">الرئيسية</a>
-        <a href="trips.html" data-nav="trips">الرحلات</a>
-        <a href="equipment.html" data-nav="equipment">المعدات</a>
-        <a href="vehicles.html" data-nav="vehicles">المركبات</a>
-        <a href="food.html" data-nav="food">التموين</a>
-        <a href="suppliers.html" data-nav="suppliers">الموردين</a>
-        <a href="contact.html" data-nav="contact">تواصل معنا</a>
-        <a href="admin.html" data-nav="admin">لوحة الإدارة</a>
+        <a href="index.html" data-nav="index" data-i18n="nav.home">الرئيسية</a>
+        <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الرحلات</a>
+        <a href="equipment.html" data-nav="equipment" data-i18n="nav.equipment">المعدات</a>
+        <a href="vehicles.html" data-nav="vehicles" data-i18n="nav.vehicles">المركبات</a>
+        <a href="food.html" data-nav="food" data-i18n="nav.food">التموين</a>
+        <a href="suppliers.html" data-nav="suppliers" data-i18n="nav.suppliers">الموردين</a>
+        <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
+        <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
       <div class="nav-search">
-        <input type="text" class="js-search-input" placeholder="ابحث: قناع غوص، دفع رباعي، مؤن...">
+        <input type="text" class="js-search-input" placeholder="ابحث: قناع غوص، دفع رباعي، مؤن..." data-i18n-placeholder="search.placeholder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         <div class="search-results"></div>
       </div>
       <div class="nav-actions">
-        <a href="register.html" class="btn btn-primary btn-sm">تسجيل / دخول</a>
-        <button class="menu-toggle icon-btn" aria-label="القائمة">
+        <button type="button" class="js-lang-toggle" data-i18n="lang.toggle">English</button>
+        <a href="register.html" class="btn btn-primary btn-sm" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+        <button class="menu-toggle icon-btn" aria-label="القائمة" data-i18n-aria="menu.aria">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
   </header>
 
-  <button class="cart-fab" onclick="location.href='cart.html'" aria-label="عرض السلة">
+  <button class="cart-fab" onclick="location.href='cart.html'" aria-label="عرض السلة" data-i18n-aria="cart.viewAria">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.8h8.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>
     <span class="badge js-cart-badge" style="display:none">0</span>
   </button>
 
   <div class="mobile-drawer">
     <div class="panel">
-      <button class="close-x" aria-label="إغلاق">×</button>
+      <button class="close-x" aria-label="إغلاق" data-i18n-aria="drawer.close">×</button>
+      <button type="button" class="js-lang-toggle" data-i18n="lang.toggle" style="margin-bottom:14px">English</button>
       <div class="m-search">
-        <input type="text" class="js-search-input" placeholder="ابحث...">
+        <input type="text" class="js-search-input" placeholder="ابحث..." data-i18n-placeholder="search.placeholderShort">
         <div class="search-results"></div>
       </div>
-      <a href="index.html">الرئيسية</a>
-      <a href="trips.html">الرحلات</a>
-      <a href="equipment.html">المعدات</a>
-      <a href="vehicles.html">المركبات</a>
-      <a href="food.html">التموين</a>
-      <a href="suppliers.html">الموردين</a>
-      <a href="contact.html">تواصل معنا</a>
-      <a href="admin.html">لوحة الإدارة</a>
-      <a href="register.html">تسجيل / دخول</a>
-      <a href="cart.html">سلتي</a>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="trips.html" data-i18n="nav.trips">الرحلات</a>
+      <a href="equipment.html" data-i18n="nav.equipment">المعدات</a>
+      <a href="vehicles.html" data-i18n="nav.vehicles">المركبات</a>
+      <a href="food.html" data-i18n="nav.food">التموين</a>
+      <a href="suppliers.html" data-i18n="nav.suppliers">الموردين</a>
+      <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
+      <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
+      <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+      <a href="cart.html" data-i18n="nav.cart">سلتي</a>
     </div>
   </div>
   <main>
 <section class="page-hero">
     <div class="container">
-      <div class="breadcrumb"><a href="index.html">الرئيسية</a> / <a href="cart.html">سلتي</a> / إتمام الطلب</div>
-      <h1>إتمام الطلب</h1>
-      <p>عبّي بياناتك وراجع الفاتورة قبل التأكيد</p>
+      <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / <a href="cart.html" data-i18n="nav.cart">سلتي</a> / إتمام الطلب</div>
+      <h1 data-i18n="checkout.title">إتمام الطلب</h1>
+      <p data-i18n="checkout.lead">عبّي بياناتك وراجع الفاتورة قبل التأكيد</p>
     </div>
   </section>
 
@@ -78,96 +81,96 @@
     <div class="container">
       <div class="empty-state" id="emptyCheckout" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.8h8.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>
-        <p>سلتك فارغة، ما فيه شي تدفع له.</p>
-        <a href="trips.html" class="btn btn-primary" style="margin-top:14px">ابدأ التصفح</a>
+        <p data-i18n="checkout.emptyText">سلتك فارغة، ما فيه شي تدفع له.</p>
+        <a href="trips.html" class="btn btn-primary" style="margin-top:14px" data-i18n="checkout.startBrowsing">ابدأ التصفح</a>
       </div>
 
       <div id="purchaseBlock" style="display:none">
         <div class="section-head" style="text-align:right;margin:0 0 20px">
-          <div class="eyebrow">فاتورة الشراء</div>
-          <h2>معدات وتموين — بيانات التوصيل والدفع</h2>
+          <div class="eyebrow" data-i18n="checkout.purchaseEyebrow">فاتورة الشراء</div>
+          <h2 data-i18n="checkout.purchaseHeading">معدات وتموين — بيانات التوصيل والدفع</h2>
         </div>
         <div class="cart-layout">
           <div class="card-surface">
             <form id="purchaseForm">
               <div class="form-grid">
-                <div class="field"><label>الاسم الكامل</label><input type="text" required placeholder="مثال: سالم الرواحي"></div>
-                <div class="field"><label>رقم الجوال</label><input type="tel" required placeholder="9XXXXXXX"></div>
-                <div class="field full"><label>العنوان / نقطة التسليم</label><input type="text" required placeholder="الولاية، المنطقة، أقرب معلم"></div>
-                <div class="field full"><label>ملاحظات إضافية (اختياري)</label><textarea placeholder="أي تفاصيل تساعد المورد يجهز طلبك"></textarea></div>
+                <div class="field"><label data-i18n="checkout.fullName">الاسم الكامل</label><input type="text" required placeholder="مثال: سالم الرواحي"></div>
+                <div class="field"><label data-i18n="checkout.phone">رقم الجوال</label><div class="phone-field-row" id="purchasePhoneRow"><input type="tel" required placeholder="9XXXXXXX"></div></div>
+                <div class="field full"><label data-i18n="checkout.address">العنوان / نقطة التسليم</label><input type="text" required placeholder="الولاية، المنطقة، أقرب معلم"></div>
+                <div class="field full"><label data-i18n="checkout.notes">ملاحظات إضافية (اختياري)</label><textarea placeholder="أي تفاصيل تساعد المورد يجهز طلبك" data-i18n-placeholder="checkout.notesPlaceholder"></textarea></div>
               </div>
-              <h3 style="margin-top:28px">طريقة الدفع</h3>
+              <h3 style="margin-top:28px" data-i18n="checkout.paymentMethodHeading">طريقة الدفع</h3>
               <div class="form-grid">
                 <div class="field full">
-                  <label>اختر طريقة الدفع</label>
+                  <label data-i18n="checkout.paymentMethodLabel">اختر طريقة الدفع</label>
                   <select>
-                    <option value="card">بطاقة ائتمانية / مدى</option>
-                    <option value="cod">الدفع عند الاستلام</option>
-                    <option value="transfer">تحويل بنكي</option>
+                    <option value="card" data-i18n="checkout.payCard">بطاقة ائتمانية / مدى</option>
+                    <option value="cod" data-i18n="checkout.payCod">الدفع عند الاستلام</option>
+                    <option value="transfer" data-i18n="checkout.payTransfer">تحويل بنكي</option>
                   </select>
                 </div>
-                <div class="field"><label>رقم البطاقة</label><input type="text" placeholder="XXXX XXXX XXXX XXXX"></div>
-                <div class="field"><label>تاريخ الانتهاء</label><input type="text" placeholder="MM/YY"></div>
+                <div class="field"><label data-i18n="checkout.cardNumber">رقم البطاقة</label><input type="text" placeholder="XXXX XXXX XXXX XXXX"></div>
+                <div class="field"><label data-i18n="checkout.expiry">تاريخ الانتهاء</label><input type="text" placeholder="MM/YY"></div>
               </div>
-              <button type="submit" class="btn btn-primary btn-block" style="margin-top:24px">تأكيد فاتورة الشراء</button>
+              <button type="submit" class="btn btn-primary btn-block" style="margin-top:24px" data-i18n="checkout.confirmPurchase">تأكيد فاتورة الشراء</button>
             </form>
           </div>
           <div class="summary-card">
-            <h3>ملخص الشراء</h3>
+            <h3 data-i18n="checkout.purchaseSummary">ملخص الشراء</h3>
             <div id="purchaseLines"></div>
-            <div class="summary-row"><span>المجموع الفرعي</span><span id="pSubtotal">0 ر.ع</span></div>
-            <div class="summary-row"><span>رسوم الخدمة</span><span id="pFee">0 ر.ع</span></div>
-            <div class="summary-row total"><span>الإجمالي</span><span id="pTotal">0 ر.ع</span></div>
+            <div class="summary-row"><span data-i18n="cart.subtotal">المجموع الفرعي</span><span id="pSubtotal">0 ر.ع</span></div>
+            <div class="summary-row"><span data-i18n="cart.serviceFee">رسوم الخدمة</span><span id="pFee">0 ر.ع</span></div>
+            <div class="summary-row total"><span data-i18n="cart.total">الإجمالي</span><span id="pTotal">0 ر.ع</span></div>
           </div>
         </div>
       </div>
 
       <div id="rentalBlock" style="display:none; margin-top:56px">
         <div class="section-head" style="text-align:right;margin:0 0 20px">
-          <div class="eyebrow">فاتورة الإيجار</div>
-          <h2>مركبات — بيانات الحجز والاستلام</h2>
+          <div class="eyebrow" data-i18n="checkout.rentalEyebrow">فاتورة الإيجار</div>
+          <h2 data-i18n="checkout.rentalHeading">مركبات — بيانات الحجز والاستلام</h2>
         </div>
         <div class="disclaimer-box">
-          <strong>تنويه مهم قبل تأكيد الإيجار:</strong>
-          رحّال منصة حجز وتنسيق إلكترونية فقط تربطك بمورد مركبات مرخّص، وليست مالكة أو مشغّلة لأي مركبة معروضة. المسؤولية الكاملة عن سلامة المركبة وصيانتها وأي ضرر أو حادث يحصل أثناء فترة الاستئجار تقع على عاتق المورّد المؤجّر والمستأجر بحسب اتفاقهما، ولا تتحمّل رحّال أي مسؤولية قانونية أو مادية عن ذلك. مبلغ التأمين القابل للاسترداد بند منفصل تمامًا عن أجرة التأجير.
+          <strong data-i18n="checkout.disclaimerTitle">تنويه مهم قبل تأكيد الإيجار:</strong>
+          <span data-i18n="checkout.disclaimerText">رحّال منصة حجز وتنسيق إلكترونية فقط تربطك بمورد مركبات مرخّص، وليست مالكة أو مشغّلة لأي مركبة معروضة. المسؤولية الكاملة عن سلامة المركبة وصيانتها وأي ضرر أو حادث يحصل أثناء فترة الاستئجار تقع على عاتق المورّد المؤجّر والمستأجر بحسب اتفاقهما، ولا تتحمّل رحّال أي مسؤولية قانونية أو مادية عن ذلك. مبلغ التأمين القابل للاسترداد بند منفصل تمامًا عن أجرة التأجير.</span>
         </div>
         <div class="cart-layout">
           <div class="card-surface">
             <form id="rentalForm">
               <div class="form-grid">
-                <div class="field"><label>الاسم الكامل</label><input type="text" required placeholder="مثال: سالم الرواحي"></div>
-                <div class="field"><label>رقم الجوال</label><input type="tel" required placeholder="9XXXXXXX"></div>
-                <div class="field"><label>رقم رخصة القيادة</label><input type="text" required placeholder="رقم الرخصة سارية المفعول"></div>
-                <div class="field"><label>موقع الاستلام</label><input type="text" required placeholder="الولاية / أقرب معلم"></div>
-                <div class="field"><label>تاريخ الاستلام</label><input type="date" required></div>
-                <div class="field"><label>تاريخ الإرجاع</label><input type="date" required></div>
+                <div class="field"><label data-i18n="checkout.fullName">الاسم الكامل</label><input type="text" required placeholder="مثال: سالم الرواحي"></div>
+                <div class="field"><label>رقم الجوال</label><div class="phone-field-row" id="rentalPhoneRow"><input type="tel" required placeholder="9XXXXXXX"></div></div>
+                <div class="field"><label data-i18n="checkout.licenseNumber">رقم رخصة القيادة</label><input type="text" required placeholder="رقم الرخصة سارية المفعول" data-i18n-placeholder="checkout.licensePlaceholder"></div>
+                <div class="field"><label data-i18n="checkout.pickupLocation">موقع الاستلام</label><input type="text" required placeholder="الولاية / أقرب معلم"></div>
+                <div class="field"><label data-i18n="checkout.pickupDate">تاريخ الاستلام</label><input type="date" required></div>
+                <div class="field"><label data-i18n="checkout.returnDate">تاريخ الإرجاع</label><input type="date" required></div>
               </div>
-              <h3 style="margin-top:28px">طريقة الدفع</h3>
+              <h3 style="margin-top:28px" data-i18n="checkout.paymentMethodHeading">طريقة الدفع</h3>
               <div class="form-grid">
                 <div class="field full">
-                  <label>اختر طريقة الدفع</label>
+                  <label data-i18n="checkout.paymentMethodLabel">اختر طريقة الدفع</label>
                   <select>
-                    <option value="card">بطاقة ائتمانية / مدى</option>
-                    <option value="cod">الدفع عند الاستلام</option>
-                    <option value="transfer">تحويل بنكي</option>
+                    <option value="card" data-i18n="checkout.payCard">بطاقة ائتمانية / مدى</option>
+                    <option value="cod" data-i18n="checkout.payCod">الدفع عند الاستلام</option>
+                    <option value="transfer" data-i18n="checkout.payTransfer">تحويل بنكي</option>
                   </select>
                 </div>
-                <div class="field"><label>رقم البطاقة</label><input type="text" placeholder="XXXX XXXX XXXX XXXX"></div>
-                <div class="field"><label>تاريخ الانتهاء</label><input type="text" placeholder="MM/YY"></div>
+                <div class="field"><label data-i18n="checkout.cardNumber">رقم البطاقة</label><input type="text" placeholder="XXXX XXXX XXXX XXXX"></div>
+                <div class="field"><label data-i18n="checkout.expiry">تاريخ الانتهاء</label><input type="text" placeholder="MM/YY"></div>
               </div>
               <label class="checkbox-field">
                 <input type="checkbox" required>
-                أقرّ بأنني اطّلعت على شروط التأجير أعلاه، وأن رحّال منصة تنسيق فقط وغير مسؤولة عن أي ضرر أو حادث يحصل أثناء استخدام المركبة.
+                <span data-i18n="checkout.rentalAgree">أقرّ بأنني اطّلعت على شروط التأجير أعلاه، وأن رحّال منصة تنسيق فقط وغير مسؤولة عن أي ضرر أو حادث يحصل أثناء استخدام المركبة.</span>
               </label>
-              <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px">تأكيد فاتورة الإيجار</button>
+              <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px" data-i18n="checkout.confirmRental">تأكيد فاتورة الإيجار</button>
             </form>
           </div>
           <div class="summary-card">
-            <h3>ملخص الإيجار</h3>
+            <h3 data-i18n="checkout.rentalSummary">ملخص الإيجار</h3>
             <div id="rentalLines"></div>
-            <div class="summary-row"><span>المجموع الفرعي</span><span id="rSubtotal">0 ر.ع</span></div>
-            <div class="summary-row"><span>تأمين قابل للاسترداد</span><span id="rDeposit">0 ر.ع</span></div>
-            <div class="summary-row total"><span>الإجمالي المدفوع الآن</span><span id="rTotal">0 ر.ع</span></div>
+            <div class="summary-row"><span data-i18n="cart.subtotal">المجموع الفرعي</span><span id="rSubtotal">0 ر.ع</span></div>
+            <div class="summary-row"><span data-i18n="checkout.depositLabel">تأمين قابل للاسترداد</span><span id="rDeposit">0 ر.ع</span></div>
+            <div class="summary-row total"><span data-i18n="checkout.totalNow">الإجمالي المدفوع الآن</span><span id="rTotal">0 ر.ع</span></div>
           </div>
         </div>
       </div>
@@ -177,6 +180,9 @@
   <script>
     const FEE_RATE = 0.05;
     const DEPOSIT_PER_ITEM = 15;
+
+    document.getElementById('purchasePhoneRow').insertAdjacentHTML('afterbegin', countryCodeSelectHtml('purchaseCountryCode'));
+    document.getElementById('rentalPhoneRow').insertAdjacentHTML('afterbegin', countryCodeSelectHtml('rentalCountryCode'));
 
     function splitCart() {
       const cart = readCart();
@@ -192,12 +198,14 @@
 
     function renderLines(containerId, items) {
       const ids = Object.keys(items);
+      const notes = readCartNotes();
       let subtotal = 0;
       document.getElementById(containerId).innerHTML = ids.map(id => {
         const p = findProduct(id);
         const line = p.price * items[id];
         subtotal += line;
-        return `<div class="summary-row"><span>${p.name} ×${items[id]}</span><span>${line.toFixed(1)} ر.ع</span></div>`;
+        const note = p.category === 'food' && notes[id] ? `<div class="summary-note">ملاحظة: ${notes[id]}</div>` : '';
+        return `<div class="summary-row"><span>${p.name} ×${items[id]}</span><span>${line.toFixed(1)} ر.ع</span></div>${note}`;
       }).join('');
       return { subtotal, count: ids.length };
     }
@@ -263,31 +271,31 @@
     <div class="container footer-grid">
       <div>
         <h4>رحّال</h4>
-        <p>منصتك لشراء معدات وتموين رحلتك البرية والبحرية، واستئجار المركبات، من موردين موثوقين في كل ربوع عُمان.</p>
+        <p data-i18n="footer.about">منصتك لشراء معدات وتموين رحلتك البرية والبحرية، واستئجار المركبات، من موردين موثوقين في كل ربوع عُمان.</p>
       </div>
       <div>
-        <h4>تصفح</h4>
-        <a href="trips.html">الرحلات المجهزة</a>
-        <a href="equipment.html">المعدات</a>
-        <a href="vehicles.html">المركبات</a>
-        <a href="food.html">التموين والطعام</a>
+        <h4 data-i18n="footer.browseHeading">تصفح</h4>
+        <a href="trips.html" data-i18n="footer.trips">الرحلات المجهزة</a>
+        <a href="equipment.html" data-i18n="nav.equipment">المعدات</a>
+        <a href="vehicles.html" data-i18n="nav.vehicles">المركبات</a>
+        <a href="food.html" data-i18n="footer.food">التموين والطعام</a>
       </div>
       <div>
-        <h4>حسابي</h4>
-        <a href="register.html">تسجيل / دخول</a>
-        <a href="cart.html">سلتي</a>
-        <a href="checkout.html">إتمام الطلب</a>
-        <a href="suppliers.html">الموردون</a>
-        <a href="admin.html">لوحة الإدارة</a>
+        <h4 data-i18n="footer.accountHeading">حسابي</h4>
+        <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+        <a href="cart.html" data-i18n="nav.cart">سلتي</a>
+        <a href="checkout.html" data-i18n="footer.checkout">إتمام الطلب</a>
+        <a href="suppliers.html" data-i18n="footer.suppliersLink">الموردون</a>
+        <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       </div>
       <div>
-        <h4>الدعم والقانونية</h4>
-        <a href="contact.html">تواصل معنا</a>
-        <a href="terms.html">الشروط والأحكام</a>
-        <a href="privacy.html">سياسة الخصوصية</a>
+        <h4 data-i18n="footer.supportHeading">الدعم والقانونية</h4>
+        <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
+        <a href="terms.html" data-i18n="footer.terms">الشروط والأحكام</a>
+        <a href="privacy.html" data-i18n="footer.privacy">سياسة الخصوصية</a>
       </div>
     </div>
-    <div class="footer-bottom container">© 2026 رحّال — جميع الحقوق محفوظة</div>
+    <div class="footer-bottom container" data-i18n="footer.copyright">© 2026 رحّال — جميع الحقوق محفوظة</div>
   </footer>
 
 </body>

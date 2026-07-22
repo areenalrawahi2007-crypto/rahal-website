@@ -2,6 +2,7 @@
 // هذا الملف يعتمد على المتغيرات المعرّفة في data.js (CATEGORIES, PRODUCTS, SUPPLIERS)
 
 const CART_KEY = 'rahalCart';
+const CART_NOTES_KEY = 'rahalCartNotes';
 
 function readCart() {
   try {
@@ -20,10 +21,38 @@ function findProduct(id) {
   return PRODUCTS.find(p => p.id === id);
 }
 
+// رموز الدول لحقول رقم الجوال بالموقع (التسجيل، الدفع، تسجيل الموردين) — عُمان +968 افتراضي
+const COUNTRY_CODES = [
+  { code: '968', name: 'عُمان' },
+  { code: '971', name: 'الإمارات' },
+  { code: '966', name: 'السعودية' },
+  { code: '974', name: 'قطر' },
+  { code: '973', name: 'البحرين' },
+  { code: '965', name: 'الكويت' },
+  { code: '20', name: 'مصر' },
+  { code: '962', name: 'الأردن' },
+  { code: '961', name: 'لبنان' },
+  { code: '212', name: 'المغرب' },
+  { code: '216', name: 'تونس' },
+  { code: '213', name: 'الجزائر' },
+  { code: '91', name: 'الهند' },
+  { code: '92', name: 'باكستان' },
+  { code: '63', name: 'الفلبين' },
+  { code: '44', name: 'بريطانيا' },
+  { code: '1', name: 'أمريكا/كندا' },
+];
+
+function countryCodeSelectHtml(id, selected) {
+  const sel = selected || '968';
+  const options = COUNTRY_CODES.map(c => `<option value="${c.code}"${c.code === sel ? ' selected' : ''}>+${c.code} ${c.name}</option>`).join('');
+  return `<select id="${id}" class="country-code-select">${options}</select>`;
+}
+
 function setQty(id, qty) {
   const cart = readCart();
   if (qty <= 0) {
     delete cart[id];
+    setCartNote(id, '');
   } else {
     cart[id] = qty;
   }
@@ -34,6 +63,26 @@ function removeFromCart(id) {
   const cart = readCart();
   delete cart[id];
   writeCart(cart);
+  setCartNote(id, '');
+}
+
+// ملاحظات/حساسية حرة لكل عنصر بالسلة (تُستخدم لعناصر التموين، تُعرض بملخص الطلب)
+function readCartNotes() {
+  try {
+    return JSON.parse(localStorage.getItem(CART_NOTES_KEY)) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function setCartNote(id, note) {
+  const notes = readCartNotes();
+  if (note && note.trim()) {
+    notes[id] = note.trim();
+  } else {
+    delete notes[id];
+  }
+  localStorage.setItem(CART_NOTES_KEY, JSON.stringify(notes));
 }
 
 function addToCart(id, qty = 1) {
