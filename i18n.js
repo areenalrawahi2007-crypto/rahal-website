@@ -6,7 +6,7 @@
   const T = {
     // ---- الهيدر والتنقل (مشترك بكل الصفحات) ----
     'nav.home': { ar: 'الرئيسية', en: 'Home' },
-    'nav.trips': { ar: 'الرحلات', en: 'Trips' },
+    'nav.trips': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
     'nav.equipment': { ar: 'المعدات', en: 'Equipment' },
     'nav.vehicles': { ar: 'المركبات', en: 'Vehicles' },
     'nav.food': { ar: 'التموين', en: 'Food' },
@@ -25,7 +25,7 @@
     // ---- الفوتر (مشترك) ----
     'footer.about': { ar: 'منصتك لشراء معدات وتموين رحلتك البرية والبحرية، واستئجار المركبات، من موردين موثوقين في كل ربوع عُمان.', en: 'Your platform for buying land & sea trip gear and supplies, and renting vehicles, from trusted suppliers across Oman.' },
     'footer.browseHeading': { ar: 'تصفح', en: 'Browse' },
-    'footer.trips': { ar: 'الرحلات المجهزة', en: 'Ready-made Trips' },
+    'footer.trips': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
     'footer.equipment': { ar: 'المعدات', en: 'Equipment' },
     'footer.vehicles': { ar: 'المركبات', en: 'Vehicles' },
     'footer.food': { ar: 'التموين والطعام', en: 'Food & Supplies' },
@@ -57,7 +57,7 @@
     'home.featuredTitle': { ar: 'حقائب مقترحة لرحلتك', en: 'Bags suggested for your trip' },
 
     // ---- الرحلات (trips.html) ----
-    'trips.title': { ar: 'الرحلات المجهزة', en: 'Ready-made Trips' },
+    'trips.title': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
     'trips.lead': { ar: 'حزم جاهزة تجمع لك المعدات والمركبة والمؤن المناسبة — واختر تعدّل عليها وتشيل أو تضيف قبل ما تحجز.', en: 'Ready packages bundling the right gear, vehicle, and supplies — customize by adding or removing before you book.' },
     'trips.customizeEyebrow': { ar: 'تخصيص الرحلة', en: 'Customize Trip' },
     'trips.resetPackage': { ar: 'إعادة الحزمة لوضعها الأصلي', en: 'Reset Package to Original' },
