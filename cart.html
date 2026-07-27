@@ -26,7 +26,7 @@
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
       <div class="nav-search">
-        <input type="text" class="js-search-input" placeholder="ابحث: قناع غوص، خيمة تخييم، مؤن..." data-i18n-placeholder="search.placeholder">
+        <input type="text" class="js-search-input" placeholder="ابحث: قناع غوص، خيمة تخييم، حبل تسلق..." data-i18n-placeholder="search.placeholder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         <div class="search-results"></div>
       </div>
@@ -108,7 +108,6 @@
       document.getElementById('emptyCart').style.display = ids.length ? 'none' : 'block';
       if(!ids.length) return;
 
-      const notes = readCartNotes();
       let subtotal = 0, count = 0;
       document.getElementById('cartList').innerHTML = ids.map(id=>{
         const p = findProduct(id);
@@ -116,17 +115,12 @@
         const qty = cart[id];
         subtotal += p.price * qty;
         count += qty;
-        const noteField = p.category === 'food' ? `
-          <div class="cart-item-note">
-            <textarea class="js-note-input" data-id="${id}" placeholder="أي طلب خاص أو حساسية غذائية؟ مثال: بدون مكسرات" data-i18n-placeholder="cart.notePlaceholder">${notes[id] || ''}</textarea>
-          </div>` : '';
         return `
           <div class="cart-item" data-id="${id}">
             <div class="thumb">${p.emoji}</div>
             <div class="info">
               <h4>${p.name}</h4>
               <div class="unit-price">${p.price} ر.ع / ${p.unit}</div>
-              ${noteField}
             </div>
             <div class="qty-control">
               <button class="qty-minus">−</button>
@@ -157,12 +151,6 @@
       if(e.target.closest('.remove-link')){ removeFromCart(id); renderCart(); showToast('تم حذف المنتج'); }
     });
 
-    document.addEventListener('input', (e)=>{
-      const noteInput = e.target.closest('.js-note-input');
-      if(!noteInput) return;
-      setCartNote(noteInput.dataset.id, noteInput.value);
-    });
-
     renderCart();
   </script>
   </main>
@@ -170,7 +158,7 @@
     <div class="container footer-grid">
       <div>
         <h4>رحّال</h4>
-        <p data-i18n="footer.about">منصتك لشراء معدات وتموين رحلتك البرية والبحرية، من موردين موثوقين في كل ربوع عُمان.</p>
+        <p data-i18n="footer.about">منصتك لشراء معدات رحلتك البرية والبحرية، من موردين موثوقين في كل ربوع عُمان.</p>
       </div>
       <div>
         <h4 data-i18n="footer.browseHeading">تصفح</h4>

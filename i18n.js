@@ -8,7 +8,6 @@
     'nav.home': { ar: 'الرئيسية', en: 'Home' },
     'nav.trips': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
     'nav.equipment': { ar: 'المعدات', en: 'Equipment' },
-    'nav.food': { ar: 'التموين', en: 'Food' },
     'nav.suppliers': { ar: 'الموردين', en: 'Suppliers' },
     'nav.contact': { ar: 'تواصل معنا', en: 'Contact' },
     'nav.admin': { ar: 'لوحة الإدارة', en: 'Admin' },
@@ -26,7 +25,6 @@
     'footer.browseHeading': { ar: 'تصفح', en: 'Browse' },
     'footer.trips': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
     'footer.equipment': { ar: 'المعدات', en: 'Equipment' },
-    'footer.food': { ar: 'التموين والطعام', en: 'Food & Supplies' },
     'footer.accountHeading': { ar: 'حسابي', en: 'My Account' },
     'footer.checkout': { ar: 'إتمام الطلب', en: 'Checkout' },
     'footer.suppliersLink': { ar: 'الموردون', en: 'Suppliers' },
@@ -38,7 +36,7 @@
     // ---- الرئيسية (index.html) ----
     'home.heroEyebrow': { ar: 'منصّة رحلاتك البرية والبحرية', en: 'Your land & sea trip platform' },
     'home.heroTitle': { ar: 'جهّز رحلتك القادمة بضغطة واحدة', en: 'Prep your next trip in one click' },
-    'home.heroLead': { ar: 'معدات تخييم وغوص وتسلق، وتموين جاهز — كل شي تحتاجه لرحلتك من موردين موثوقين، بمكان واحد.', en: 'Camping, diving, and climbing gear, and ready supplies — everything your trip needs from trusted suppliers, in one place.' },
+    'home.heroLead': { ar: 'معدات تخييم وغوص وتسلق — كل شي تحتاجه لرحلتك من موردين موثوقين، بمكان واحد.', en: 'Camping, diving, and climbing gear — everything your trip needs from trusted suppliers, in one place.' },
     'home.browseTrips': { ar: 'تصفح الحقائب', en: 'Browse Trip Bags' },
     'home.suppliersPage': { ar: 'صفحة الموردين', en: 'Suppliers Page' },
     'assistant.eyebrow': { ar: 'مساعد رحّال الذكي', en: 'Rahhal Smart Assistant' },
@@ -56,7 +54,7 @@
 
     // ---- الرحلات (trips.html) ----
     'trips.title': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
-    'trips.lead': { ar: 'حزم جاهزة تجمع لك المعدات والمؤن المناسبة — تقدر تعدّل عليها وتضيف أو تشيل عناصر قبل ما تشتري.', en: 'Ready packages bundling the right gear and supplies — you can customize by adding or removing items before you buy.' },
+    'trips.lead': { ar: 'حزم جاهزة تجمع لك المعدات المناسبة — تقدر تعدّل عليها وتضيف أو تشيل عناصر قبل ما تشتري.', en: 'Ready packages bundling the right gear — you can customize by adding or removing items before you buy.' },
     'trips.customizeEyebrow': { ar: 'تخصيص الرحلة', en: 'Customize Trip' },
     'trips.resetPackage': { ar: 'إعادة الحزمة لوضعها الأصلي', en: 'Reset Package to Original' },
     'trips.summaryHeading': { ar: 'ملخص الحزمة', en: 'Package Summary' },
@@ -78,8 +76,6 @@
     'section.addBtn': { ar: 'أضف', en: 'Add' },
     'equipment.title': { ar: 'المعدات', en: 'Equipment' },
     'equipment.lead': { ar: 'معدات غوص وتخييم ورحلات براً وبحراً بأفضل الأسعار', en: 'Diving, camping, and land & sea trip gear at the best prices' },
-    'food.title': { ar: 'التموين والطعام', en: 'Food & Supplies' },
-    'food.lead': { ar: 'وجبات ومؤن جاهزة لرحلات الغوص والبر', en: 'Ready meals and supplies for diving and land trips' },
 
     // ---- السلة (cart.html) ----
     'cart.title': { ar: 'سلة الطلبات', en: 'Cart' },
@@ -93,7 +89,6 @@
     'cart.continueBrowsing': { ar: 'متابعة التصفح', en: 'Continue Browsing' },
     'cart.emptyTitle': { ar: 'سلتك فارغة حالياً', en: 'Your cart is currently empty' },
     'cart.emptyBtn': { ar: 'ابدأ التصفح', en: 'Start Browsing' },
-    'cart.notePlaceholder': { ar: 'أي طلب خاص أو حساسية غذائية؟ مثال: بدون مكسرات', en: 'Special request or food allergy? e.g. no nuts' },
     'cart.removeLink': { ar: 'حذف', en: 'Remove' },
 
     // ---- إتمام الطلب (checkout.html) ----
@@ -158,7 +153,6 @@
     'suppliers.bioPlaceholder': { ar: 'اكتب وصف مختصر عن منتجاتك وخدماتك', en: 'Briefly describe your products and services' },
     'suppliers.submit': { ar: 'إرسال الطلب', en: 'Submit Request' },
     'suppliers.catEquipment': { ar: 'معدات', en: 'Equipment' },
-    'suppliers.catFood': { ar: 'تموين وطعام', en: 'Food & Supplies' },
 
     // ---- التسجيل (register.html) ----
     'register.pageTitle': { ar: 'تسجيل حساب جديد', en: 'Create a New Account' },
