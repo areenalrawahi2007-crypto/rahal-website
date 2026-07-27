@@ -21,9 +21,6 @@
       <nav class="main-nav">
         <a href="index.html" data-nav="index" data-i18n="nav.home">الرئيسية</a>
         <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الرحلات</a>
-        <a href="equipment.html" data-nav="equipment" data-i18n="nav.equipment">المعدات</a>
-        <a href="vehicles.html" data-nav="vehicles" data-i18n="nav.vehicles">المركبات</a>
-        <a href="food.html" data-nav="food" data-i18n="nav.food">التموين</a>
         <a href="suppliers.html" data-nav="suppliers" data-i18n="nav.suppliers">الموردين</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
@@ -58,9 +55,6 @@
       </div>
       <a href="index.html" data-i18n="nav.home">الرئيسية</a>
       <a href="trips.html" data-i18n="nav.trips">الرحلات</a>
-      <a href="equipment.html" data-i18n="nav.equipment">المعدات</a>
-      <a href="vehicles.html" data-i18n="nav.vehicles">المركبات</a>
-      <a href="food.html" data-i18n="nav.food">التموين</a>
       <a href="suppliers.html" data-i18n="nav.suppliers">الموردين</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
@@ -79,7 +73,21 @@
 
   <section class="section">
     <div class="container">
-      <div class="product-grid" id="tripsGrid"></div>
+      <div class="toolbar" style="flex-direction:column;align-items:stretch;gap:16px">
+        <div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:#4d5449" data-i18n="trips.regionLabel">المحافظة</div>
+          <div class="filter-chips" id="regionChips"></div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:#4d5449" data-i18n="trips.terrainLabel">نوع الوجهة</div>
+          <div class="filter-chips" id="terrainChips"></div>
+        </div>
+      </div>
+      <div class="product-grid" id="tripsGrid" style="margin-top:24px"></div>
+      <div class="empty-state" id="emptyTrips" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <p data-i18n="trips.emptyState">ما فيه حقائب مطابقة لهذا الفلتر. جرّب تغيّر المحافظة أو نوع الوجهة.</p>
+      </div>
     </div>
   </section>
 
@@ -107,6 +115,23 @@
   </section>
 
   <script>
+    const REGIONS = ['مسقط','ظفار','الشرقية','الداخلية','الباطنة','البريمي','مسندم','الوسطى','الظاهرة'];
+    const TERRAINS = ['جبال','بحر','صحراء','وديان'];
+    const TERRAIN_ICONS = { 'جبال':'🏔️', 'بحر':'🌊', 'صحراء':'🏜️', 'وديان':'💧' };
+
+    // الرحلات مربوطة بمحافظة ونوع وجهة عبر وسمين بنهاية الوصف (#المحافظة #النوع) لأن قاعدة بيانات
+    // الباك اند الحية ما تدعم حقول إضافية بجدول الرحلات — نفكّهم هنا للفلترة والعرض فقط.
+    function parseTripMeta(trip) {
+      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
+      if (!m) return { desc: trip.desc, region: null, terrain: null };
+      return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2] };
+    }
+
+    const params = new URLSearchParams(location.search);
+    let activeRegion = params.get('region') || '';
+    let activeTerrain = params.get('terrain') || '';
+    const searchTerm = (params.get('q') || '').toLowerCase();
+
     let selectedTrip = null;
     let builderState = {}; // { productId: qty }
 
@@ -117,14 +142,39 @@
       }, 0);
     }
 
+    function renderFilters() {
+      document.getElementById('regionChips').innerHTML =
+        `<button class="chip${!activeRegion ? ' active' : ''}" data-region="" data-i18n="section.all">الكل</button>` +
+        REGIONS.map(r => `<button class="chip${activeRegion === r ? ' active' : ''}" data-region="${r}">${r}</button>`).join('');
+      document.getElementById('terrainChips').innerHTML =
+        `<button class="chip${!activeTerrain ? ' active' : ''}" data-terrain="" data-i18n="section.all">الكل</button>` +
+        TERRAINS.map(t => `<button class="chip${activeTerrain === t ? ' active' : ''}" data-terrain="${t}">${TERRAIN_ICONS[t]} ${t}</button>`).join('');
+      if (window.RahalI18n) RahalI18n.applyI18n();
+    }
+
     function renderTripsGrid() {
-      document.getElementById('tripsGrid').innerHTML = TRIPS.map(trip => `
+      const list = TRIPS.filter(trip => {
+        const meta = parseTripMeta(trip);
+        const matchesRegion = !activeRegion || meta.region === activeRegion;
+        const matchesTerrain = !activeTerrain || meta.terrain === activeTerrain;
+        const matchesSearch = !searchTerm || (trip.name + ' ' + meta.desc).toLowerCase().includes(searchTerm);
+        return matchesRegion && matchesTerrain && matchesSearch;
+      });
+      document.getElementById('emptyTrips').style.display = list.length ? 'none' : 'block';
+      document.getElementById('tripsGrid').innerHTML = list.map(trip => {
+        const meta = parseTripMeta(trip);
+        const tags = [
+          `${trip.days} ${trip.days === 1 ? 'يوم' : 'أيام'}`,
+          meta.region ? `📍 ${meta.region}` : '',
+          meta.terrain ? `${TERRAIN_ICONS[meta.terrain] || ''} ${meta.terrain}` : '',
+        ].filter(Boolean).join(' · ');
+        return `
         <div class="product-card">
           <div class="product-media">${trip.emoji}</div>
           <div class="product-body">
-            <div class="product-cat">${trip.days} ${trip.days === 1 ? 'يوم' : 'أيام'}</div>
+            <div class="product-cat">${tags}</div>
             <div class="product-name">${trip.name}</div>
-            <p class="product-desc">${trip.desc}</p>
+            <p class="product-desc">${meta.desc}</p>
             <div class="product-foot">
               <div class="price">من ${tripBasePrice(trip)} ر.ع</div>
               <button class="btn btn-primary btn-sm js-select-trip" data-id="${trip.id}" data-i18n="trips.selectBtn">
@@ -133,8 +183,25 @@
             </div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
+      if (window.RahalI18n) RahalI18n.applyI18n();
     }
+
+    document.getElementById('regionChips').addEventListener('click', e => {
+      const btn = e.target.closest('.chip');
+      if (!btn) return;
+      activeRegion = btn.dataset.region || '';
+      renderFilters();
+      renderTripsGrid();
+    });
+    document.getElementById('terrainChips').addEventListener('click', e => {
+      const btn = e.target.closest('.chip');
+      if (!btn) return;
+      activeTerrain = btn.dataset.terrain || '';
+      renderFilters();
+      renderTripsGrid();
+    });
 
     function selectTrip(id) {
       selectedTrip = TRIPS.find(t => t.id === id);
@@ -143,7 +210,8 @@
       selectedTrip.items.forEach(item => { builderState[item.id] = item.qty; });
       document.getElementById('builderSection').hidden = false;
       document.getElementById('builderTitle').textContent = selectedTrip.name;
-      document.getElementById('builderDesc').textContent = `${selectedTrip.desc} — مدة الرحلة: ${selectedTrip.days} ${selectedTrip.days === 1 ? 'يوم' : 'أيام'}`;
+      const meta = parseTripMeta(selectedTrip);
+      document.getElementById('builderDesc').textContent = `${meta.desc} — مدة الرحلة: ${selectedTrip.days} ${selectedTrip.days === 1 ? 'يوم' : 'أيام'}`;
       renderBuilder();
       document.getElementById('builderSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -172,7 +240,7 @@
             <div class="item-total">${(p.price * qty).toFixed(1)} ر.ع</div>
             <button class="remove-link">حذف</button>
           </div>`;
-      }).join('') || '<p style="color:#8b9188">ما بقي أي عنصر بالحزمة — أضف عناصر من صفحات المعدات أو المركبات أو التموين ثم عد هنا، أو اضغط "إعادة الحزمة لوضعها الأصلي".</p>';
+      }).join('') || '<p style="color:#8b9188">ما بقي أي عنصر بالحزمة — اضغط "إعادة الحزمة لوضعها الأصلي" لو تبي ترجعها زي ما كانت.</p>';
 
       document.getElementById('builderCount').textContent = count;
       document.getElementById('builderTotal').textContent = total.toFixed(1) + ' ر.ع';
@@ -211,6 +279,7 @@
       showToast(`تمت إضافة عناصر "${selectedTrip.name}" إلى السلة`);
     });
 
+    renderFilters();
     renderTripsGrid();
   </script>
   </main>
@@ -223,9 +292,6 @@
       <div>
         <h4 data-i18n="footer.browseHeading">تصفح</h4>
         <a href="trips.html" data-i18n="footer.trips">الرحلات المجهزة</a>
-        <a href="equipment.html" data-i18n="nav.equipment">المعدات</a>
-        <a href="vehicles.html" data-i18n="nav.vehicles">المركبات</a>
-        <a href="food.html" data-i18n="footer.food">التموين والطعام</a>
       </div>
       <div>
         <h4 data-i18n="footer.accountHeading">حسابي</h4>

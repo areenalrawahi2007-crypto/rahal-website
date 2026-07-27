@@ -196,6 +196,7 @@ input,select,textarea{ font-family:inherit; }
   font-weight:700; font-size:12px;
 }
 .ai-toggle-btn.added{ background: var(--moss); }
+.ai-toggle-btn:disabled{ opacity:.7; cursor:default; }
 
 /* ---------- Category / Stamp cards (index) ---------- */
 .stamp-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:22px; }

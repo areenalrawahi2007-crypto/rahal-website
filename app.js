@@ -139,13 +139,20 @@ function setupMobileDrawer() {
   });
 }
 
+// يفكّ وسمي #المحافظة #النوع بنهاية وصف الرحلة (نفس منطق trips.html) لعرضهما بنتائج البحث
+function parseTripMetaForSearch(trip) {
+  const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
+  if (!m) return { desc: trip.desc, region: null, terrain: null };
+  return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2] };
+}
+
 function searchIndex(term) {
   const q = term.trim().toLowerCase();
   if (!q) return [];
-  const productMatches = PRODUCTS.filter(p =>
-    (p.name + ' ' + p.desc + ' ' + p.tags.join(' ')).toLowerCase().includes(q)
-  ).slice(0, 6);
-  return productMatches;
+  return TRIPS.filter(t => {
+    const meta = parseTripMetaForSearch(t);
+    return (t.name + ' ' + meta.desc + ' ' + (meta.region || '') + ' ' + (meta.terrain || '')).toLowerCase().includes(q);
+  }).slice(0, 6);
 }
 
 function setupSearch(input) {
@@ -160,10 +167,10 @@ function setupSearch(input) {
       resultsBox.innerHTML = '';
       return;
     }
-    resultsBox.innerHTML = matches.map(p => {
-      const category = CATEGORIES.find(c => c.id === p.category);
-      const href = `${category.page}?q=${encodeURIComponent(p.name)}`;
-      return `<a href="${href}"><span>${p.emoji}</span><span>${p.name}<br><small style="color:#8b9188">${category.name}</small></span></a>`;
+    resultsBox.innerHTML = matches.map(t => {
+      const meta = parseTripMetaForSearch(t);
+      const href = `trips.html?q=${encodeURIComponent(t.name)}`;
+      return `<a href="${href}"><span>${t.emoji}</span><span>${t.name}<br><small style="color:#8b9188">${meta.region || ''} ${meta.terrain || ''}</small></span></a>`;
     }).join('');
     resultsBox.classList.add('show');
   }
@@ -173,7 +180,7 @@ function setupSearch(input) {
   input.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
       const q = input.value.trim();
-      if (q) location.href = `equipment.html?q=${encodeURIComponent(q)}`;
+      if (q) location.href = `trips.html?q=${encodeURIComponent(q)}`;
     }
     if (e.key === 'Escape') resultsBox.classList.remove('show');
   });

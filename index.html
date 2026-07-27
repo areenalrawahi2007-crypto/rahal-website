@@ -22,9 +22,6 @@
       <nav class="main-nav">
         <a href="index.html" data-nav="index" data-i18n="nav.home">الرئيسية</a>
         <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الرحلات</a>
-        <a href="equipment.html" data-nav="equipment" data-i18n="nav.equipment">المعدات</a>
-        <a href="vehicles.html" data-nav="vehicles" data-i18n="nav.vehicles">المركبات</a>
-        <a href="food.html" data-nav="food" data-i18n="nav.food">التموين</a>
         <a href="suppliers.html" data-nav="suppliers" data-i18n="nav.suppliers">الموردين</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
@@ -59,9 +56,6 @@
       </div>
       <a href="index.html" data-i18n="nav.home">الرئيسية</a>
       <a href="trips.html" data-i18n="nav.trips">الرحلات</a>
-      <a href="equipment.html" data-i18n="nav.equipment">المعدات</a>
-      <a href="vehicles.html" data-i18n="nav.vehicles">المركبات</a>
-      <a href="food.html" data-i18n="nav.food">التموين</a>
       <a href="suppliers.html" data-i18n="nav.suppliers">الموردين</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
@@ -76,7 +70,7 @@
       <h1 data-i18n="home.heroTitle">جهّز رحلتك القادمة بضغطة واحدة</h1>
       <p class="lead" data-i18n="home.heroLead">معدات غوص، مركبات دفع رباعي وقوارب، وتموين جاهز — كل شي تحتاجه لرحلتك من موردين موثوقين، بمكان واحد.</p>
       <div class="hero-actions">
-        <a href="equipment.html" class="btn btn-primary" data-i18n="home.browseEquipment">تصفح المعدات</a>
+        <a href="trips.html" class="btn btn-primary" data-i18n="home.browseTrips">تصفح الحقائب</a>
         <a href="suppliers.html" class="btn btn-outline" style="border-color:#F4EFE2;color:#F4EFE2" data-i18n="home.suppliersPage">صفحة الموردين</a>
       </div>
     </div>
@@ -103,59 +97,93 @@
     <div class="container">
       <div class="section-head">
         <div class="eyebrow" data-i18n="home.categoriesEyebrow">اختر وجهتك</div>
-        <h2 data-i18n="home.categoriesTitle">كل قسم له صفحته الخاصة</h2>
-        <p style="color:#6b7268" data-i18n="home.categoriesLead">اضغط على أي بطاقة عشان تنتقل مباشرة لصفحة مستقلة فيها كل التفاصيل والخيارات</p>
+        <h2 data-i18n="home.categoriesTitle">حقيبة رحلة جاهزة لكل نوع وجهة</h2>
+        <p style="color:#6b7268" data-i18n="home.categoriesLead">اضغط على أي بطاقة عشان تشوف الحقائب المناسبة لها</p>
       </div>
-      <div class="stamp-grid" id="categoryGrid"></div>
+      <div class="stamp-grid" id="terrainGrid"></div>
     </div>
   </section>
 
   <section class="section" style="background:#fff">
     <div class="container">
       <div class="section-head">
+        <div class="eyebrow" data-i18n="home.regionsEyebrow">تصفّح حسب المحافظة</div>
+        <h2 data-i18n="home.regionsTitle">حقائب من كل ربوع عُمان</h2>
+      </div>
+      <div class="filter-chips" id="regionQuickLinks" style="justify-content:center"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
         <div class="eyebrow" data-i18n="home.featuredEyebrow">الأكثر طلباً</div>
-        <h2 data-i18n="home.featuredTitle">منتجات مقترحة لرحلتك</h2>
+        <h2 data-i18n="home.featuredTitle">حقائب مقترحة لرحلتك</h2>
       </div>
       <div class="product-grid" id="featuredGrid"></div>
     </div>
   </section>
 
   <script>
-    // بطاقات الفئات
-    function categoryCount(c) {
-      if (c.id === 'trips') return TRIPS.length;
-      return PRODUCTS.filter(p => p.category === c.id).length || SUPPLIERS.filter(s => s.category === c.id).length;
+    const TERRAINS_HOME = [
+      { id: 'جبال', desc: 'تسلق ومبيت بأعلى قمم عُمان' },
+      { id: 'بحر', desc: 'غوص، قوارب، وسواحل عُمان' },
+      { id: 'صحراء', desc: 'كثبان وتخييم صحراوي' },
+      { id: 'وديان', desc: 'برك ومسارات طبيعية' },
+    ];
+    const TERRAIN_ICONS_HOME = { 'جبال':'🏔️', 'بحر':'🌊', 'صحراء':'🏜️', 'وديان':'💧' };
+    const REGIONS_HOME = ['مسقط','ظفار','الشرقية','الداخلية','الباطنة','البريمي','مسندم','الوسطى','الظاهرة'];
+
+    function parseTripMetaHome(trip) {
+      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
+      if (!m) return { desc: trip.desc, region: null, terrain: null };
+      return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2] };
     }
 
-    document.getElementById('categoryGrid').innerHTML = CATEGORIES.map(c => `
-      <a href="${c.page}" class="stamp-card">
-        <span class="count-tag">${categoryCount(c)} ${c.id === 'trips' ? 'رحلة' : 'عنصر'}</span>
-        <div class="stamp-badge">${CATEGORY_SVG[c.icon]}</div>
-        <h3>${c.name}</h3>
-        <p>${c.desc}</p>
-        <span class="stamp-link">تصفح القسم ←</span>
-      </a>
-    `).join('');
+    function tripBasePriceHome(trip) {
+      return trip.items.reduce((sum, item) => {
+        const p = findProduct(item.id);
+        return sum + (p ? p.price * item.qty : 0);
+      }, 0);
+    }
 
-    // منتجات مقترحة (أول 4)
-    const featured = PRODUCTS.slice(0,4);
-    document.getElementById('featuredGrid').innerHTML = featured.map(p => `
+    // بطاقات نوع الوجهة
+    document.getElementById('terrainGrid').innerHTML = TERRAINS_HOME.map(t => {
+      const count = TRIPS.filter(trip => parseTripMetaHome(trip).terrain === t.id).length;
+      return `
+      <a href="trips.html?terrain=${encodeURIComponent(t.id)}" class="stamp-card">
+        <span class="count-tag">${count} حقيبة</span>
+        <div class="stamp-badge" style="font-size:34px;border-style:solid">${TERRAIN_ICONS_HOME[t.id]}</div>
+        <h3>${t.id}</h3>
+        <p>${t.desc}</p>
+        <span class="stamp-link">تصفح الحقائب ←</span>
+      </a>`;
+    }).join('');
+
+    // روابط سريعة حسب المحافظة
+    document.getElementById('regionQuickLinks').innerHTML = REGIONS_HOME.map(r => {
+      const count = TRIPS.filter(trip => parseTripMetaHome(trip).region === r).length;
+      return `<a href="trips.html?region=${encodeURIComponent(r)}" class="chip">${r} <small style="opacity:.6">(${count})</small></a>`;
+    }).join('');
+
+    // حقائب مقترحة (أول 4)
+    const featuredTrips = TRIPS.slice(0,4);
+    document.getElementById('featuredGrid').innerHTML = featuredTrips.map(trip => {
+      const meta = parseTripMetaHome(trip);
+      return `
       <div class="product-card">
-        <div class="product-media">${p.emoji}</div>
+        <div class="product-media">${trip.emoji}</div>
         <div class="product-body">
-          <div class="product-cat">${CATEGORIES.find(c=>c.id===p.category).name}</div>
-          <div class="product-name">${p.name}</div>
-          <p class="product-desc">${p.desc}</p>
+          <div class="product-cat">${meta.region ? '📍 ' + meta.region : ''} ${meta.terrain ? (TERRAIN_ICONS_HOME[meta.terrain]||'') + ' ' + meta.terrain : ''}</div>
+          <div class="product-name">${trip.name}</div>
+          <p class="product-desc">${meta.desc}</p>
           <div class="product-foot">
-            <div class="price">${p.price} ر.ع <small>/ ${p.unit}</small></div>
-            <button class="add-btn" data-id="${p.id}" data-i18n="section.addBtn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-              أضف
-            </button>
+            <div class="price">من ${tripBasePriceHome(trip)} ر.ع</div>
+            <a href="trips.html" class="btn btn-primary btn-sm" data-i18n="trips.selectBtn">خصّص واحجز</a>
           </div>
         </div>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
   </script>
   </main>
 <footer class="site-footer">
@@ -167,9 +195,6 @@
       <div>
         <h4 data-i18n="footer.browseHeading">تصفح</h4>
         <a href="trips.html" data-i18n="footer.trips">الرحلات المجهزة</a>
-        <a href="equipment.html" data-i18n="nav.equipment">المعدات</a>
-        <a href="vehicles.html" data-i18n="nav.vehicles">المركبات</a>
-        <a href="food.html" data-i18n="footer.food">التموين والطعام</a>
       </div>
       <div>
         <h4 data-i18n="footer.accountHeading">حسابي</h4>

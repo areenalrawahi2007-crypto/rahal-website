@@ -1,6 +1,6 @@
-// مساعد "رحّال" الذكي — يفهم وصف رحلة العميل بلغته العادية ويقترح منتجات حقيقية من الكتالوج (data.js)
+// مساعد "رحّال" الذكي — يفهم وصف رحلة العميل بلغته العادية ويقترح حقائب رحلات كاملة وحقيقية من الكتالوج (TRIPS بـdata.js)
 // يحاول أولاً /api/ai-assistant على الباك اند (Claude API الفعلي)، ولو ما رد بسرعة أو ما كان متاحاً
-// يرجع لمطابقة محلية بسيطة حسب الكلمات المفتاحية على نفس كتالوج PRODUCTS — بدون اختراع أي منتج وهمي.
+// يرجع لمطابقة محلية بسيطة حسب الكلمات المفتاحية على نفس كتالوج TRIPS — بدون اختراع أي حقيبة وهمية.
 (function () {
   const API_URL = 'https://rahal-backend-production.up.railway.app';
   const SESSION_KEY = 'rahalAssistantSession';
@@ -14,66 +14,62 @@
     'تسلق': ['تسلق', 'climbing'],
     'مشي': ['مشي', 'ترايكنق', 'trekking', 'مسير', 'هايكنق'],
     'صيد': ['صيد', 'سمك', 'صياد', 'fishing'],
-    'صحراء': ['صحراء', 'رمل', 'رمال', 'كثبان', 'desert'],
-    'دفع رباعي': ['دفع رباعي', 'رباعي', '4x4', 'جيب'],
-    'بحر': ['بحر', 'بحري', 'شاطئ', 'ساحل', 'sea', 'beach'],
-    'قوارب': ['قارب', 'قوارب', 'boat'],
     'جبال': ['جبل', 'جبال', 'mountain'],
-    'طرق برية': ['رحلة طويلة', 'road trip'],
+    'بحر': ['بحر', 'بحري', 'شاطئ', 'ساحل', 'sea', 'beach'],
+    'صحراء': ['صحراء', 'رمل', 'رمال', 'كثبان', 'desert'],
+    'وديان': ['وادي', 'ودي', 'ويدان', 'برك', 'wadi'],
+    'دفع رباعي': ['دفع رباعي', 'رباعي', '4x4', 'جيب'],
+    'قوارب': ['قارب', 'قوارب', 'boat', 'يخت'],
     'عائلي': ['عيال', 'أطفال', 'اطفال', 'عائلة', 'family', 'ولد', 'بنت', 'اولاد', 'أولاد'],
-    'مخيم': ['عشاء مخيم', 'بوفيه مخيم'],
-    'إفطار': ['فطور', 'إفطار', 'breakfast'],
-    'مؤن': ['مؤن', 'اكل', 'أكل', 'طعام', 'وجبات', 'مويه', 'مياه', 'ماء'],
-    'معدات سلامة': ['أمان', 'سلامة', 'safety'],
-    'بدلات': ['بدلة غوص', 'بدلة'],
-    'دراجات': ['دراجة', 'دباب', 'bike', 'motorcycle'],
+    'مسقط': ['مسقط', 'muscat'],
+    'ظفار': ['ظفار', 'صلالة', 'خريف', 'dhofar'],
+    'الشرقية': ['الشرقيه', 'الشرقية', 'شرقية'],
+    'الداخلية': ['الداخليه', 'الداخلية', 'داخلية'],
+    'الباطنة': ['الباطنه', 'الباطنة', 'باطنة'],
+    'البريمي': ['البريمي', 'بريمي'],
+    'مسندم': ['مسندم', 'خصب'],
+    'الوسطى': ['الوسطى', 'وسطى', 'الدقم', 'دقم'],
+    'الظاهرة': ['الظاهره', 'الظاهرة', 'ظاهرة', 'عبري'],
   };
 
   const NEG_TRIGGERS = ['بدون', 'بلا', 'ما احتاج', 'ما ابي', 'ما أبي', 'ما ابغى', 'مو محتاج'];
 
-  // معرفة بأماكن ووجهات سلطنة عُمان — لربط اسم المكان بطبيعته (جبل/وادي/بحر/صحراء/جزيرة/مدينة) واقتراح المعدات المناسبة
+  // معرفة بأماكن ووجهات سلطنة عُمان — لربط اسم المكان بمحافظته وطبيعته (جبل/وادي/بحر/صحراء) واقتراح الحقيبة المناسبة
   const PLACES = {
-    'جبل شمس': ['تسلق', 'جبال', 'تخييم'],
-    'الجبل الأخضر': ['تسلق', 'جبال', 'تخييم'],
-    'جبل بني جبر': ['تسلق', 'جبال'],
-    'جبل القرة': ['تسلق', 'جبال'],
-    'جبل سمحان': ['تسلق', 'جبال'],
-    'جبال الحجر': ['تسلق', 'جبال'],
-    'وادي شاب': ['مشي', 'معدات سلامة'],
-    'وادي بني خالد': ['مشي', 'معدات سلامة'],
-    'وادي درم': ['مشي', 'معدات سلامة'],
-    'وادي دايقة': ['مشي', 'معدات سلامة'],
-    'وادي طيوي': ['مشي', 'معدات سلامة'],
-    'وادي عربيين': ['مشي', 'معدات سلامة'],
-    'وادي الخوض': ['مشي'],
-    'وادي المعيدن': ['مشي'],
-    'شاطئ القرم': ['بحر'],
-    'مسيرة': ['بحر'],
-    'الرمال البيضاء': ['بحر'],
-    'شاطئ الفنار': ['بحر'],
-    'رأس الحد': ['بحر'],
-    'رأس الجنز': ['بحر'],
-    'بندر الخيران': ['بحر', 'قوارب'],
-    'رمال الشرقية': ['صحراء', 'دفع رباعي'],
-    'ويهيبة': ['صحراء', 'دفع رباعي'],
-    'الربع الخالي': ['صحراء', 'دفع رباعي'],
-    'مصيرة': ['بحر', 'قوارب'],
-    'جزر الديمانيات': ['بحر', 'قوارب', 'غوص'],
-    'جزيرة الفحل': ['بحر', 'قوارب'],
-    'صلالة': ['جبال', 'مشي', 'بحر'],
-    'نزوى': ['تسلق', 'مشي'],
-    'صور': ['بحر', 'قوارب'],
-    'مسقط': ['بحر'],
-    'صحار': ['بحر'],
-    'البريمي': ['صحراء'],
-    'عبري': ['صحراء', 'جبال'],
-    'إبراء': ['صحراء'],
-    'بهلاء': ['جبال'],
-    'الرستاق': ['جبال', 'مشي'],
-    'مسندم': ['بحر', 'قوارب', 'غوص'],
-    'خصب': ['بحر', 'قوارب', 'غوص'],
-    'ينقل': ['جبال', 'مشي'],
-    'دقم': ['بحر', 'صحراء'],
+    'جبل شمس': ['جبال', 'الداخلية'],
+    'الجبل الأخضر': ['جبال', 'الداخلية'],
+    'جبل بني جبر': ['جبال', 'الداخلية'],
+    'جبل القرة': ['جبال', 'ظفار'],
+    'جبل سمحان': ['جبال', 'ظفار'],
+    'جبال الحجر': ['جبال', 'الداخلية'],
+    'وادي شاب': ['وديان', 'الشرقية'],
+    'وادي بني خالد': ['وديان', 'الشرقية'],
+    'وادي درم': ['وديان', 'الشرقية'],
+    'وادي دايقة': ['وديان', 'مسقط'],
+    'وادي طيوي': ['وديان', 'الشرقية'],
+    'وادي عربيين': ['وديان', 'الداخلية'],
+    'شاطئ القرم': ['بحر', 'مسقط'],
+    'مسيرة': ['بحر', 'مسقط'],
+    'الرمال البيضاء': ['بحر', 'مسقط'],
+    'رأس الحد': ['بحر', 'الشرقية'],
+    'رأس الجنز': ['بحر', 'الشرقية'],
+    'رمال الشرقية': ['صحراء', 'الشرقية'],
+    'ويهيبة': ['صحراء', 'الشرقية'],
+    'جزيرة مصيرة': ['بحر', 'الوسطى'],
+    'مصيرة': ['بحر', 'الوسطى'],
+    'جزر الديمانيات': ['بحر', 'غوص', 'الباطنة'],
+    'صلالة': ['جبال', 'بحر', 'ظفار'],
+    'نزوى': ['تسلق', 'مشي', 'الداخلية'],
+    'صور': ['بحر', 'قوارب', 'الشرقية'],
+    'مسقط': ['بحر', 'مسقط'],
+    'صحار': ['بحر', 'الباطنة'],
+    'البريمي': ['صحراء', 'البريمي'],
+    'عبري': ['صحراء', 'جبال', 'الظاهرة'],
+    'بهلاء': ['جبال', 'الداخلية'],
+    'الرستاق': ['جبال', 'مشي', 'الباطنة'],
+    'مسندم': ['بحر', 'قوارب', 'غوص', 'مسندم'],
+    'خصب': ['بحر', 'قوارب', 'غوص', 'مسندم'],
+    'الدقم': ['بحر', 'صحراء', 'الوسطى'],
   };
 
   function normalize(text) {
@@ -128,29 +124,55 @@
     sessionStorage.removeItem(SESSION_KEY);
   }
 
-  function matchProducts(session) {
+  // يفكّ وسمي #المحافظة #النوع بنهاية وصف الحقيبة (نفس اصطلاح trips.html)
+  function parseTripMeta(trip) {
+    const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
+    if (!m) return { desc: trip.desc, region: null, terrain: null };
+    return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2] };
+  }
+
+  function tripPrice(trip) {
+    return trip.items.reduce((sum, item) => {
+      const p = findProduct(item.id);
+      return sum + (p ? p.price * item.qty : 0);
+    }, 0);
+  }
+
+  function matchTrips(session) {
     const include = session.includeTags;
     const exclude = new Set(session.excludeTags);
-    const scored = PRODUCTS
-      .map(p => ({ p, score: p.tags.filter(t => include.includes(t) && !exclude.has(t)).length }))
+
+    const scored = TRIPS.map(trip => {
+      const meta = parseTripMeta(trip);
+      let score = 0;
+      if (meta.region && include.includes(meta.region)) score += 2;
+      if (meta.terrain) {
+        if (exclude.has(meta.terrain)) return { trip, score: -1 };
+        if (include.includes(meta.terrain)) score += 2;
+      }
+      // تطابق إضافي حسب وسوم عناصر الحزمة نفسها (تخييم/غوص/تسلق/صيد...)
+      const itemTags = new Set();
+      trip.items.forEach(it => {
+        const p = findProduct(it.id);
+        if (p) p.tags.forEach(t => itemTags.add(t));
+      });
+      include.forEach(tag => {
+        if (itemTags.has(tag) && !exclude.has(tag)) score += 1;
+      });
+      return { trip, score };
+    })
       .filter(x => x.score > 0)
       .sort((a, b) => b.score - a.score);
 
-    // اقتراحات أشمل مو ضيقة: نغطي كل الفئات ذات الصلة (نوم، طبخ، إضاءة، سلامة...) بدل عنصر أو اثنين بس
-    const result = [];
-    const perCategory = {};
-    scored.forEach(({ p }) => {
-      const count = perCategory[p.category] || 0;
-      if (count >= 6 || result.length >= 10) return;
-      result.push(p);
-      perCategory[p.category] = count + 1;
-    });
-    return result;
+    return scored.slice(0, 6).map(x => x.trip);
   }
 
-  function buildReason(p, session) {
-    const matchedTag = p.tags.find(t => session.includeTags.includes(t));
-    return matchedTag ? `مناسب لـ${matchedTag}` : 'يكمّل احتياجات رحلتك';
+  function buildReason(trip, session) {
+    const meta = parseTripMeta(trip);
+    const bits = [];
+    if (meta.region && session.includeTags.includes(meta.region)) bits.push(meta.region);
+    if (meta.terrain && session.includeTags.includes(meta.terrain)) bits.push(meta.terrain);
+    return bits.length ? `مناسبة لـ${bits.join(' · ')}` : 'تكمّل احتياجات رحلتك';
   }
 
   function localAssistantReply(message, session) {
@@ -167,19 +189,19 @@
 
     if (!session.includeTags.length) {
       return {
-        clarify: 'ما فهمت طلبك بالضبط 🙂 تقدر توضح أكثر؟ مثال: "تخييم في الصحراء"، "غوص في مسقط"، "تسلق جبال"، "رحلة صيد بحرية"...',
+        clarify: 'ما فهمت طلبك بالضبط 🙂 تقدر توضح أكثر؟ مثال: "تخييم في الصحراء بالشرقية"، "غوص في مسقط"، "تسلق جبل شمس"، "رحلة بحرية بمسندم"...',
       };
     }
 
-    const products = matchProducts(session);
-    if (!products.length) {
+    const trips = matchTrips(session);
+    if (!trips.length) {
       return {
-        clarify: 'ما لقيت عناصر مطابقة بالضبط بالكتالوج الحالي. جرّب توصف احتياجك بطريقة ثانية أو تصفح الأقسام مباشرة.',
+        clarify: 'ما لقيت حقيبة مطابقة بالضبط بالكتالوج الحالي. جرّب توصف احتياجك بطريقة ثانية أو تصفح كل الحقائب مباشرة.',
       };
     }
 
     return {
-      items: products.map(p => ({ product_id: p.id, category: p.category, reason: buildReason(p, session) })),
+      items: trips.map(t => ({ trip_id: t.id, reason: buildReason(t, session) })),
     };
   }
 
@@ -187,7 +209,7 @@
     if (!data || typeof data !== 'object') return false;
     if (typeof data.clarify === 'string') return true;
     if (Array.isArray(data.items)) {
-      return data.items.every(it => it && typeof it.product_id === 'string' && findProduct(it.product_id));
+      return data.items.every(it => it && typeof it.trip_id === 'string' && TRIPS.some(t => t.id === it.trip_id));
     }
     return false;
   }
@@ -229,7 +251,7 @@
       reply = { clarify: 'صار خلل بسيط، جرّب تكتبها بطريقة ثانية.' };
     }
 
-    session.messages.push({ role: 'assistant', text: reply.clarify || `اقترحت ${reply.items ? reply.items.length : 0} عنصر` });
+    session.messages.push({ role: 'assistant', text: reply.clarify || `اقترحت ${reply.items ? reply.items.length : 0} حقيبة` });
     session.messages = session.messages.slice(-MAX_HISTORY);
     saveSession(session);
     return reply;
@@ -254,27 +276,26 @@
   }
 
   function renderCards(items) {
-    const cart = readCart();
     const cards = items
       .map(item => {
-        const p = findProduct(item.product_id);
-        if (!p) return '';
-        const inCart = !!cart[p.id];
+        const t = TRIPS.find(x => x.id === item.trip_id);
+        if (!t) return '';
+        const meta = parseTripMeta(t);
         return `
-        <div class="assistant-card" data-id="${p.id}">
-          <div class="product-media">${p.emoji}</div>
+        <div class="assistant-card" data-id="${t.id}">
+          <div class="product-media">${t.emoji}</div>
           <div class="product-body">
             <div class="product-cat">${escapeHtml(item.reason || '')}</div>
-            <div class="product-name">${p.name}</div>
+            <div class="product-name">${t.name}</div>
             <div class="product-foot">
-              <div class="price">${p.price} ر.ع <small>/ ${p.unit}</small></div>
-              <button class="ai-toggle-btn${inCart ? ' added' : ''}" data-id="${p.id}">${inCart ? '✓ مضاف — احذف' : 'أضف للسلة'}</button>
+              <div class="price">من ${tripPrice(t)} ر.ع</div>
+              <button class="ai-toggle-btn" data-id="${t.id}">أضف الحقيبة</button>
             </div>
           </div>
         </div>`;
       })
       .join('');
-    return `<div class="chat-bubble assistant"><p>هذا اللي يناسب رحلتك:</p><div class="assistant-cards">${cards}</div></div>`;
+    return `<div class="chat-bubble assistant"><p>هذي الحقائب اللي تناسب رحلتك:</p><div class="assistant-cards">${cards}</div></div>`;
   }
 
   function setupAssistantUI() {
@@ -288,20 +309,13 @@
       const btn = e.target.closest('.ai-toggle-btn');
       if (!btn) return;
       const id = btn.dataset.id;
-      const p = findProduct(id);
-      if (!p) return;
-      const cart = readCart();
-      if (cart[id]) {
-        removeFromCart(id);
-        btn.textContent = 'أضف للسلة';
-        btn.classList.remove('added');
-        showToast('تم الحذف من السلة');
-      } else {
-        addToCart(id, 1);
-        btn.textContent = '✓ مضاف — احذف';
-        btn.classList.add('added');
-        showToast(`تمت إضافة "${p.name}" إلى السلة`);
-      }
+      const trip = TRIPS.find(t => t.id === id);
+      if (!trip) return;
+      trip.items.forEach(item => addToCart(item.id, item.qty));
+      btn.textContent = '✓ أُضيفت الحقيبة';
+      btn.classList.add('added');
+      btn.disabled = true;
+      showToast(`تمت إضافة حقيبة "${trip.name}" إلى السلة`);
     });
 
     form.addEventListener('submit', async e => {
