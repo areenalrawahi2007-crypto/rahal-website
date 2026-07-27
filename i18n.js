@@ -56,7 +56,7 @@
 
     // ---- الرحلات (trips.html) ----
     'trips.title': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
-    'trips.lead': { ar: 'حزم جاهزة تجمع لك المعدات والمؤن المناسبة — واختر تعدّل عليها وتشيل أو تضيف قبل ما تشتري.', en: 'Ready packages bundling the right gear and supplies — customize by adding or removing before you buy.' },
+    'trips.lead': { ar: 'حزم جاهزة تجمع لك المعدات والمؤن المناسبة — تقدر تعدّل عليها وتضيف أو تشيل عناصر قبل ما تشتري.', en: 'Ready packages bundling the right gear and supplies — you can customize by adding or removing items before you buy.' },
     'trips.customizeEyebrow': { ar: 'تخصيص الرحلة', en: 'Customize Trip' },
     'trips.resetPackage': { ar: 'إعادة الحزمة لوضعها الأصلي', en: 'Reset Package to Original' },
     'trips.summaryHeading': { ar: 'ملخص الحزمة', en: 'Package Summary' },
