@@ -8,14 +8,13 @@
     'nav.home': { ar: 'الرئيسية', en: 'Home' },
     'nav.trips': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
     'nav.equipment': { ar: 'المعدات', en: 'Equipment' },
-    'nav.vehicles': { ar: 'المركبات', en: 'Vehicles' },
     'nav.food': { ar: 'التموين', en: 'Food' },
     'nav.suppliers': { ar: 'الموردين', en: 'Suppliers' },
     'nav.contact': { ar: 'تواصل معنا', en: 'Contact' },
     'nav.admin': { ar: 'لوحة الإدارة', en: 'Admin' },
     'nav.registerLogin': { ar: 'تسجيل / دخول', en: 'Sign up / Login' },
     'nav.cart': { ar: 'سلتي', en: 'My Cart' },
-    'search.placeholder': { ar: 'ابحث: قناع غوص، دفع رباعي، مؤن...', en: 'Search: dive mask, 4x4, supplies...' },
+    'search.placeholder': { ar: 'ابحث: قناع غوص، خيمة تخييم، مؤن...', en: 'Search: dive mask, camping tent, supplies...' },
     'search.placeholderShort': { ar: 'ابحث...', en: 'Search...' },
     'cart.viewAria': { ar: 'عرض السلة', en: 'View cart' },
     'menu.aria': { ar: 'القائمة', en: 'Menu' },
@@ -23,11 +22,10 @@
     'lang.toggle': { ar: 'English', en: 'العربية' },
 
     // ---- الفوتر (مشترك) ----
-    'footer.about': { ar: 'منصتك لشراء معدات وتموين رحلتك البرية والبحرية، واستئجار المركبات، من موردين موثوقين في كل ربوع عُمان.', en: 'Your platform for buying land & sea trip gear and supplies, and renting vehicles, from trusted suppliers across Oman.' },
+    'footer.about': { ar: 'منصتك لشراء معدات وتموين رحلتك البرية والبحرية، من موردين موثوقين في كل ربوع عُمان.', en: 'Your platform for buying land & sea trip gear and supplies, from trusted suppliers across Oman.' },
     'footer.browseHeading': { ar: 'تصفح', en: 'Browse' },
     'footer.trips': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
     'footer.equipment': { ar: 'المعدات', en: 'Equipment' },
-    'footer.vehicles': { ar: 'المركبات', en: 'Vehicles' },
     'footer.food': { ar: 'التموين والطعام', en: 'Food & Supplies' },
     'footer.accountHeading': { ar: 'حسابي', en: 'My Account' },
     'footer.checkout': { ar: 'إتمام الطلب', en: 'Checkout' },
@@ -40,7 +38,7 @@
     // ---- الرئيسية (index.html) ----
     'home.heroEyebrow': { ar: 'منصّة رحلاتك البرية والبحرية', en: 'Your land & sea trip platform' },
     'home.heroTitle': { ar: 'جهّز رحلتك القادمة بضغطة واحدة', en: 'Prep your next trip in one click' },
-    'home.heroLead': { ar: 'معدات غوص، مركبات دفع رباعي وقوارب، وتموين جاهز — كل شي تحتاجه لرحلتك من موردين موثوقين، بمكان واحد.', en: 'Diving gear, 4x4s and boats, and ready supplies — everything your trip needs from trusted suppliers, in one place.' },
+    'home.heroLead': { ar: 'معدات تخييم وغوص وتسلق، وتموين جاهز — كل شي تحتاجه لرحلتك من موردين موثوقين، بمكان واحد.', en: 'Camping, diving, and climbing gear, and ready supplies — everything your trip needs from trusted suppliers, in one place.' },
     'home.browseTrips': { ar: 'تصفح الحقائب', en: 'Browse Trip Bags' },
     'home.suppliersPage': { ar: 'صفحة الموردين', en: 'Suppliers Page' },
     'assistant.eyebrow': { ar: 'مساعد رحّال الذكي', en: 'Rahhal Smart Assistant' },
@@ -58,7 +56,7 @@
 
     // ---- الرحلات (trips.html) ----
     'trips.title': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
-    'trips.lead': { ar: 'حزم جاهزة تجمع لك المعدات والمركبة والمؤن المناسبة — واختر تعدّل عليها وتشيل أو تضيف قبل ما تشتري.', en: 'Ready packages bundling the right gear, vehicle, and supplies — customize by adding or removing before you buy.' },
+    'trips.lead': { ar: 'حزم جاهزة تجمع لك المعدات والمؤن المناسبة — واختر تعدّل عليها وتشيل أو تضيف قبل ما تشتري.', en: 'Ready packages bundling the right gear and supplies — customize by adding or removing before you buy.' },
     'trips.customizeEyebrow': { ar: 'تخصيص الرحلة', en: 'Customize Trip' },
     'trips.resetPackage': { ar: 'إعادة الحزمة لوضعها الأصلي', en: 'Reset Package to Original' },
     'trips.summaryHeading': { ar: 'ملخص الحزمة', en: 'Package Summary' },
@@ -71,7 +69,7 @@
     'trips.emptyState': { ar: 'ما فيه حقائب مطابقة لهذا الفلتر. جرّب تغيّر المحافظة أو نوع الوجهة.', en: 'No bags match this filter. Try changing the governorate or destination type.' },
     'section.all': { ar: 'الكل', en: 'All' },
 
-    // ---- المعدات/المركبات/الطعام (صفحات القسم) ----
+    // ---- عناصر مشتركة بصفحات القسم (فلترة/فرز) ----
     'section.sortDefault': { ar: 'الترتيب الافتراضي', en: 'Default Order' },
     'section.sortPriceAsc': { ar: 'السعر: من الأقل للأعلى', en: 'Price: Low to High' },
     'section.sortPriceDesc': { ar: 'السعر: من الأعلى للأقل', en: 'Price: High to Low' },
@@ -80,8 +78,6 @@
     'section.addBtn': { ar: 'أضف', en: 'Add' },
     'equipment.title': { ar: 'المعدات', en: 'Equipment' },
     'equipment.lead': { ar: 'معدات غوص وتخييم ورحلات براً وبحراً بأفضل الأسعار', en: 'Diving, camping, and land & sea trip gear at the best prices' },
-    'vehicles.title': { ar: 'المركبات', en: 'Vehicles' },
-    'vehicles.lead': { ar: 'سيارات دفع رباعي، دراجات، وقوارب للإيجار', en: '4x4 cars, bikes, and boats for rent' },
     'food.title': { ar: 'التموين والطعام', en: 'Food & Supplies' },
     'food.lead': { ar: 'وجبات ومؤن جاهزة لرحلات الغوص والبر', en: 'Ready meals and supplies for diving and land trips' },
 
@@ -112,7 +108,6 @@
     'checkout.address': { ar: 'العنوان / نقطة التسليم', en: 'Address / Delivery Point' },
     'checkout.notes': { ar: 'ملاحظات إضافية (اختياري)', en: 'Additional Notes (optional)' },
     'checkout.notesPlaceholder': { ar: 'أي تفاصيل تساعد المورد يجهز طلبك', en: 'Any details to help the supplier prepare your order' },
-    'checkout.coordinationNote': { ar: 'بنتواصل معك بعد تأكيد الطلب لتنسيق موعد التسليم أو استلام المركبة.', en: "We'll contact you after confirming your order to coordinate delivery or vehicle pickup timing." },
     'checkout.paymentMethodHeading': { ar: 'طريقة الدفع', en: 'Payment Method' },
     'checkout.paymentMethodLabel': { ar: 'اختر طريقة الدفع', en: 'Choose Payment Method' },
     'checkout.payCard': { ar: 'بطاقة ائتمانية / مدى', en: 'Credit Card / Mada' },
@@ -122,12 +117,6 @@
     'checkout.expiry': { ar: 'تاريخ الانتهاء', en: 'Expiry Date' },
     'checkout.confirmOrder': { ar: 'تأكيد الطلب', en: 'Confirm Order' },
     'checkout.orderSummary': { ar: 'ملخص الطلب', en: 'Order Summary' },
-    'checkout.vehicleNoticeTitle': { ar: 'ملاحظة مهمة عن عناصر المركبات بطلبك:', en: 'Important note about vehicle items in your order:' },
-    'checkout.disclaimerText': { ar: 'رحّال منصة بيع وتنسيق إلكترونية فقط تربطك بمورد مركبات مرخّص، وليست مالكة أو مشغّلة لأي مركبة معروضة. المسؤولية الكاملة عن سلامة المركبة وصيانتها وأي ضرر أو حادث يحصل أثناء استخدامها تقع على عاتق المورّد والمشتري بحسب اتفاقهما، ولا تتحمّل رحّال أي مسؤولية قانونية أو مادية عن ذلك. مبلغ التأمين القابل للاسترداد بند منفصل تمامًا عن سعر المركبة.', en: "Rahhal is only an electronic sales and coordination platform connecting you to a licensed vehicle supplier, and does not own or operate any listed vehicle. Full responsibility for the vehicle's safety, maintenance, and any damage or accident during use lies with the supplier and buyer per their agreement; Rahhal bears no legal or financial liability. The refundable deposit is a separate line item from the vehicle price." },
-    'checkout.licenseNumber': { ar: 'رقم رخصة القيادة', en: 'Driving License Number' },
-    'checkout.licensePlaceholder': { ar: 'رقم الرخصة سارية المفعول', en: 'Valid license number' },
-    'checkout.vehicleAgree': { ar: 'أقرّ بأنني اطّلعت على الملاحظة أعلاه بخصوص عناصر المركبات، وأن رحّال منصة تنسيق فقط وغير مسؤولة عن أي ضرر أو حادث يحصل أثناء استخدامها.', en: 'I acknowledge I have read the notice above about vehicle items, and that Rahhal is only a coordination platform and is not liable for any damage or accident during their use.' },
-    'checkout.depositLabel': { ar: 'تأمين قابل للاسترداد', en: 'Refundable Deposit' },
 
     // ---- تواصل معنا (contact.html) ----
     'contact.title': { ar: 'تواصل معنا', en: 'Contact Us' },
@@ -169,7 +158,6 @@
     'suppliers.bioPlaceholder': { ar: 'اكتب وصف مختصر عن منتجاتك وخدماتك', en: 'Briefly describe your products and services' },
     'suppliers.submit': { ar: 'إرسال الطلب', en: 'Submit Request' },
     'suppliers.catEquipment': { ar: 'معدات', en: 'Equipment' },
-    'suppliers.catVehicles': { ar: 'مركبات', en: 'Vehicles' },
     'suppliers.catFood': { ar: 'تموين وطعام', en: 'Food & Supplies' },
 
     // ---- التسجيل (register.html) ----
