@@ -69,16 +69,16 @@
     <div class="container">
       <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / إعادة التجهيز</div>
       <h1 data-i18n="refill.title">إعادة تجهيز الحقيبة</h1>
-      <p data-i18n="refill.lead">خلّصت مكونات حقيبتك؟ اختر نوعها وحدّد وش نقص بس، وندفّع لك السعر حسب اللي تحتاجه فعلاً — مو حقيبة كاملة جديدة.</p>
+      <p data-i18n="refill.lead">خلّصت مكونات حقيبتك؟ اختر حقيبتك وبنعرض لك كل عناصرها الأصلية، وحدّد وش نقص بس — والسعر يتحدّث بالفاتورة على طول حسب اللي تختاره.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
       <div class="field" style="max-width:420px;margin-bottom:24px">
-        <label data-i18n="refill.chooseBagLabel">نوع الحقيبة اللي عندك</label>
-        <select id="refillCategory">
-          <option value="" data-i18n="refill.chooseBag">اختر نوع الحقيبة</option>
+        <label data-i18n="refill.chooseBagLabel">الحقيبة اللي عندك</label>
+        <select id="refillBag">
+          <option value="" data-i18n="refill.chooseBag">اختر حقيبتك</option>
         </select>
       </div>
 
@@ -107,38 +107,28 @@
   </section>
 
   <script>
-    const CATEGORIES_REFILL = [
-      { key: 'السيارة', label: 'حقيبة السيارة' },
-      { key: 'البر', label: 'حقيبة البر والسيح' },
-      { key: 'الشاطئ', label: 'حقيبة الشاطئ' },
-      { key: 'الوادي', label: 'حقيبة الوادي' },
-      { key: 'الجبال', label: 'حقيبة الجبال' },
-      { key: 'السهول', label: 'حقيبة السهول' },
-      { key: 'التسلق', label: 'التسلق المتخصصة' },
-      { key: 'الغوص', label: 'الغوص المتخصصة' },
-    ];
+    // حقائب رحّال الجديدة (مو المستعملة) — كل وحدة هي نفس تركيبة الحقيبة الأصلية اللي اشتراها العميل
+    const bagsForRefill = TRIPS.filter(t => t.desc.includes('#جديد'));
 
-    const categorySelect = document.getElementById('refillCategory');
-    categorySelect.insertAdjacentHTML('beforeend', CATEGORIES_REFILL.map(c => `<option value="${c.key}">${c.label}</option>`).join(''));
+    const bagSelect = document.getElementById('refillBag');
+    bagSelect.insertAdjacentHTML('beforeend', bagsForRefill.map(t => `<option value="${t.id}">${t.emoji} ${t.name}</option>`).join(''));
 
     document.getElementById('refillPhoneRow').insertAdjacentHTML('afterbegin', countryCodeSelectHtml('refillCountryCode'));
 
-    let refillState = {}; // { productId: qty }
+    let refillState = {}; // { productId: qty مطلوب تعبئته }
+    let currentBag = null;
 
-    function refillProductsFor(category) {
-      return PRODUCTS.filter(p => p.tags.includes('أساسية') || p.tags.includes(category));
-    }
-
-    function renderRefillItems(category) {
-      const products = refillProductsFor(category);
-      document.getElementById('refillItems').innerHTML = products.map(p => {
+    function renderRefillItems() {
+      document.getElementById('refillItems').innerHTML = currentBag.items.map(item => {
+        const p = findProduct(item.id);
+        if (!p) return '';
         const qty = refillState[p.id] || 0;
         return `
           <div class="cart-item" data-id="${p.id}">
             <div class="thumb">${p.emoji}</div>
             <div class="info">
               <h4>${p.name}</h4>
-              <div class="unit-price">${p.price} ر.ع / ${p.unit}</div>
+              <div class="unit-price">${p.price} ر.ع / ${p.unit} — <span data-i18n="refill.originalQty">الكمية الأصلية بالحقيبة</span>: ${item.qty}</div>
             </div>
             <div class="qty-control">
               <button class="qty-minus">−</button>
@@ -148,6 +138,7 @@
             <div class="item-total">${(p.price * qty).toFixed(1)} ر.ع</div>
           </div>`;
       }).join('');
+      if (window.RahalI18n) RahalI18n.applyI18n();
       renderRefillSummary();
     }
 
@@ -163,12 +154,13 @@
       document.getElementById('refillTotal').textContent = total.toFixed(1) + ' ر.ع';
     }
 
-    categorySelect.addEventListener('change', () => {
-      const category = categorySelect.value;
+    bagSelect.addEventListener('change', () => {
+      const bagId = bagSelect.value;
+      currentBag = bagsForRefill.find(t => t.id === bagId) || null;
       refillState = {};
-      document.getElementById('refillEmpty').style.display = category ? 'none' : 'block';
-      document.getElementById('refillArea').hidden = !category;
-      if (category) renderRefillItems(category);
+      document.getElementById('refillEmpty').style.display = currentBag ? 'none' : 'block';
+      document.getElementById('refillArea').hidden = !currentBag;
+      if (currentBag) renderRefillItems();
     });
 
     document.getElementById('refillItems').addEventListener('click', e => {
@@ -177,7 +169,7 @@
       const id = row.dataset.id;
       if (e.target.closest('.qty-plus')) refillState[id] = (refillState[id] || 0) + 1;
       if (e.target.closest('.qty-minus')) refillState[id] = Math.max(0, (refillState[id] || 0) - 1);
-      renderRefillItems(categorySelect.value);
+      renderRefillItems();
     });
 
     document.getElementById('refillForm').addEventListener('submit', e => {

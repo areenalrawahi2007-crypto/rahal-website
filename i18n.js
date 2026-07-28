@@ -101,12 +101,13 @@
 
     // ---- إعادة التجهيز (refill.html) ----
     'refill.title': { ar: 'إعادة تجهيز الحقيبة', en: 'Bag Refill Service' },
-    'refill.lead': { ar: 'خلّصت مكونات حقيبتك؟ اختر نوعها وحدّد وش نقص بس، وندفّع لك السعر حسب اللي تحتاجه فعلاً — مو حقيبة كاملة جديدة.', en: 'Ran out of your bag contents? Pick its type and choose only what you need refilled — you pay for what you actually need, not a whole new bag.' },
-    'refill.chooseBagLabel': { ar: 'نوع الحقيبة اللي عندك', en: 'The Bag Type You Have' },
-    'refill.chooseBag': { ar: 'اختر نوع الحقيبة', en: 'Choose bag type' },
+    'refill.lead': { ar: 'خلّصت مكونات حقيبتك؟ اختر حقيبتك وبنعرض لك كل عناصرها الأصلية، وحدّد وش نقص بس — والسعر يتحدّث بالفاتورة على طول حسب اللي تختاره.', en: "Ran out of your bag contents? Pick your bag and we'll show its exact original items — choose only what's missing, and the invoice updates instantly." },
+    'refill.chooseBagLabel': { ar: 'الحقيبة اللي عندك', en: 'The Bag You Have' },
+    'refill.chooseBag': { ar: 'اختر حقيبتك', en: 'Choose your bag' },
+    'refill.originalQty': { ar: 'الكمية الأصلية بالحقيبة', en: 'Original quantity in bag' },
     'refill.summaryHeading': { ar: 'ملخص إعادة التجهيز', en: 'Refill Summary' },
     'refill.submit': { ar: 'أرسل طلب إعادة التجهيز', en: 'Submit Refill Request' },
-    'refill.emptyState': { ar: 'اختر نوع الحقيبة فوق عشان تشوف عناصرها وتحدّد وش تحتاج تعبّيه من جديد.', en: 'Choose a bag type above to see its items and pick what needs refilling.' },
+    'refill.emptyState': { ar: 'اختر حقيبتك فوق عشان تشوف عناصرها الأصلية وتحدّد وش تحتاج تعبّيه من جديد.', en: 'Choose your bag above to see its original items and pick what needs refilling.' },
 
     // ---- عناصر مشتركة بصفحات القسم (فلترة/فرز) ----
     'section.sortDefault': { ar: 'الترتيب الافتراضي', en: 'Default Order' },
