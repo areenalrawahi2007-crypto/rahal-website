@@ -124,6 +124,7 @@ input,select,textarea{ font-family:inherit; }
 }
 .trip-badge-remote{ background: rgba(79,122,102,.14); color: var(--moss-dark); }
 .trip-badge-flood{ background: rgba(193,81,47,.12); color: var(--rust); }
+.trip-badge-used{ background: rgba(217,164,65,.16); color: var(--gold-dark); }
 .trip-notice{
   margin-top:12px; padding:12px 14px; border-radius:10px;
   background: rgba(193,81,47,.08); border: 1px solid rgba(193,81,47,.25);

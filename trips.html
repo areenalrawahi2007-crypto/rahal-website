@@ -21,12 +21,12 @@
       <nav class="main-nav">
         <a href="index.html" data-nav="index" data-i18n="nav.home">الرئيسية</a>
         <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الحقيبة الجاهزة</a>
-        <a href="suppliers.html" data-nav="suppliers" data-i18n="nav.suppliers">الموردين</a>
+        <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
       <div class="nav-search">
-        <input type="text" class="js-search-input" placeholder="ابحث: قناع غوص، خيمة تخييم، حبل تسلق..." data-i18n-placeholder="search.placeholder">
+        <input type="text" class="js-search-input" placeholder="ابحث: حقيبة الشاطئ، حقيبة البر..." data-i18n-placeholder="search.placeholder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         <div class="search-results"></div>
       </div>
@@ -55,7 +55,7 @@
       </div>
       <a href="index.html" data-i18n="nav.home">الرئيسية</a>
       <a href="trips.html" data-i18n="nav.trips">الحقيبة الجاهزة</a>
-      <a href="suppliers.html" data-i18n="nav.suppliers">الموردين</a>
+      <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
@@ -67,7 +67,7 @@
     <div class="container">
       <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / الحقيبة الجاهزة</div>
       <h1 data-i18n="trips.title">الحقيبة الجاهزة</h1>
-      <p data-i18n="trips.lead">حزم جاهزة تجمع لك المعدات المناسبة — تقدر تعدّل عليها وتضيف أو تشيل عناصر قبل ما تشتري.</p>
+      <p data-i18n="trips.lead">حقائب رحلات جاهزة من مخزون رحّال — تقدر تعدّل عليها وتضيف أو تشيل عناصر قبل ما تشتري.</p>
     </div>
   </section>
 
@@ -75,18 +75,18 @@
     <div class="container">
       <div class="toolbar" style="flex-direction:column;align-items:stretch;gap:16px">
         <div>
-          <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:#4d5449" data-i18n="trips.regionLabel">المحافظة</div>
-          <div class="filter-chips" id="regionChips"></div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:#4d5449" data-i18n="trips.categoryLabel">نوع الحقيبة</div>
+          <div class="filter-chips" id="categoryChips"></div>
         </div>
         <div>
-          <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:#4d5449" data-i18n="trips.terrainLabel">نوع الوجهة</div>
-          <div class="filter-chips" id="terrainChips"></div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:#4d5449" data-i18n="trips.conditionLabel">الحالة</div>
+          <div class="filter-chips" id="conditionChips"></div>
         </div>
       </div>
       <div class="product-grid" id="tripsGrid" style="margin-top:24px"></div>
       <div class="empty-state" id="emptyTrips" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <p data-i18n="trips.emptyState">ما فيه حقائب مطابقة لهذا الفلتر. جرّب تغيّر المحافظة أو نوع الوجهة.</p>
+        <p data-i18n="trips.emptyState">ما فيه حقائب مطابقة لهذا الفلتر. جرّب تغيّر النوع أو الحالة.</p>
       </div>
     </div>
   </section>
@@ -94,7 +94,7 @@
   <section class="section" style="background:#fff" id="builderSection" hidden>
     <div class="container">
       <div class="section-head" style="margin-bottom:24px">
-        <div class="eyebrow" data-i18n="trips.customizeEyebrow">تخصيص الرحلة</div>
+        <div class="eyebrow" data-i18n="trips.customizeEyebrow">تخصيص الحقيبة</div>
         <h2 id="builderTitle"></h2>
         <p id="builderDesc" style="color:#6b7268"></p>
         <div id="builderNotice" class="trip-notice" hidden></div>
@@ -103,34 +103,46 @@
       <div class="cart-layout">
         <div class="card-surface">
           <div id="builderItems"></div>
-          <button class="btn btn-outline btn-sm" id="resetBuilder" style="margin-top:16px" data-i18n="trips.resetPackage">إعادة الحزمة لوضعها الأصلي</button>
+          <button class="btn btn-outline btn-sm" id="resetBuilder" style="margin-top:16px" data-i18n="trips.resetPackage">إعادة الحقيبة لوضعها الأصلي</button>
         </div>
         <div class="summary-card">
-          <h3 data-i18n="trips.summaryHeading">ملخص الحزمة</h3>
+          <h3 data-i18n="trips.summaryHeading">ملخص الحقيبة</h3>
           <div class="summary-row"><span data-i18n="trips.itemCount">عدد العناصر المختارة</span><span id="builderCount">0</span></div>
           <div class="summary-row total"><span data-i18n="trips.total">الإجمالي</span><span id="builderTotal">0 ر.ع</span></div>
-          <button class="btn btn-primary btn-block" id="addTripToCart" style="margin-top:16px" data-i18n="trips.addToCart">أضف الحزمة للسلة</button>
+          <button class="btn btn-primary btn-block" id="addTripToCart" style="margin-top:16px" data-i18n="trips.addToCart">أضف الحقيبة للسلة</button>
         </div>
       </div>
     </div>
   </section>
 
   <script>
-    const REGIONS = ['مسقط','ظفار','الشرقية','الداخلية','الباطنة','البريمي','مسندم','الوسطى','الظاهرة'];
-    const TERRAINS = ['جبال','بحر','صحراء','وديان'];
-    const TERRAIN_ICONS = { 'جبال':'🏔️', 'بحر':'🌊', 'صحراء':'🏜️', 'وديان':'💧' };
+    const CATEGORIES_BAG = [
+      { key: 'السيارة', label: 'حقيبة السيارة', icon: '🚗' },
+      { key: 'البر', label: 'حقيبة البر والسيح', icon: '🏕️' },
+      { key: 'الشاطئ', label: 'حقيبة الشاطئ', icon: '🏖️' },
+      { key: 'الوادي', label: 'حقيبة الوادي', icon: '💧' },
+      { key: 'الجبال', label: 'حقيبة الجبال', icon: '⛰️' },
+      { key: 'السهول', label: 'حقيبة السهول', icon: '🌾' },
+      { key: 'التسلق', label: 'التسلق المتخصصة', icon: '🧗' },
+      { key: 'الغوص', label: 'الغوص المتخصصة', icon: '🤿' },
+    ];
+    const CATEGORY_ICONS = Object.fromEntries(CATEGORIES_BAG.map(c => [c.key, c.icon]));
+    // الفئات اللي فيها احتمال بعد جغرافي عن التغطية المعتادة — تفعّل خطة الرجوع الآمنة عند الدفع
+    const REMOTE_RISK_CATEGORIES = new Set(['البر', 'الوادي', 'الجبال', 'التسلق']);
 
-    // الرحلات مربوطة بمحافظة ونوع وجهة عبر وسمين بنهاية الوصف (#المحافظة #النوع) لأن قاعدة بيانات
+    // الحقيبة مربوطة بنوعها وحالتها (جديد/مستعمل) عبر وسمين بنهاية الوصف (#النوع #الحالة) لأن قاعدة بيانات
     // الباك اند الحية ما تدعم حقول إضافية بجدول الرحلات — نفكّهم هنا للفلترة والعرض فقط.
     function parseTripMeta(trip) {
-      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)(?:\s*#(\S+))?\s*$/);
-      if (!m) return { desc: trip.desc, region: null, terrain: null, remote: false };
-      return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2], remote: m[3] === 'نائية' };
+      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
+      if (!m) return { desc: trip.desc, category: null, condition: 'جديد', remote: false };
+      const category = m[1];
+      const condition = m[2];
+      return { desc: trip.desc.slice(0, m.index).trim(), category, condition, remote: REMOTE_RISK_CATEGORIES.has(category) };
     }
 
     const params = new URLSearchParams(location.search);
-    let activeRegion = params.get('region') || '';
-    let activeTerrain = params.get('terrain') || '';
+    let activeCategory = params.get('category') || '';
+    let activeCondition = params.get('condition') || '';
     const searchTerm = (params.get('q') || '').toLowerCase();
 
     let selectedTrip = null;
@@ -144,34 +156,35 @@
     }
 
     function renderFilters() {
-      document.getElementById('regionChips').innerHTML =
-        `<button class="chip${!activeRegion ? ' active' : ''}" data-region="" data-i18n="section.all">الكل</button>` +
-        REGIONS.map(r => `<button class="chip${activeRegion === r ? ' active' : ''}" data-region="${r}">${r}</button>`).join('');
-      document.getElementById('terrainChips').innerHTML =
-        `<button class="chip${!activeTerrain ? ' active' : ''}" data-terrain="" data-i18n="section.all">الكل</button>` +
-        TERRAINS.map(t => `<button class="chip${activeTerrain === t ? ' active' : ''}" data-terrain="${t}">${TERRAIN_ICONS[t]} ${t}</button>`).join('');
+      document.getElementById('categoryChips').innerHTML =
+        `<button class="chip${!activeCategory ? ' active' : ''}" data-category="" data-i18n="section.all">الكل</button>` +
+        CATEGORIES_BAG.map(c => `<button class="chip${activeCategory === c.key ? ' active' : ''}" data-category="${c.key}">${c.icon} ${c.label}</button>`).join('');
+      document.getElementById('conditionChips').innerHTML =
+        `<button class="chip${!activeCondition ? ' active' : ''}" data-condition="" data-i18n="section.all">الكل</button>` +
+        `<button class="chip${activeCondition === 'جديد' ? ' active' : ''}" data-condition="جديد">🆕 جديدة</button>` +
+        `<button class="chip${activeCondition === 'مستعمل' ? ' active' : ''}" data-condition="مستعمل">🔁 مستعملة (نظيفة ومفحوصة)</button>`;
       if (window.RahalI18n) RahalI18n.applyI18n();
     }
 
     function renderTripsGrid() {
       const list = TRIPS.filter(trip => {
         const meta = parseTripMeta(trip);
-        const matchesRegion = !activeRegion || meta.region === activeRegion;
-        const matchesTerrain = !activeTerrain || meta.terrain === activeTerrain;
+        const matchesCategory = !activeCategory || meta.category === activeCategory;
+        const matchesCondition = !activeCondition || meta.condition === activeCondition;
         const matchesSearch = !searchTerm || (trip.name + ' ' + meta.desc).toLowerCase().includes(searchTerm);
-        return matchesRegion && matchesTerrain && matchesSearch;
+        return matchesCategory && matchesCondition && matchesSearch;
       });
       document.getElementById('emptyTrips').style.display = list.length ? 'none' : 'block';
       document.getElementById('tripsGrid').innerHTML = list.map(trip => {
         const meta = parseTripMeta(trip);
         const tags = [
-          `${trip.days} ${trip.days === 1 ? 'يوم' : 'أيام'}`,
-          meta.region ? `📍 ${meta.region}` : '',
-          meta.terrain ? `${TERRAIN_ICONS[meta.terrain] || ''} ${meta.terrain}` : '',
+          meta.category ? `${CATEGORY_ICONS[meta.category] || ''} ${meta.category}` : '',
+          meta.condition === 'مستعمل' ? '🔁 مستعملة' : '🆕 جديدة',
         ].filter(Boolean).join(' · ');
         const badges = [
-          meta.remote ? '<span class="trip-badge trip-badge-remote">📡 وجهة نائية — تحتاج خطة رجوع آمنة</span>' : '',
-          meta.terrain === 'وديان' && isFloodRiskSeason() ? '<span class="trip-badge trip-badge-flood">⚠️ تنبيه موسمي: احتمال سيول</span>' : '',
+          meta.remote ? '<span class="trip-badge trip-badge-remote">📡 قد تكون وجهة نائية — تحتاج خطة رجوع آمنة</span>' : '',
+          meta.category === 'الوادي' && isFloodRiskSeason() ? '<span class="trip-badge trip-badge-flood">⚠️ تنبيه موسمي: احتمال سيول</span>' : '',
+          meta.condition === 'مستعمل' ? '<span class="trip-badge trip-badge-used">🔁 مُعادة بيع — نُظّفت وفُحصت بالكامل</span>' : '',
         ].filter(Boolean).join('');
         return `
         <div class="product-card">
@@ -194,17 +207,17 @@
       if (window.RahalI18n) RahalI18n.applyI18n();
     }
 
-    document.getElementById('regionChips').addEventListener('click', e => {
+    document.getElementById('categoryChips').addEventListener('click', e => {
       const btn = e.target.closest('.chip');
       if (!btn) return;
-      activeRegion = btn.dataset.region || '';
+      activeCategory = btn.dataset.category || '';
       renderFilters();
       renderTripsGrid();
     });
-    document.getElementById('terrainChips').addEventListener('click', e => {
+    document.getElementById('conditionChips').addEventListener('click', e => {
       const btn = e.target.closest('.chip');
       if (!btn) return;
-      activeTerrain = btn.dataset.terrain || '';
+      activeCondition = btn.dataset.condition || '';
       renderFilters();
       renderTripsGrid();
     });
@@ -217,10 +230,11 @@
       document.getElementById('builderSection').hidden = false;
       document.getElementById('builderTitle').textContent = selectedTrip.name;
       const meta = parseTripMeta(selectedTrip);
-      document.getElementById('builderDesc').textContent = `${meta.desc} — مدة الرحلة: ${selectedTrip.days} ${selectedTrip.days === 1 ? 'يوم' : 'أيام'}`;
+      document.getElementById('builderDesc').textContent = `${meta.desc}`;
       const noticeParts = [];
-      if (meta.remote) noticeParts.push('📡 وجهة نائية: بعد إضافة الحزمة للسلة، بتظهر خطوة "خطة رجوع آمنة" بصفحة الدفع — تسجّل فيها موعد رجوعك المتوقع وجهة اتصال طوارئ.');
-      if (meta.terrain === 'وديان' && isFloodRiskSeason()) noticeParts.push('⚠️ تنبيه موسمي: هذا الوقت من السنة يزيد فيه احتمال السيول بالأودية — تابع حالة الطقس قبل التحرك وتجنّب النزول للوادي عند الإنذار بأمطار.');
+      if (meta.remote) noticeParts.push('📡 هذي الحقيبة لوجهات ممكن تكون بعيدة: بعد إضافتها للسلة، بتظهر خطوة "خطة رجوع آمنة" بصفحة الدفع — تسجّل فيها موعد رجوعك المتوقع وجهة اتصال طوارئ.');
+      if (meta.category === 'الوادي' && isFloodRiskSeason()) noticeParts.push('⚠️ تنبيه موسمي: هذا الوقت من السنة يزيد فيه احتمال السيول بالأودية — تابع حالة الطقس قبل التحرك.');
+      if (meta.condition === 'مستعمل') noticeParts.push('🔁 هذي حقيبة مُعادة بيع ضمن برنامج إعادة الشراء — نُظّفت وفُحصت بالكامل قبل عرضها.');
       const noticeEl = document.getElementById('builderNotice');
       if (noticeParts.length) {
         noticeEl.innerHTML = noticeParts.map(t => `<p>${t}</p>`).join('');
@@ -256,7 +270,7 @@
             <div class="item-total">${(p.price * qty).toFixed(1)} ر.ع</div>
             <button class="remove-link">حذف</button>
           </div>`;
-      }).join('') || '<p style="color:#8b9188">ما بقي أي عنصر بالحزمة — اضغط "إعادة الحزمة لوضعها الأصلي" لو تبي ترجعها زي ما كانت.</p>';
+      }).join('') || '<p style="color:#8b9188">ما بقي أي عنصر بالحقيبة — اضغط "إعادة الحقيبة لوضعها الأصلي" لو تبي ترجعها زي ما كانت.</p>';
 
       document.getElementById('builderCount').textContent = count;
       document.getElementById('builderTotal').textContent = total.toFixed(1) + ' ر.ع';
@@ -304,18 +318,18 @@
     <div class="container footer-grid">
       <div>
         <h4>رحّال</h4>
-        <p data-i18n="footer.about">منصتك لشراء معدات رحلتك البرية والبحرية، من موردين موثوقين في كل ربوع عُمان.</p>
+        <p data-i18n="footer.about">متجر رحّال — حقائب رحلات جاهزة من مخزوننا الخاص، تقدر تشتريها جديدة أو مستعملة نظيفة ضمن برنامج إعادة الشراء.</p>
       </div>
       <div>
         <h4 data-i18n="footer.browseHeading">تصفح</h4>
         <a href="trips.html" data-i18n="footer.trips">الحقيبة الجاهزة</a>
+        <a href="sell-back.html" data-i18n="footer.sellback">بيع حقيبتك</a>
       </div>
       <div>
         <h4 data-i18n="footer.accountHeading">حسابي</h4>
         <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
         <a href="cart.html" data-i18n="nav.cart">سلتي</a>
         <a href="checkout.html" data-i18n="footer.checkout">إتمام الطلب</a>
-        <a href="suppliers.html" data-i18n="footer.suppliersLink">الموردون</a>
         <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       </div>
       <div>

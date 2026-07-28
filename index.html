@@ -22,12 +22,12 @@
       <nav class="main-nav">
         <a href="index.html" data-nav="index" data-i18n="nav.home">الرئيسية</a>
         <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الحقيبة الجاهزة</a>
-        <a href="suppliers.html" data-nav="suppliers" data-i18n="nav.suppliers">الموردين</a>
+        <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
       <div class="nav-search">
-        <input type="text" class="js-search-input" placeholder="ابحث: قناع غوص، خيمة تخييم، حبل تسلق..." data-i18n-placeholder="search.placeholder">
+        <input type="text" class="js-search-input" placeholder="ابحث: حقيبة الشاطئ، حقيبة البر..." data-i18n-placeholder="search.placeholder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         <div class="search-results"></div>
       </div>
@@ -56,7 +56,7 @@
       </div>
       <a href="index.html" data-i18n="nav.home">الرئيسية</a>
       <a href="trips.html" data-i18n="nav.trips">الحقيبة الجاهزة</a>
-      <a href="suppliers.html" data-i18n="nav.suppliers">الموردين</a>
+      <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
@@ -66,12 +66,11 @@
   <main>
 <section class="hero">
     <div class="container hero-inner">
-      <div class="eyebrow" style="justify-content:center" data-i18n="home.heroEyebrow">منصّة رحلاتك البرية والبحرية</div>
+      <div class="eyebrow" style="justify-content:center" data-i18n="home.heroEyebrow">متجر حقائب الرحلات الجاهزة</div>
       <h1 data-i18n="home.heroTitle">جهّز رحلتك القادمة بضغطة واحدة</h1>
-      <p class="lead" data-i18n="home.heroLead">معدات تخييم وغوص وتسلق — كل شي تحتاجه لرحلتك من موردين موثوقين، بمكان واحد.</p>
+      <p class="lead" data-i18n="home.heroLead">حقائب رحلات جاهزة بمحتويات حقيقية من مخزوننا الخاص — جديدة أو مستعملة نظيفة بسعر أقل، لكل أنواع الرحلات.</p>
       <div class="hero-actions">
         <a href="trips.html" class="btn btn-primary" data-i18n="home.browseTrips">تصفح الحقائب</a>
-        <a href="suppliers.html" class="btn btn-outline" style="border-color:#F4EFE2;color:#F4EFE2" data-i18n="home.suppliersPage">صفحة الموردين</a>
       </div>
     </div>
   </section>
@@ -82,7 +81,7 @@
         <div class="assistant-head">
           <div class="eyebrow" style="justify-content:center" data-i18n="assistant.eyebrow">مساعد رحّال الذكي</div>
           <h2 data-i18n="assistant.title">وش تحتاج لرحلتك؟ اكتبها لي بكلامك العادي</h2>
-          <p style="color:#6b7268" data-i18n="assistant.lead">مثال: "رايح جبل شمس نهاية الأسبوع مع العيال" أو "بديت اطلع تخييم اول مرة وش احتاج"</p>
+          <p style="color:#6b7268" data-i18n="assistant.lead">مثال: "بديت اطلع تخييم بالبر" أو "بغيت حقيبة بحر للعائلة"</p>
         </div>
         <form id="assistantForm" class="assistant-input-row">
           <input type="text" id="assistantInput" placeholder="اكتب وصف رحلتك هنا..." data-i18n-placeholder="assistant.inputPlaceholder" autocomplete="off" required>
@@ -96,21 +95,25 @@
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow" data-i18n="home.categoriesEyebrow">اختر وجهتك</div>
-        <h2 data-i18n="home.categoriesTitle">حقيبة رحلة جاهزة لكل نوع وجهة</h2>
+        <div class="eyebrow" data-i18n="home.categoriesEyebrow">اختر نوع رحلتك</div>
+        <h2 data-i18n="home.categoriesTitle">حقيبة جاهزة لكل نوع رحلة</h2>
         <p style="color:#6b7268" data-i18n="home.categoriesLead">اضغط على أي بطاقة عشان تشوف الحقائب المناسبة لها</p>
       </div>
-      <div class="stamp-grid" id="terrainGrid"></div>
+      <div class="stamp-grid" id="categoryGrid"></div>
     </div>
   </section>
 
   <section class="section" style="background:#fff">
     <div class="container">
       <div class="section-head">
-        <div class="eyebrow" data-i18n="home.regionsEyebrow">تصفّح حسب المحافظة</div>
-        <h2 data-i18n="home.regionsTitle">حقائب من كل ربوع عُمان</h2>
+        <div class="eyebrow" data-i18n="home.sellbackEyebrow">برنامج إعادة الشراء</div>
+        <h2 data-i18n="home.sellbackTitle">خلصت من حقيبتك؟ بيعها لنا بنص السعر</h2>
+        <p style="color:#6b7268" data-i18n="home.sellbackLead">ننظّفها ونفحصها ونعيد بيعها بسعر أقل لعميل ثاني — دورة استخدام أذكى وأرخص للجميع.</p>
       </div>
-      <div class="filter-chips" id="regionQuickLinks" style="justify-content:center"></div>
+      <div style="text-align:center">
+        <a href="sell-back.html" class="btn btn-outline" data-i18n="home.sellbackCta">بيع حقيبتك المستعملة</a>
+        <a href="trips.html?condition=مستعمل" class="btn btn-outline" style="margin-inline-start:10px" data-i18n="home.browseUsed">تصفح الحقائب المستعملة</a>
+      </div>
     </div>
   </section>
 
@@ -125,19 +128,21 @@
   </section>
 
   <script>
-    const TERRAINS_HOME = [
-      { id: 'جبال', desc: 'تسلق ومبيت بأعلى قمم عُمان' },
-      { id: 'بحر', desc: 'معدات غوص وسواحل عُمان' },
-      { id: 'صحراء', desc: 'كثبان وتخييم صحراوي' },
-      { id: 'وديان', desc: 'برك ومسارات طبيعية' },
+    const CATEGORIES_HOME = [
+      { key: 'السيارة', label: 'حقيبة السيارة', icon: '🚗', desc: 'طوارئ وراحة يومية بالسيارة' },
+      { key: 'البر', label: 'حقيبة البر والسيح', icon: '🏕️', desc: 'تخييم وشواء متكامل' },
+      { key: 'الشاطئ', label: 'حقيبة الشاطئ', icon: '🏖️', desc: 'يوم بحر مريح وكامل' },
+      { key: 'الوادي', label: 'حقيبة الوادي', icon: '💧', desc: 'خفيفة ومقاومة للماء' },
+      { key: 'الجبال', label: 'حقيبة الجبال', icon: '⛰️', desc: 'مشي وتسلّق جبلي أساسي' },
+      { key: 'السهول', label: 'حقيبة السهول', icon: '🌾', desc: 'نزهة عائلية بسيطة' },
+      { key: 'التسلق', label: 'التسلق المتخصصة', icon: '🧗', desc: 'معدات تسلق إضافية' },
+      { key: 'الغوص', label: 'الغوص المتخصصة', icon: '🤿', desc: 'غوص سطحي وسنوركل' },
     ];
-    const TERRAIN_ICONS_HOME = { 'جبال':'🏔️', 'بحر':'🌊', 'صحراء':'🏜️', 'وديان':'💧' };
-    const REGIONS_HOME = ['مسقط','ظفار','الشرقية','الداخلية','الباطنة','البريمي','مسندم','الوسطى','الظاهرة'];
 
     function parseTripMetaHome(trip) {
-      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)(?:\s*#(\S+))?\s*$/);
-      if (!m) return { desc: trip.desc, region: null, terrain: null, remote: false };
-      return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2], remote: m[3] === 'نائية' };
+      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
+      if (!m) return { desc: trip.desc, category: null, condition: 'جديد' };
+      return { desc: trip.desc.slice(0, m.index).trim(), category: m[1], condition: m[2] };
     }
 
     function tripBasePriceHome(trip) {
@@ -147,34 +152,28 @@
       }, 0);
     }
 
-    // بطاقات نوع الوجهة
-    document.getElementById('terrainGrid').innerHTML = TERRAINS_HOME.map(t => {
-      const count = TRIPS.filter(trip => parseTripMetaHome(trip).terrain === t.id).length;
+    // بطاقات نوع الحقيبة
+    document.getElementById('categoryGrid').innerHTML = CATEGORIES_HOME.map(c => {
+      const count = TRIPS.filter(trip => parseTripMetaHome(trip).category === c.key && parseTripMetaHome(trip).condition === 'جديد').length;
       return `
-      <a href="trips.html?terrain=${encodeURIComponent(t.id)}" class="stamp-card">
+      <a href="trips.html?category=${encodeURIComponent(c.key)}" class="stamp-card">
         <span class="count-tag">${count} حقيبة</span>
-        <div class="stamp-badge" style="font-size:34px;border-style:solid">${TERRAIN_ICONS_HOME[t.id]}</div>
-        <h3>${t.id}</h3>
-        <p>${t.desc}</p>
+        <div class="stamp-badge" style="font-size:34px;border-style:solid">${c.icon}</div>
+        <h3>${c.label}</h3>
+        <p>${c.desc}</p>
         <span class="stamp-link">تصفح الحقائب ←</span>
       </a>`;
     }).join('');
 
-    // روابط سريعة حسب المحافظة
-    document.getElementById('regionQuickLinks').innerHTML = REGIONS_HOME.map(r => {
-      const count = TRIPS.filter(trip => parseTripMetaHome(trip).region === r).length;
-      return `<a href="trips.html?region=${encodeURIComponent(r)}" class="chip">${r} <small style="opacity:.6">(${count})</small></a>`;
-    }).join('');
-
-    // حقائب مقترحة (أول 4)
-    const featuredTrips = TRIPS.slice(0,4);
+    // حقائب مقترحة (أول 4 جديدة)
+    const featuredTrips = TRIPS.filter(t => parseTripMetaHome(t).condition === 'جديد').slice(0, 4);
     document.getElementById('featuredGrid').innerHTML = featuredTrips.map(trip => {
       const meta = parseTripMetaHome(trip);
       return `
       <div class="product-card">
         <div class="product-media">${trip.emoji}</div>
         <div class="product-body">
-          <div class="product-cat">${meta.region ? '📍 ' + meta.region : ''} ${meta.terrain ? (TERRAIN_ICONS_HOME[meta.terrain]||'') + ' ' + meta.terrain : ''}</div>
+          <div class="product-cat">${meta.category || ''}</div>
           <div class="product-name">${trip.name}</div>
           <p class="product-desc">${meta.desc}</p>
           <div class="product-foot">
@@ -190,18 +189,18 @@
     <div class="container footer-grid">
       <div>
         <h4>رحّال</h4>
-        <p data-i18n="footer.about">منصتك لشراء معدات رحلتك البرية والبحرية، من موردين موثوقين في كل ربوع عُمان.</p>
+        <p data-i18n="footer.about">متجر رحّال — حقائب رحلات جاهزة من مخزوننا الخاص، تقدر تشتريها جديدة أو مستعملة نظيفة ضمن برنامج إعادة الشراء.</p>
       </div>
       <div>
         <h4 data-i18n="footer.browseHeading">تصفح</h4>
         <a href="trips.html" data-i18n="footer.trips">الحقيبة الجاهزة</a>
+        <a href="sell-back.html" data-i18n="footer.sellback">بيع حقيبتك</a>
       </div>
       <div>
         <h4 data-i18n="footer.accountHeading">حسابي</h4>
         <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
         <a href="cart.html" data-i18n="nav.cart">سلتي</a>
         <a href="checkout.html" data-i18n="footer.checkout">إتمام الطلب</a>
-        <a href="suppliers.html" data-i18n="footer.suppliersLink">الموردون</a>
         <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       </div>
       <div>

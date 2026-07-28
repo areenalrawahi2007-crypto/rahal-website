@@ -119,9 +119,9 @@ function setupMobileDrawer() {
 
 // يفكّ وسمي #المحافظة #النوع بنهاية وصف الرحلة (نفس منطق trips.html) لعرضهما بنتائج البحث
 function parseTripMetaForSearch(trip) {
-  const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)(?:\s*#(\S+))?\s*$/);
-  if (!m) return { desc: trip.desc, region: null, terrain: null, remote: false };
-  return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2], remote: m[3] === 'نائية' };
+  const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
+  if (!m) return { desc: trip.desc, category: null, condition: 'جديد' };
+  return { desc: trip.desc.slice(0, m.index).trim(), category: m[1], condition: m[2] };
 }
 
 // موسم خطر السيول بعُمان تقريباً أكتوبر–أبريل — تنبيه موسمي ثابت وليس بيانات أنواء حية (لا يوجد اشتراك بخدمة أرصاد رسمية حالياً)
@@ -156,7 +156,7 @@ function searchIndex(term) {
   if (!q) return [];
   return TRIPS.filter(t => {
     const meta = parseTripMetaForSearch(t);
-    return (t.name + ' ' + meta.desc + ' ' + (meta.region || '') + ' ' + (meta.terrain || '')).toLowerCase().includes(q);
+    return (t.name + ' ' + meta.desc + ' ' + (meta.category || '')).toLowerCase().includes(q);
   }).slice(0, 6);
 }
 
@@ -175,7 +175,7 @@ function setupSearch(input) {
     resultsBox.innerHTML = matches.map(t => {
       const meta = parseTripMetaForSearch(t);
       const href = `trips.html?q=${encodeURIComponent(t.name)}`;
-      return `<a href="${href}"><span>${t.emoji}</span><span>${t.name}<br><small style="color:#8b9188">${meta.region || ''} ${meta.terrain || ''}</small></span></a>`;
+      return `<a href="${href}"><span>${t.emoji}</span><span>${t.name}<br><small style="color:#8b9188">${meta.category || ''}</small></span></a>`;
     }).join('');
     resultsBox.classList.add('show');
   }

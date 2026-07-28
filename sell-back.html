@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بيع حقيبتك المستعملة | رحّال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://rahal-backend-production.up.railway.app/data.js"></script>
+<script src="app.js"></script>
+<script src="i18n.js"></script>
+</head>
+<body>
+<header class="site-header">
+    <div class="nav-row">
+      <a href="index.html" class="brand">
+        <svg class="stamp" viewBox="0 0 24 24" fill="none" stroke="#D9A441" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+        <span>رحّال<span class="tag">دليلك لكل رحلة</span></span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html" data-nav="index" data-i18n="nav.home">الرئيسية</a>
+        <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الحقيبة الجاهزة</a>
+        <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
+        <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
+        <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
+      </nav>
+      <div class="nav-search">
+        <input type="text" class="js-search-input" placeholder="ابحث: حقيبة الشاطئ، حقيبة البر..." data-i18n-placeholder="search.placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <div class="search-results"></div>
+      </div>
+      <div class="nav-actions">
+        <button type="button" class="js-lang-toggle" data-i18n="lang.toggle">English</button>
+        <a href="register.html" class="btn btn-primary btn-sm" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+        <button class="menu-toggle icon-btn" aria-label="القائمة" data-i18n-aria="menu.aria">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <button class="cart-fab" onclick="location.href='cart.html'" aria-label="عرض السلة" data-i18n-aria="cart.viewAria">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.8h8.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>
+    <span class="badge js-cart-badge" style="display:none">0</span>
+  </button>
+
+  <div class="mobile-drawer">
+    <div class="panel">
+      <button class="close-x" aria-label="إغلاق" data-i18n-aria="drawer.close">×</button>
+      <button type="button" class="js-lang-toggle" data-i18n="lang.toggle" style="margin-bottom:14px">English</button>
+      <div class="m-search">
+        <input type="text" class="js-search-input" placeholder="ابحث..." data-i18n-placeholder="search.placeholderShort">
+        <div class="search-results"></div>
+      </div>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="trips.html" data-i18n="nav.trips">الحقيبة الجاهزة</a>
+      <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
+      <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
+      <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
+      <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+      <a href="cart.html" data-i18n="nav.cart">سلتي</a>
+    </div>
+  </div>
+  <main>
+<section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / بيع حقيبتك</div>
+      <h1 data-i18n="sellback.title">بيع حقيبتك المستعملة</h1>
+      <p data-i18n="sellback.lead">خلصت من حقيبة اشتريتها من رحّال؟ بيعها لنا بنص السعر اللي دفعتيه، وننظّفها ونفحصها ونعيد بيعها لعميل ثاني.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cart-layout">
+        <div class="card-surface">
+          <form id="sellbackForm">
+            <div class="form-grid">
+              <div class="field"><label data-i18n="sellback.fullName">الاسم الكامل</label><input type="text" required placeholder="مثال: سالم الرواحي"></div>
+              <div class="field"><label data-i18n="sellback.phone">رقم الجوال</label><div class="phone-field-row" id="sellbackPhoneRow"><input type="tel" required placeholder="9XXXXXXX"></div></div>
+              <div class="field full">
+                <label data-i18n="sellback.bagType">نوع الحقيبة</label>
+                <select id="sellbackBagType" required>
+                  <option value="" disabled selected data-i18n="sellback.chooseBag">اختر نوع الحقيبة</option>
+                </select>
+              </div>
+              <div class="field">
+                <label data-i18n="sellback.purchasePrice">كم دفعت فيها وقت الشراء (ر.ع)؟</label>
+                <input type="number" id="sellbackPrice" min="1" step="0.5" required placeholder="مثال: 45">
+              </div>
+              <div class="field">
+                <label data-i18n="sellback.condition">حالة الحقيبة الآن</label>
+                <select id="sellbackCondition" required>
+                  <option value="ممتازة" data-i18n="sellback.condExcellent">ممتازة — كأنها جديدة</option>
+                  <option value="جيدة" data-i18n="sellback.condGood">جيدة — استخدام عادي</option>
+                  <option value="متوسطة" data-i18n="sellback.condFair">متوسطة — فيها أثر استخدام واضح</option>
+                </select>
+              </div>
+              <div class="field full"><label data-i18n="sellback.notes">ملاحظات إضافية (اختياري)</label><textarea placeholder="أي تفاصيل عن حالة العناصر داخل الحقيبة" data-i18n-placeholder="sellback.notesPlaceholder"></textarea></div>
+            </div>
+            <div class="summary-card" style="margin-top:20px" id="sellbackEstimate" hidden>
+              <h3 data-i18n="sellback.estimateHeading">السعر التقديري لإعادة الشراء</h3>
+              <div class="summary-row total"><span data-i18n="sellback.estimateLabel">تقريباً (نصف سعر الشراء)</span><span id="sellbackEstimateValue">0 ر.ع</span></div>
+              <p style="font-size:12.5px;color:#6b7268;margin-top:8px" data-i18n="sellback.estimateNote">السعر النهائي يتأكد بعد ما فريقنا يفحص الحقيبة فعلياً.</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:24px" data-i18n="sellback.submit">أرسل طلب البيع</button>
+          </form>
+        </div>
+        <div class="summary-card">
+          <h3 data-i18n="sellback.howHeading">كيف تشتغل الخطوات؟</h3>
+          <div class="summary-row"><span data-i18n="sellback.step1">١. تعبّي بيانات الحقيبة وسعرها الأصلي</span></div>
+          <div class="summary-row"><span data-i18n="sellback.step2">٢. نتواصل معك لتأكيد موعد استلامها</span></div>
+          <div class="summary-row"><span data-i18n="sellback.step3">٣. نفحصها وننظّفها، ونحوّل لك نصف السعر</span></div>
+          <div class="summary-row"><span data-i18n="sellback.step4">٤. نعيد بيعها لعميل ثاني بسعر أقل من الجديدة</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const bagTypeSelect = document.getElementById('sellbackBagType');
+    const uniqueBagNames = [...new Set(TRIPS.filter(t => t.desc.includes('#جديد')).map(t => t.name))];
+    bagTypeSelect.insertAdjacentHTML('beforeend', uniqueBagNames.map(n => `<option value="${n}">${n}</option>`).join(''));
+
+    document.getElementById('sellbackPhoneRow').insertAdjacentHTML('afterbegin', countryCodeSelectHtml('sellbackCountryCode'));
+
+    const priceInput = document.getElementById('sellbackPrice');
+    const estimateBox = document.getElementById('sellbackEstimate');
+    const estimateValue = document.getElementById('sellbackEstimateValue');
+    priceInput.addEventListener('input', () => {
+      const val = parseFloat(priceInput.value);
+      if (!val || val <= 0) { estimateBox.hidden = true; return; }
+      estimateBox.hidden = false;
+      estimateValue.textContent = (val / 2).toFixed(1) + ' ر.ع';
+    });
+
+    document.getElementById('sellbackForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const val = parseFloat(priceInput.value) || 0;
+      document.querySelector('main .section .container').innerHTML = `
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4F7A66" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <h2 style="color:#16241F">تم استلام طلبك 🎉</h2>
+          <p>راح يتواصل معك فريقنا قريباً لتنسيق استلام الحقيبة وتأكيد السعر النهائي (تقريباً ${(val / 2).toFixed(1)} ر.ع).</p>
+        </div>`;
+    });
+  </script>
+  </main>
+<footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>رحّال</h4>
+        <p data-i18n="footer.about">متجر رحّال — حقائب رحلات جاهزة من مخزوننا الخاص، تقدر تشتريها جديدة أو مستعملة نظيفة ضمن برنامج إعادة الشراء.</p>
+      </div>
+      <div>
+        <h4 data-i18n="footer.browseHeading">تصفح</h4>
+        <a href="trips.html" data-i18n="footer.trips">الحقيبة الجاهزة</a>
+        <a href="sell-back.html" data-i18n="footer.sellback">بيع حقيبتك</a>
+      </div>
+      <div>
+        <h4 data-i18n="footer.accountHeading">حسابي</h4>
+        <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+        <a href="cart.html" data-i18n="nav.cart">سلتي</a>
+        <a href="checkout.html" data-i18n="footer.checkout">إتمام الطلب</a>
+        <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
+      </div>
+      <div>
+        <h4 data-i18n="footer.supportHeading">الدعم والقانونية</h4>
+        <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
+        <a href="terms.html" data-i18n="footer.terms">الشروط والأحكام</a>
+        <a href="privacy.html" data-i18n="footer.privacy">سياسة الخصوصية</a>
+      </div>
+    </div>
+    <div class="footer-bottom container" data-i18n="footer.copyright">© 2026 رحّال — جميع الحقوق محفوظة</div>
+  </footer>
+</body>
+</html>
