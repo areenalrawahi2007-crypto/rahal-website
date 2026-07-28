@@ -124,9 +124,9 @@
 
   // يفكّ وسمي #المحافظة #النوع بنهاية وصف الحقيبة (نفس اصطلاح trips.html)
   function parseTripMeta(trip) {
-    const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
-    if (!m) return { desc: trip.desc, region: null, terrain: null };
-    return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2] };
+    const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)(?:\s*#(\S+))?\s*$/);
+    if (!m) return { desc: trip.desc, region: null, terrain: null, remote: false };
+    return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2], remote: m[3] === 'نائية' };
   }
 
   function tripPrice(trip) {
@@ -274,17 +274,26 @@
   }
 
   function renderCards(items) {
+    let hasRemote = false;
+    let hasFloodRisk = false;
     const cards = items
       .map(item => {
         const t = TRIPS.find(x => x.id === item.trip_id);
         if (!t) return '';
         const meta = parseTripMeta(t);
+        if (meta.remote) hasRemote = true;
+        if (meta.terrain === 'وديان' && isFloodRiskSeason()) hasFloodRisk = true;
+        const badges = [
+          meta.remote ? '<span class="trip-badge trip-badge-remote">📡 وجهة نائية</span>' : '',
+          meta.terrain === 'وديان' && isFloodRiskSeason() ? '<span class="trip-badge trip-badge-flood">⚠️ تنبيه سيول</span>' : '',
+        ].filter(Boolean).join('');
         return `
         <div class="assistant-card" data-id="${t.id}">
           <div class="product-media">${t.emoji}</div>
           <div class="product-body">
             <div class="product-cat">${escapeHtml(item.reason || '')}</div>
             <div class="product-name">${t.name}</div>
+            ${badges ? `<div class="trip-badges">${badges}</div>` : ''}
             <div class="product-foot">
               <div class="price">من ${tripPrice(t)} ر.ع</div>
               <button class="ai-toggle-btn" data-id="${t.id}">أضف الحقيبة</button>
@@ -293,7 +302,11 @@
         </div>`;
       })
       .join('');
-    return `<div class="chat-bubble assistant"><p>هذي الحقائب اللي تناسب رحلتك:</p><div class="assistant-cards">${cards}</div></div>`;
+    const notes = [];
+    if (hasFloodRisk) notes.push('⚠️ فيه حقيبة وادي بالاقتراحات، وهذا الوقت من السنة يزيد فيه احتمال السيول — تابع حالة الطقس قبل التحرك.');
+    if (hasRemote) notes.push('📡 فيه حقيبة لوجهة نائية — بنطلب منك عند الدفع خطة رجوع آمنة (موعد رجوع وجهة اتصال طوارئ).');
+    const noteHtml = notes.length ? `<p style="margin-top:8px;font-size:13px;color:var(--rust)">${notes.join('<br>')}</p>` : '';
+    return `<div class="chat-bubble assistant"><p>هذي الحقائب اللي تناسب رحلتك:</p><div class="assistant-cards">${cards}</div>${noteHtml}</div>`;
   }
 
   function setupAssistantUI() {
@@ -310,6 +323,7 @@
       const trip = TRIPS.find(t => t.id === id);
       if (!trip) return;
       trip.items.forEach(item => addToCart(item.id, item.qty));
+      if (parseTripMeta(trip).remote) addRemoteTripFlag(trip.name);
       btn.textContent = '✓ أُضيفت الحقيبة';
       btn.classList.add('added');
       btn.disabled = true;

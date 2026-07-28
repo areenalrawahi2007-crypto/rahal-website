@@ -13,7 +13,7 @@
     'nav.admin': { ar: 'لوحة الإدارة', en: 'Admin' },
     'nav.registerLogin': { ar: 'تسجيل / دخول', en: 'Sign up / Login' },
     'nav.cart': { ar: 'سلتي', en: 'My Cart' },
-    'search.placeholder': { ar: 'ابحث: قناع غوص، خيمة تخييم، مؤن...', en: 'Search: dive mask, camping tent, supplies...' },
+    'search.placeholder': { ar: 'ابحث: قناع غوص، خيمة تخييم، حبل تسلق...', en: 'Search: dive mask, camping tent, climbing rope...' },
     'search.placeholderShort': { ar: 'ابحث...', en: 'Search...' },
     'cart.viewAria': { ar: 'عرض السلة', en: 'View cart' },
     'menu.aria': { ar: 'القائمة', en: 'Menu' },
@@ -21,7 +21,7 @@
     'lang.toggle': { ar: 'English', en: 'العربية' },
 
     // ---- الفوتر (مشترك) ----
-    'footer.about': { ar: 'منصتك لشراء معدات وتموين رحلتك البرية والبحرية، من موردين موثوقين في كل ربوع عُمان.', en: 'Your platform for buying land & sea trip gear and supplies, from trusted suppliers across Oman.' },
+    'footer.about': { ar: 'منصتك لشراء معدات رحلتك البرية والبحرية، من موردين موثوقين في كل ربوع عُمان.', en: 'Your platform for buying land & sea trip gear, from trusted suppliers across Oman.' },
     'footer.browseHeading': { ar: 'تصفح', en: 'Browse' },
     'footer.trips': { ar: 'الحقيبة الجاهزة', en: 'Ready Bag' },
     'footer.equipment': { ar: 'المعدات', en: 'Equipment' },
@@ -103,6 +103,10 @@
     'checkout.address': { ar: 'العنوان / نقطة التسليم', en: 'Address / Delivery Point' },
     'checkout.notes': { ar: 'ملاحظات إضافية (اختياري)', en: 'Additional Notes (optional)' },
     'checkout.notesPlaceholder': { ar: 'أي تفاصيل تساعد المورد يجهز طلبك', en: 'Any details to help the supplier prepare your order' },
+    'checkout.safetyHeading': { ar: 'خطة الرجوع الآمنة', en: 'Safe Return Plan' },
+    'checkout.returnTime': { ar: 'موعد الرجوع المتوقع', en: 'Expected Return Time' },
+    'checkout.emergencyName': { ar: 'اسم جهة اتصال الطوارئ', en: 'Emergency Contact Name' },
+    'checkout.emergencyPhone': { ar: 'رقم جوال جهة الطوارئ', en: 'Emergency Contact Phone' },
     'checkout.paymentMethodHeading': { ar: 'طريقة الدفع', en: 'Payment Method' },
     'checkout.paymentMethodLabel': { ar: 'اختر طريقة الدفع', en: 'Choose Payment Method' },
     'checkout.payCard': { ar: 'بطاقة ائتمانية / مدى', en: 'Credit Card / Mada' },

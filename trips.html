@@ -97,6 +97,7 @@
         <div class="eyebrow" data-i18n="trips.customizeEyebrow">تخصيص الرحلة</div>
         <h2 id="builderTitle"></h2>
         <p id="builderDesc" style="color:#6b7268"></p>
+        <div id="builderNotice" class="trip-notice" hidden></div>
       </div>
 
       <div class="cart-layout">
@@ -122,9 +123,9 @@
     // الرحلات مربوطة بمحافظة ونوع وجهة عبر وسمين بنهاية الوصف (#المحافظة #النوع) لأن قاعدة بيانات
     // الباك اند الحية ما تدعم حقول إضافية بجدول الرحلات — نفكّهم هنا للفلترة والعرض فقط.
     function parseTripMeta(trip) {
-      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
-      if (!m) return { desc: trip.desc, region: null, terrain: null };
-      return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2] };
+      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)(?:\s*#(\S+))?\s*$/);
+      if (!m) return { desc: trip.desc, region: null, terrain: null, remote: false };
+      return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2], remote: m[3] === 'نائية' };
     }
 
     const params = new URLSearchParams(location.search);
@@ -168,6 +169,10 @@
           meta.region ? `📍 ${meta.region}` : '',
           meta.terrain ? `${TERRAIN_ICONS[meta.terrain] || ''} ${meta.terrain}` : '',
         ].filter(Boolean).join(' · ');
+        const badges = [
+          meta.remote ? '<span class="trip-badge trip-badge-remote">📡 وجهة نائية — تحتاج خطة رجوع آمنة</span>' : '',
+          meta.terrain === 'وديان' && isFloodRiskSeason() ? '<span class="trip-badge trip-badge-flood">⚠️ تنبيه موسمي: احتمال سيول</span>' : '',
+        ].filter(Boolean).join('');
         return `
         <div class="product-card">
           <div class="product-media">${trip.emoji}</div>
@@ -175,6 +180,7 @@
             <div class="product-cat">${tags}</div>
             <div class="product-name">${trip.name}</div>
             <p class="product-desc">${meta.desc}</p>
+            ${badges ? `<div class="trip-badges">${badges}</div>` : ''}
             <div class="product-foot">
               <div class="price">من ${tripBasePrice(trip)} ر.ع</div>
               <button class="btn btn-primary btn-sm js-select-trip" data-id="${trip.id}" data-i18n="trips.selectBtn">
@@ -212,6 +218,16 @@
       document.getElementById('builderTitle').textContent = selectedTrip.name;
       const meta = parseTripMeta(selectedTrip);
       document.getElementById('builderDesc').textContent = `${meta.desc} — مدة الرحلة: ${selectedTrip.days} ${selectedTrip.days === 1 ? 'يوم' : 'أيام'}`;
+      const noticeParts = [];
+      if (meta.remote) noticeParts.push('📡 وجهة نائية: بعد إضافة الحزمة للسلة، بتظهر خطوة "خطة رجوع آمنة" بصفحة الدفع — تسجّل فيها موعد رجوعك المتوقع وجهة اتصال طوارئ.');
+      if (meta.terrain === 'وديان' && isFloodRiskSeason()) noticeParts.push('⚠️ تنبيه موسمي: هذا الوقت من السنة يزيد فيه احتمال السيول بالأودية — تابع حالة الطقس قبل التحرك وتجنّب النزول للوادي عند الإنذار بأمطار.');
+      const noticeEl = document.getElementById('builderNotice');
+      if (noticeParts.length) {
+        noticeEl.innerHTML = noticeParts.map(t => `<p>${t}</p>`).join('');
+        noticeEl.hidden = false;
+      } else {
+        noticeEl.hidden = true;
+      }
       renderBuilder();
       document.getElementById('builderSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -276,6 +292,7 @@
       const ids = Object.keys(builderState);
       if (!ids.length) { showToast('اختر عنصر واحد على الأقل قبل الإضافة للسلة'); return; }
       ids.forEach(id => addToCart(id, builderState[id]));
+      if (parseTripMeta(selectedTrip).remote) addRemoteTripFlag(selectedTrip.name);
       showToast(`تمت إضافة عناصر "${selectedTrip.name}" إلى السلة`);
     });
 

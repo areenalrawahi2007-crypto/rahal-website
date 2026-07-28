@@ -119,9 +119,36 @@ function setupMobileDrawer() {
 
 // يفكّ وسمي #المحافظة #النوع بنهاية وصف الرحلة (نفس منطق trips.html) لعرضهما بنتائج البحث
 function parseTripMetaForSearch(trip) {
-  const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
-  if (!m) return { desc: trip.desc, region: null, terrain: null };
-  return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2] };
+  const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)(?:\s*#(\S+))?\s*$/);
+  if (!m) return { desc: trip.desc, region: null, terrain: null, remote: false };
+  return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2], remote: m[3] === 'نائية' };
+}
+
+// موسم خطر السيول بعُمان تقريباً أكتوبر–أبريل — تنبيه موسمي ثابت وليس بيانات أنواء حية (لا يوجد اشتراك بخدمة أرصاد رسمية حالياً)
+function isFloodRiskSeason() {
+  const month = new Date().getMonth() + 1;
+  return month >= 10 || month <= 4;
+}
+
+// علم "وجهة نائية" يُخزَّن عند إضافة رحلة نائية للسلة، ليعرف الدفع إنه يحتاج خطة رجوع آمنة
+const REMOTE_TRIP_KEY = 'rahalRemoteTrips';
+
+function readRemoteTripFlags() {
+  try {
+    return JSON.parse(localStorage.getItem(REMOTE_TRIP_KEY)) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function addRemoteTripFlag(name) {
+  const list = readRemoteTripFlags();
+  if (!list.includes(name)) list.push(name);
+  localStorage.setItem(REMOTE_TRIP_KEY, JSON.stringify(list));
+}
+
+function clearRemoteTripFlags() {
+  localStorage.removeItem(REMOTE_TRIP_KEY);
 }
 
 function searchIndex(term) {

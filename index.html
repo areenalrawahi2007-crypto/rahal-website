@@ -135,9 +135,9 @@
     const REGIONS_HOME = ['مسقط','ظفار','الشرقية','الداخلية','الباطنة','البريمي','مسندم','الوسطى','الظاهرة'];
 
     function parseTripMetaHome(trip) {
-      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
-      if (!m) return { desc: trip.desc, region: null, terrain: null };
-      return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2] };
+      const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)(?:\s*#(\S+))?\s*$/);
+      if (!m) return { desc: trip.desc, region: null, terrain: null, remote: false };
+      return { desc: trip.desc.slice(0, m.index).trim(), region: m[1], terrain: m[2], remote: m[3] === 'نائية' };
     }
 
     function tripBasePriceHome(trip) {
