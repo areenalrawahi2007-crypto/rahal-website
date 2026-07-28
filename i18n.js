@@ -44,6 +44,10 @@
     'home.categoriesEyebrow': { ar: 'اختر نوع رحلتك', en: 'Choose your trip type' },
     'home.categoriesTitle': { ar: 'حقيبة جاهزة لكل نوع رحلة', en: 'A ready bag for every kind of trip' },
     'home.categoriesLead': { ar: 'اضغط على أي بطاقة عشان تشوف الحقائب المناسبة لها', en: 'Tap any card to see the matching bags' },
+    'home.refillEyebrow': { ar: 'خدمة إعادة التجهيز', en: 'Refill Service' },
+    'home.refillTitle': { ar: 'خلّصت مكونات حقيبتك؟ عبّيها من جديد بس', en: 'Ran out of your bag contents? Just refill it' },
+    'home.refillLead': { ar: 'ما تحتاج تشتري حقيبة كاملة من جديد — حدّد وش نقص بس وندفّع لك السعر حسبه.', en: "No need to buy a whole new bag — pick only what's missing and pay accordingly." },
+    'home.refillCta': { ar: 'إعادة تجهيز حقيبتي', en: 'Refill My Bag' },
     'home.sellbackEyebrow': { ar: 'برنامج إعادة الشراء', en: 'Buyback Program' },
     'home.sellbackTitle': { ar: 'خلصت من حقيبتك؟ بيعها لنا بنص السعر', en: 'Done with your bag? Sell it back for half price' },
     'home.sellbackLead': { ar: 'ننظّفها ونفحصها ونعيد بيعها بسعر أقل لعميل ثاني — دورة استخدام أذكى وأرخص للجميع.', en: 'We clean it, inspect it, and resell it cheaper to another customer — a smarter, more affordable cycle for everyone.' },
@@ -68,6 +72,8 @@
     'section.all': { ar: 'الكل', en: 'All' },
 
     // ---- بيع حقيبتك (sell-back.html) ----
+    'nav.refill': { ar: 'إعادة التجهيز', en: 'Refill Service' },
+    'footer.refill': { ar: 'إعادة التجهيز', en: 'Refill Service' },
     'nav.sellback': { ar: 'بيع حقيبتك', en: 'Sell Your Bag' },
     'footer.sellback': { ar: 'بيع حقيبتك', en: 'Sell Your Bag' },
     'sellback.title': { ar: 'بيع حقيبتك المستعملة', en: 'Sell Your Used Bag' },
@@ -92,6 +98,15 @@
     'sellback.step2': { ar: '٢. نتواصل معك لتأكيد موعد استلامها', en: '2. We contact you to confirm a pickup time' },
     'sellback.step3': { ar: '٣. نفحصها وننظّفها، ونحوّل لك نصف السعر', en: '3. We inspect and clean it, and transfer half the price to you' },
     'sellback.step4': { ar: '٤. نعيد بيعها لعميل ثاني بسعر أقل من الجديدة', en: '4. We resell it to another customer at a lower price than new' },
+
+    // ---- إعادة التجهيز (refill.html) ----
+    'refill.title': { ar: 'إعادة تجهيز الحقيبة', en: 'Bag Refill Service' },
+    'refill.lead': { ar: 'خلّصت مكونات حقيبتك؟ اختر نوعها وحدّد وش نقص بس، وندفّع لك السعر حسب اللي تحتاجه فعلاً — مو حقيبة كاملة جديدة.', en: 'Ran out of your bag contents? Pick its type and choose only what you need refilled — you pay for what you actually need, not a whole new bag.' },
+    'refill.chooseBagLabel': { ar: 'نوع الحقيبة اللي عندك', en: 'The Bag Type You Have' },
+    'refill.chooseBag': { ar: 'اختر نوع الحقيبة', en: 'Choose bag type' },
+    'refill.summaryHeading': { ar: 'ملخص إعادة التجهيز', en: 'Refill Summary' },
+    'refill.submit': { ar: 'أرسل طلب إعادة التجهيز', en: 'Submit Refill Request' },
+    'refill.emptyState': { ar: 'اختر نوع الحقيبة فوق عشان تشوف عناصرها وتحدّد وش تحتاج تعبّيه من جديد.', en: 'Choose a bag type above to see its items and pick what needs refilling.' },
 
     // ---- عناصر مشتركة بصفحات القسم (فلترة/فرز) ----
     'section.sortDefault': { ar: 'الترتيب الافتراضي', en: 'Default Order' },
@@ -136,6 +151,8 @@
     'checkout.payTransfer': { ar: 'تحويل بنكي', en: 'Bank Transfer' },
     'checkout.cardNumber': { ar: 'رقم البطاقة', en: 'Card Number' },
     'checkout.expiry': { ar: 'تاريخ الانتهاء', en: 'Expiry Date' },
+    'checkout.storageTitle': { ar: '🗄️ خزّن حقيبتك عندنا', en: '🗄️ Store Your Bag With Us' },
+    'checkout.storageDesc': { ar: 'بدل ما تاخذها معك، خلّها بمخزننا لين رحلتك الجاية — 1 ر.ع شهرياً بس.', en: "Instead of taking it home, leave it in our warehouse until your next trip — just 1 OMR/month." },
     'checkout.confirmOrder': { ar: 'تأكيد الطلب', en: 'Confirm Order' },
     'checkout.orderSummary': { ar: 'ملخص الطلب', en: 'Order Summary' },
 

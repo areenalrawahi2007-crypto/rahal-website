@@ -21,6 +21,7 @@
       <nav class="main-nav">
         <a href="index.html" data-nav="index" data-i18n="nav.home">الرئيسية</a>
         <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الحقيبة الجاهزة</a>
+        <a href="refill.html" data-nav="refill" data-i18n="nav.refill">إعادة التجهيز</a>
         <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
@@ -55,6 +56,7 @@
       </div>
       <a href="index.html" data-i18n="nav.home">الرئيسية</a>
       <a href="trips.html" data-i18n="nav.trips">الحقيبة الجاهزة</a>
+      <a href="refill.html" data-i18n="nav.refill">إعادة التجهيز</a>
       <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
@@ -107,6 +109,15 @@
                 <div class="field"><label data-i18n="checkout.cardNumber">رقم البطاقة</label><input type="text" placeholder="XXXX XXXX XXXX XXXX"></div>
                 <div class="field"><label data-i18n="checkout.expiry">تاريخ الانتهاء</label><input type="text" placeholder="MM/YY"></div>
               </div>
+
+              <div class="trip-notice" style="margin-top:20px;display:flex;align-items:flex-start;gap:10px">
+                <input type="checkbox" id="storageOptIn" style="margin-top:4px;flex-shrink:0">
+                <label for="storageOptIn" style="cursor:pointer">
+                  <strong data-i18n="checkout.storageTitle">🗄️ خزّن حقيبتك عندنا</strong><br>
+                  <span data-i18n="checkout.storageDesc">بدل ما تاخذها معك، خلّها بمخزننا لين رحلتك الجاية — 1 ر.ع شهرياً بس.</span>
+                </label>
+              </div>
+
               <button type="submit" class="btn btn-primary btn-block" style="margin-top:24px" data-i18n="checkout.confirmOrder">تأكيد الطلب</button>
             </form>
           </div>
@@ -158,12 +169,17 @@
 
     document.getElementById('orderForm').addEventListener('submit', e => {
       e.preventDefault();
+      const storageOn = document.getElementById('storageOptIn').checked;
+      const storageNote = storageOn
+        ? `<p style="margin-top:10px">🗄️ فعّلنا خدمة تخزين الحقيبة عندنا (1 ر.ع شهرياً) — راح نتواصل معك لتأكيد تفاصيلها.</p>`
+        : '';
       writeCart({});
       document.getElementById('orderBlock').innerHTML = `
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="#4F7A66" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
           <h2 style="color:#16241F">تم تأكيد طلبك 🎉</h2>
           <p>راح يتواصل معك فريقنا قريباً لتنسيق التسليم.</p>
+          ${storageNote}
         </div>`;
     });
 
@@ -189,6 +205,7 @@
       </div>
       <div>
         <h4 data-i18n="footer.supportHeading">الدعم والقانونية</h4>
+        <a href="refill.html" data-i18n="nav.refill">إعادة التجهيز</a>
         <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
         <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
         <a href="terms.html" data-i18n="footer.terms">الشروط والأحكام</a>

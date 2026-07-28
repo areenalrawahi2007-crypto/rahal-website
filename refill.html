@@ -1,9 +1,9 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بيع حقيبتك المستعملة | رحّال</title>
+<title>إعادة تجهيز الحقيبة | رحّال</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -67,84 +67,129 @@
   <main>
 <section class="page-hero">
     <div class="container">
-      <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / بيع حقيبتك</div>
-      <h1 data-i18n="sellback.title">بيع حقيبتك المستعملة</h1>
-      <p data-i18n="sellback.lead">خلصت من حقيبة اشتريتها من رحّال؟ بيعها لنا بنص السعر اللي دفعتيه، وننظّفها ونفحصها ونعيد بيعها لعميل ثاني.</p>
+      <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / إعادة التجهيز</div>
+      <h1 data-i18n="refill.title">إعادة تجهيز الحقيبة</h1>
+      <p data-i18n="refill.lead">خلّصت مكونات حقيبتك؟ اختر نوعها وحدّد وش نقص بس، وندفّع لك السعر حسب اللي تحتاجه فعلاً — مو حقيبة كاملة جديدة.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <div class="cart-layout">
+      <div class="field" style="max-width:420px;margin-bottom:24px">
+        <label data-i18n="refill.chooseBagLabel">نوع الحقيبة اللي عندك</label>
+        <select id="refillCategory">
+          <option value="" data-i18n="refill.chooseBag">اختر نوع الحقيبة</option>
+        </select>
+      </div>
+
+      <div class="cart-layout" id="refillArea" hidden>
         <div class="card-surface">
-          <form id="sellbackForm">
-            <div class="form-grid">
-              <div class="field"><label data-i18n="sellback.fullName">الاسم الكامل</label><input type="text" required placeholder="مثال: سالم الرواحي"></div>
-              <div class="field"><label data-i18n="sellback.phone">رقم الجوال</label><div class="phone-field-row" id="sellbackPhoneRow"><input type="tel" required placeholder="9XXXXXXX"></div></div>
-              <div class="field full">
-                <label data-i18n="sellback.bagType">نوع الحقيبة</label>
-                <select id="sellbackBagType" required>
-                  <option value="" disabled selected data-i18n="sellback.chooseBag">اختر نوع الحقيبة</option>
-                </select>
-              </div>
-              <div class="field">
-                <label data-i18n="sellback.purchasePrice">كم دفعت فيها وقت الشراء (ر.ع)؟</label>
-                <input type="number" id="sellbackPrice" min="1" step="0.5" required placeholder="مثال: 45">
-              </div>
-              <div class="field">
-                <label data-i18n="sellback.condition">حالة الحقيبة الآن</label>
-                <select id="sellbackCondition" required>
-                  <option value="ممتازة" data-i18n="sellback.condExcellent">ممتازة — كأنها جديدة</option>
-                  <option value="جيدة" data-i18n="sellback.condGood">جيدة — استخدام عادي</option>
-                  <option value="متوسطة" data-i18n="sellback.condFair">متوسطة — فيها أثر استخدام واضح</option>
-                </select>
-              </div>
-              <div class="field full"><label data-i18n="sellback.notes">ملاحظات إضافية (اختياري)</label><textarea placeholder="أي تفاصيل عن حالة العناصر داخل الحقيبة" data-i18n-placeholder="sellback.notesPlaceholder"></textarea></div>
-            </div>
-            <div class="summary-card" style="margin-top:20px" id="sellbackEstimate" hidden>
-              <h3 data-i18n="sellback.estimateHeading">السعر التقديري لإعادة الشراء</h3>
-              <div class="summary-row total"><span data-i18n="sellback.estimateLabel">تقريباً (نصف سعر الشراء)</span><span id="sellbackEstimateValue">0 ر.ع</span></div>
-              <p style="font-size:12.5px;color:#6b7268;margin-top:8px" data-i18n="sellback.estimateNote">السعر النهائي يتأكد بعد ما فريقنا يفحص الحقيبة فعلياً.</p>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" style="margin-top:24px" data-i18n="sellback.submit">أرسل طلب البيع</button>
-          </form>
+          <div id="refillItems"></div>
         </div>
         <div class="summary-card">
-          <h3 data-i18n="sellback.howHeading">كيف تشتغل الخطوات؟</h3>
-          <div class="summary-row"><span data-i18n="sellback.step1">١. تعبّي بيانات الحقيبة وسعرها الأصلي</span></div>
-          <div class="summary-row"><span data-i18n="sellback.step2">٢. نتواصل معك لتأكيد موعد استلامها</span></div>
-          <div class="summary-row"><span data-i18n="sellback.step3">٣. نفحصها وننظّفها، ونحوّل لك نصف السعر</span></div>
-          <div class="summary-row"><span data-i18n="sellback.step4">٤. نعيد بيعها لعميل ثاني بسعر أقل من الجديدة</span></div>
+          <h3 data-i18n="refill.summaryHeading">ملخص إعادة التجهيز</h3>
+          <div class="summary-row"><span data-i18n="trips.itemCount">عدد العناصر المختارة</span><span id="refillCount">0</span></div>
+          <div class="summary-row total"><span data-i18n="trips.total">الإجمالي</span><span id="refillTotal">0 ر.ع</span></div>
+
+          <form id="refillForm" style="margin-top:16px">
+            <div class="field" style="margin-bottom:12px"><label data-i18n="sellback.fullName">الاسم الكامل</label><input type="text" required placeholder="مثال: سالم الرواحي"></div>
+            <div class="field"><label data-i18n="sellback.phone">رقم الجوال</label><div class="phone-field-row" id="refillPhoneRow"><input type="tel" required placeholder="9XXXXXXX"></div></div>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px" data-i18n="refill.submit">أرسل طلب إعادة التجهيز</button>
+          </form>
         </div>
+      </div>
+
+      <div class="empty-state" id="refillEmpty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <p data-i18n="refill.emptyState">اختر نوع الحقيبة فوق عشان تشوف عناصرها وتحدّد وش تحتاج تعبّيه من جديد.</p>
       </div>
     </div>
   </section>
 
   <script>
-    const bagTypeSelect = document.getElementById('sellbackBagType');
-    const uniqueBagNames = [...new Set(TRIPS.filter(t => t.desc.includes('#جديد')).map(t => t.name))];
-    bagTypeSelect.insertAdjacentHTML('beforeend', uniqueBagNames.map(n => `<option value="${n}">${n}</option>`).join(''));
+    const CATEGORIES_REFILL = [
+      { key: 'السيارة', label: 'حقيبة السيارة' },
+      { key: 'البر', label: 'حقيبة البر والسيح' },
+      { key: 'الشاطئ', label: 'حقيبة الشاطئ' },
+      { key: 'الوادي', label: 'حقيبة الوادي' },
+      { key: 'الجبال', label: 'حقيبة الجبال' },
+      { key: 'السهول', label: 'حقيبة السهول' },
+      { key: 'التسلق', label: 'التسلق المتخصصة' },
+      { key: 'الغوص', label: 'الغوص المتخصصة' },
+    ];
 
-    document.getElementById('sellbackPhoneRow').insertAdjacentHTML('afterbegin', countryCodeSelectHtml('sellbackCountryCode'));
+    const categorySelect = document.getElementById('refillCategory');
+    categorySelect.insertAdjacentHTML('beforeend', CATEGORIES_REFILL.map(c => `<option value="${c.key}">${c.label}</option>`).join(''));
 
-    const priceInput = document.getElementById('sellbackPrice');
-    const estimateBox = document.getElementById('sellbackEstimate');
-    const estimateValue = document.getElementById('sellbackEstimateValue');
-    priceInput.addEventListener('input', () => {
-      const val = parseFloat(priceInput.value);
-      if (!val || val <= 0) { estimateBox.hidden = true; return; }
-      estimateBox.hidden = false;
-      estimateValue.textContent = (val / 2).toFixed(1) + ' ر.ع';
+    document.getElementById('refillPhoneRow').insertAdjacentHTML('afterbegin', countryCodeSelectHtml('refillCountryCode'));
+
+    let refillState = {}; // { productId: qty }
+
+    function refillProductsFor(category) {
+      return PRODUCTS.filter(p => p.tags.includes('أساسية') || p.tags.includes(category));
+    }
+
+    function renderRefillItems(category) {
+      const products = refillProductsFor(category);
+      document.getElementById('refillItems').innerHTML = products.map(p => {
+        const qty = refillState[p.id] || 0;
+        return `
+          <div class="cart-item" data-id="${p.id}">
+            <div class="thumb">${p.emoji}</div>
+            <div class="info">
+              <h4>${p.name}</h4>
+              <div class="unit-price">${p.price} ر.ع / ${p.unit}</div>
+            </div>
+            <div class="qty-control">
+              <button class="qty-minus">−</button>
+              <span>${qty}</span>
+              <button class="qty-plus">+</button>
+            </div>
+            <div class="item-total">${(p.price * qty).toFixed(1)} ر.ع</div>
+          </div>`;
+      }).join('');
+      renderRefillSummary();
+    }
+
+    function renderRefillSummary() {
+      let total = 0, count = 0;
+      Object.entries(refillState).forEach(([id, qty]) => {
+        const p = findProduct(id);
+        if (!p || !qty) return;
+        total += p.price * qty;
+        count += qty;
+      });
+      document.getElementById('refillCount').textContent = count;
+      document.getElementById('refillTotal').textContent = total.toFixed(1) + ' ر.ع';
+    }
+
+    categorySelect.addEventListener('change', () => {
+      const category = categorySelect.value;
+      refillState = {};
+      document.getElementById('refillEmpty').style.display = category ? 'none' : 'block';
+      document.getElementById('refillArea').hidden = !category;
+      if (category) renderRefillItems(category);
     });
 
-    document.getElementById('sellbackForm').addEventListener('submit', e => {
+    document.getElementById('refillItems').addEventListener('click', e => {
+      const row = e.target.closest('.cart-item');
+      if (!row) return;
+      const id = row.dataset.id;
+      if (e.target.closest('.qty-plus')) refillState[id] = (refillState[id] || 0) + 1;
+      if (e.target.closest('.qty-minus')) refillState[id] = Math.max(0, (refillState[id] || 0) - 1);
+      renderRefillItems(categorySelect.value);
+    });
+
+    document.getElementById('refillForm').addEventListener('submit', e => {
       e.preventDefault();
-      const val = parseFloat(priceInput.value) || 0;
+      const count = Object.values(refillState).reduce((s, q) => s + q, 0);
+      if (!count) { showToast('اختر عنصر واحد على الأقل تحتاج تعبّيه'); return; }
+      const total = document.getElementById('refillTotal').textContent;
       document.querySelector('main .section .container').innerHTML = `
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="#4F7A66" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
           <h2 style="color:#16241F">تم استلام طلبك 🎉</h2>
-          <p>راح يتواصل معك فريقنا قريباً لتنسيق استلام الحقيبة وتأكيد السعر النهائي (تقريباً ${(val / 2).toFixed(1)} ر.ع).</p>
+          <p>راح يتواصل معك فريقنا لتنسيق استلام الحقيبة وتسليمها معبّأة من جديد — الإجمالي التقديري ${total}.</p>
         </div>`;
     });
   </script>
@@ -158,6 +203,7 @@
       <div>
         <h4 data-i18n="footer.browseHeading">تصفح</h4>
         <a href="trips.html" data-i18n="footer.trips">الحقيبة الجاهزة</a>
+        <a href="refill.html" data-i18n="footer.refill">إعادة التجهيز</a>
         <a href="sell-back.html" data-i18n="footer.sellback">بيع حقيبتك</a>
       </div>
       <div>
