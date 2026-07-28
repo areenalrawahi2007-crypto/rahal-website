@@ -124,33 +124,6 @@ function parseTripMetaForSearch(trip) {
   return { desc: trip.desc.slice(0, m.index).trim(), category: m[1], condition: m[2] };
 }
 
-// موسم خطر السيول بعُمان تقريباً أكتوبر–أبريل — تنبيه موسمي ثابت وليس بيانات أنواء حية (لا يوجد اشتراك بخدمة أرصاد رسمية حالياً)
-function isFloodRiskSeason() {
-  const month = new Date().getMonth() + 1;
-  return month >= 10 || month <= 4;
-}
-
-// علم "وجهة نائية" يُخزَّن عند إضافة رحلة نائية للسلة، ليعرف الدفع إنه يحتاج خطة رجوع آمنة
-const REMOTE_TRIP_KEY = 'rahalRemoteTrips';
-
-function readRemoteTripFlags() {
-  try {
-    return JSON.parse(localStorage.getItem(REMOTE_TRIP_KEY)) || [];
-  } catch (e) {
-    return [];
-  }
-}
-
-function addRemoteTripFlag(name) {
-  const list = readRemoteTripFlags();
-  if (!list.includes(name)) list.push(name);
-  localStorage.setItem(REMOTE_TRIP_KEY, JSON.stringify(list));
-}
-
-function clearRemoteTripFlags() {
-  localStorage.removeItem(REMOTE_TRIP_KEY);
-}
-
 function searchIndex(term) {
   const q = term.trim().toLowerCase();
   if (!q) return [];

@@ -23,8 +23,10 @@
 
   const NEG_TRIGGERS = ['بدون', 'بلا', 'ما احتاج', 'ما ابي', 'ما أبي', 'ما ابغى', 'مو محتاج'];
 
-  // معرفة بأماكن مشهورة بعُمان — لربط اسم المكان بنوع الحقيبة المناسبة تلقائياً
+  // معرفة بأماكن عُمان — تغطي كل المحافظات والولايات الـ11 بدون استثناء (مو بس الوجهات السياحية المعروفة)،
+  // لربط اسم أي منطقة يذكرها العميل بنوع الحقيبة المناسبة تلقائياً.
   const PLACES = {
+    // معالم ووجهات معروفة
     'جبل شمس': ['الجبال'],
     'الجبل الأخضر': ['الجبال'],
     'جبل بني جبر': ['الجبال'],
@@ -46,18 +48,97 @@
     'ويهيبة': ['البر'],
     'جزيرة مصيرة': ['الشاطئ'],
     'جزر الديمانيات': ['الغوص', 'الشاطئ'],
-    'صلالة': ['الجبال', 'الشاطئ'],
-    'نزوى': ['الجبال', 'التسلق'],
-    'صور': ['الشاطئ'],
+
+    // أسماء المحافظات الـ11
     'مسقط': ['الشاطئ'],
-    'صحار': ['الشاطئ'],
-    'البريمي': ['البر'],
-    'عبري': ['البر', 'الجبال'],
-    'بهلاء': ['الجبال'],
-    'الرستاق': ['الجبال'],
+    'ظفار': ['الجبال', 'الشاطئ'],
     'مسندم': ['الغوص', 'الشاطئ'],
+    'البريمي': ['البر'],
+    'الداخلية': ['الجبال'],
+    'الشرقية جنوب': ['البر'],
+    'الشرقية شمال': ['البر'],
+    'الشرقية': ['البر'],
+    'الظاهرة': ['البر'],
+    'الباطنة جنوب': ['الشاطئ'],
+    'الباطنة شمال': ['الشاطئ'],
+    'الباطنة': ['الشاطئ'],
+    'الوسطى': ['البر'],
+
+    // ولايات محافظة مسقط
+    'مطرح': ['الشاطئ'],
+    'بوشر': ['السهول'],
+    'السيب': ['الشاطئ'],
+    'العامرات': ['البر'],
+    'قريات': ['الشاطئ'],
+
+    // ولايات محافظة ظفار
+    'صلالة': ['الجبال', 'الشاطئ'],
+    'طاقة': ['الشاطئ'],
+    'مرباط': ['الشاطئ'],
+    'ثمريت': ['البر'],
+    'سدح': ['البر'],
+    'رخيوت': ['الجبال'],
+    'ضلكوت': ['الجبال'],
+    'مقشن': ['البر'],
+    'شليم وجزر الحلانيات': ['الشاطئ'],
+
+    // ولايات محافظة مسندم
     'خصب': ['الغوص', 'الشاطئ'],
+    'بخاء': ['الجبال'],
+    'دبا': ['الشاطئ'],
+    'مدحاء': ['الجبال'],
+
+    // ولايات محافظة البريمي
+    'محضة': ['الجبال'],
+    'السنينة': ['البر'],
+
+    // ولايات محافظة الداخلية
+    'نزوى': ['الجبال', 'التسلق'],
+    'بهلاء': ['الجبال'],
+    'منح': ['الجبال'],
+    'الحمراء': ['الجبال'],
+    'أدم': ['البر'],
+    'إزكي': ['الجبال'],
+    'سمائل': ['الجبال'],
+
+    // ولايات محافظة الشرقية جنوب
+    'صور': ['الشاطئ'],
+    'الكامل والوافي': ['الشاطئ'],
+    'جعلان بني بو علي': ['البر'],
+    'جعلان بني بو حسن': ['البر'],
+
+    // ولايات محافظة الشرقية شمال
+    'إبراء': ['البر'],
+    'المضيبي': ['البر'],
+    'بدية': ['البر'],
+    'القابل': ['البر'],
+    'دماء والطائيين': ['الجبال'],
+
+    // ولايات محافظة الظاهرة
+    'عبري': ['البر', 'الجبال'],
+    'ينقل': ['الجبال'],
+    'ضنك': ['البر'],
+
+    // ولايات محافظة الباطنة جنوب
+    'الرستاق': ['الجبال'],
+    'العوابي': ['الجبال'],
+    'نخل': ['الوادي'],
+    'وادي المعاول': ['الوادي'],
+    'بركاء': ['الشاطئ'],
+
+    // ولايات محافظة الباطنة شمال
+    'صحار': ['الشاطئ'],
+    'شناص': ['الشاطئ'],
+    'لوى': ['الشاطئ'],
+    'صحم': ['الشاطئ'],
+    'الخابورة': ['الشاطئ'],
+    'السويق': ['الشاطئ'],
+
+    // ولايات محافظة الوسطى
     'الدقم': ['البر'],
+    'هيماء': ['البر'],
+    'محوت': ['الشاطئ'],
+    'الجازر': ['البر'],
   };
 
   function normalize(text) {
@@ -112,15 +193,11 @@
     sessionStorage.removeItem(SESSION_KEY);
   }
 
-  const REMOTE_RISK_CATEGORIES = new Set(['البر', 'الوادي', 'الجبال', 'التسلق']);
-
   // يفكّ وسمي #النوع #الحالة بنهاية وصف الحقيبة (نفس اصطلاح trips.html)
   function parseTripMeta(trip) {
     const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
-    if (!m) return { desc: trip.desc, category: null, condition: 'جديد', remote: false };
-    const category = m[1];
-    const condition = m[2];
-    return { desc: trip.desc.slice(0, m.index).trim(), category, condition, remote: REMOTE_RISK_CATEGORIES.has(category) };
+    if (!m) return { desc: trip.desc, category: null, condition: 'جديد' };
+    return { desc: trip.desc.slice(0, m.index).trim(), category: m[1], condition: m[2] };
   }
 
   function tripPrice(trip) {
@@ -266,26 +343,16 @@
   }
 
   function renderCards(items) {
-    let hasRemote = false;
-    let hasFloodRisk = false;
     const cards = items
       .map(item => {
         const t = TRIPS.find(x => x.id === item.trip_id);
         if (!t) return '';
-        const meta = parseTripMeta(t);
-        if (meta.remote) hasRemote = true;
-        if (meta.category === 'الوادي' && isFloodRiskSeason()) hasFloodRisk = true;
-        const badges = [
-          meta.remote ? '<span class="trip-badge trip-badge-remote">📡 قد تكون وجهة نائية</span>' : '',
-          meta.category === 'الوادي' && isFloodRiskSeason() ? '<span class="trip-badge trip-badge-flood">⚠️ تنبيه سيول</span>' : '',
-        ].filter(Boolean).join('');
         return `
         <div class="assistant-card" data-id="${t.id}">
           <div class="product-media">${t.emoji}</div>
           <div class="product-body">
             <div class="product-cat">${escapeHtml(item.reason || '')}</div>
             <div class="product-name">${t.name}</div>
-            ${badges ? `<div class="trip-badges">${badges}</div>` : ''}
             <div class="product-foot">
               <div class="price">من ${tripPrice(t)} ر.ع</div>
               <button class="ai-toggle-btn" data-id="${t.id}">أضف الحقيبة</button>
@@ -294,11 +361,7 @@
         </div>`;
       })
       .join('');
-    const notes = [];
-    if (hasFloodRisk) notes.push('⚠️ فيه حقيبة وادي بالاقتراحات، وهذا الوقت من السنة يزيد فيه احتمال السيول — تابع حالة الطقس قبل التحرك.');
-    if (hasRemote) notes.push('📡 فيه حقيبة لوجهة نائية — بنطلب منك عند الدفع خطة رجوع آمنة (موعد رجوع وجهة اتصال طوارئ).');
-    const noteHtml = notes.length ? `<p style="margin-top:8px;font-size:13px;color:var(--rust)">${notes.join('<br>')}</p>` : '';
-    return `<div class="chat-bubble assistant"><p>هذي الحقائب اللي تناسب رحلتك:</p><div class="assistant-cards">${cards}</div>${noteHtml}</div>`;
+    return `<div class="chat-bubble assistant"><p>هذي الحقائب اللي تناسب رحلتك:</p><div class="assistant-cards">${cards}</div></div>`;
   }
 
   function setupAssistantUI() {
@@ -315,7 +378,6 @@
       const trip = TRIPS.find(t => t.id === id);
       if (!trip) return;
       trip.items.forEach(item => addToCart(item.id, item.qty));
-      if (parseTripMeta(trip).remote) addRemoteTripFlag(trip.name);
       btn.textContent = '✓ أُضيفت الحقيبة';
       btn.classList.add('added');
       btn.disabled = true;

@@ -127,17 +127,13 @@
       { key: 'الغوص', label: 'الغوص المتخصصة', icon: '🤿' },
     ];
     const CATEGORY_ICONS = Object.fromEntries(CATEGORIES_BAG.map(c => [c.key, c.icon]));
-    // الفئات اللي فيها احتمال بعد جغرافي عن التغطية المعتادة — تفعّل خطة الرجوع الآمنة عند الدفع
-    const REMOTE_RISK_CATEGORIES = new Set(['البر', 'الوادي', 'الجبال', 'التسلق']);
 
     // الحقيبة مربوطة بنوعها وحالتها (جديد/مستعمل) عبر وسمين بنهاية الوصف (#النوع #الحالة) لأن قاعدة بيانات
     // الباك اند الحية ما تدعم حقول إضافية بجدول الرحلات — نفكّهم هنا للفلترة والعرض فقط.
     function parseTripMeta(trip) {
       const m = trip.desc.match(/\s*#(\S+)\s*#(\S+)\s*$/);
-      if (!m) return { desc: trip.desc, category: null, condition: 'جديد', remote: false };
-      const category = m[1];
-      const condition = m[2];
-      return { desc: trip.desc.slice(0, m.index).trim(), category, condition, remote: REMOTE_RISK_CATEGORIES.has(category) };
+      if (!m) return { desc: trip.desc, category: null, condition: 'جديد' };
+      return { desc: trip.desc.slice(0, m.index).trim(), category: m[1], condition: m[2] };
     }
 
     const params = new URLSearchParams(location.search);
@@ -182,8 +178,6 @@
           meta.condition === 'مستعمل' ? '🔁 مستعملة' : '🆕 جديدة',
         ].filter(Boolean).join(' · ');
         const badges = [
-          meta.remote ? '<span class="trip-badge trip-badge-remote">📡 قد تكون وجهة نائية — تحتاج خطة رجوع آمنة</span>' : '',
-          meta.category === 'الوادي' && isFloodRiskSeason() ? '<span class="trip-badge trip-badge-flood">⚠️ تنبيه موسمي: احتمال سيول</span>' : '',
           meta.condition === 'مستعمل' ? '<span class="trip-badge trip-badge-used">🔁 مُعادة بيع — نُظّفت وفُحصت بالكامل</span>' : '',
         ].filter(Boolean).join('');
         return `
@@ -232,8 +226,6 @@
       const meta = parseTripMeta(selectedTrip);
       document.getElementById('builderDesc').textContent = `${meta.desc}`;
       const noticeParts = [];
-      if (meta.remote) noticeParts.push('📡 هذي الحقيبة لوجهات ممكن تكون بعيدة: بعد إضافتها للسلة، بتظهر خطوة "خطة رجوع آمنة" بصفحة الدفع — تسجّل فيها موعد رجوعك المتوقع وجهة اتصال طوارئ.');
-      if (meta.category === 'الوادي' && isFloodRiskSeason()) noticeParts.push('⚠️ تنبيه موسمي: هذا الوقت من السنة يزيد فيه احتمال السيول بالأودية — تابع حالة الطقس قبل التحرك.');
       if (meta.condition === 'مستعمل') noticeParts.push('🔁 هذي حقيبة مُعادة بيع ضمن برنامج إعادة الشراء — نُظّفت وفُحصت بالكامل قبل عرضها.');
       const noticeEl = document.getElementById('builderNotice');
       if (noticeParts.length) {
@@ -306,7 +298,6 @@
       const ids = Object.keys(builderState);
       if (!ids.length) { showToast('اختر عنصر واحد على الأقل قبل الإضافة للسلة'); return; }
       ids.forEach(id => addToCart(id, builderState[id]));
-      if (parseTripMeta(selectedTrip).remote) addRemoteTripFlag(selectedTrip.name);
       showToast(`تمت إضافة عناصر "${selectedTrip.name}" إلى السلة`);
     });
 
