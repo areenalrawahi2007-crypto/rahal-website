@@ -23,6 +23,7 @@
         <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الحقيبة الجاهزة</a>
         <a href="refill.html" data-nav="refill" data-i18n="nav.refill">إعادة التجهيز</a>
         <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
+        <a href="join-supplier.html" data-nav="joinsupplier" data-i18n="nav.joinSupplier">انضم كمورد</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
@@ -58,6 +59,7 @@
       <a href="trips.html" data-i18n="nav.trips">الحقيبة الجاهزة</a>
       <a href="refill.html" data-i18n="nav.refill">إعادة التجهيز</a>
       <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
+      <a href="join-supplier.html" data-i18n="nav.joinSupplier">انضم كمورد</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
@@ -69,7 +71,7 @@
     <div class="container">
       <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / الحقيبة الجاهزة</div>
       <h1 data-i18n="trips.title">الحقيبة الجاهزة</h1>
-      <p data-i18n="trips.lead">حقائب رحلات جاهزة من مخزون رحّال — تقدر تعدّل عليها وتضيف أو تشيل عناصر قبل ما تشتري.</p>
+      <p data-i18n="trips.lead">حقائب رحلات جاهزة من موردين فحصهم رحّال — تقدر تعدّل عليها وتضيف أو تشيل عناصر قبل ما تشتري.</p>
     </div>
   </section>
 
@@ -180,6 +182,7 @@
           meta.condition === 'مستعمل' ? '🔁 مستعملة' : '🆕 جديدة',
         ].filter(Boolean).join(' · ');
         const badges = [
+          '<span class="trip-badge trip-badge-verified">✅ مفحوص من رحّال</span>',
           meta.condition === 'مستعمل' ? '<span class="trip-badge trip-badge-used">🔁 مُعادة بيع — نُظّفت وفُحصت بالكامل</span>' : '',
         ].filter(Boolean).join('');
         return `
@@ -255,6 +258,7 @@
             <div class="info">
               <h4>${p.name}</h4>
               <div class="unit-price">${p.price} ر.ع / ${p.unit}</div>
+              <div class="supplier-line">✅ ${p.supplier || 'مورد مفحوص'} · آخر فحص جودة: ${p.qcDate || '—'}</div>
             </div>
             <div class="qty-control">
               <button class="qty-minus">−</button>
@@ -311,12 +315,13 @@
     <div class="container footer-grid">
       <div>
         <h4>رحّال</h4>
-        <p data-i18n="footer.about">متجر رحّال — حقائب رحلات جاهزة من مخزوننا الخاص، تقدر تشتريها جديدة أو مستعملة نظيفة ضمن برنامج إعادة الشراء.</p>
+        <p data-i18n="footer.about">منصة رحّال — تجمّع موردين موثوقين لمعدات الرحلات وتنظّمهم بحقائب جاهزة مفحوصة حسب نوع الرحلة.</p>
       </div>
       <div>
         <h4 data-i18n="footer.browseHeading">تصفح</h4>
         <a href="trips.html" data-i18n="footer.trips">الحقيبة الجاهزة</a>
         <a href="sell-back.html" data-i18n="footer.sellback">بيع حقيبتك</a>
+        <a href="join-supplier.html" data-i18n="footer.joinSupplier">انضم كمورد</a>
       </div>
       <div>
         <h4 data-i18n="footer.accountHeading">حسابي</h4>

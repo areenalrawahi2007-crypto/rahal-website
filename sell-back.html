@@ -23,6 +23,7 @@
         <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الحقيبة الجاهزة</a>
         <a href="refill.html" data-nav="refill" data-i18n="nav.refill">إعادة التجهيز</a>
         <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
+        <a href="join-supplier.html" data-nav="joinsupplier" data-i18n="nav.joinSupplier">انضم كمورد</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
@@ -58,6 +59,7 @@
       <a href="trips.html" data-i18n="nav.trips">الحقيبة الجاهزة</a>
       <a href="refill.html" data-i18n="nav.refill">إعادة التجهيز</a>
       <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
+      <a href="join-supplier.html" data-i18n="nav.joinSupplier">انضم كمورد</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
@@ -68,8 +70,8 @@
 <section class="page-hero">
     <div class="container">
       <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / بيع حقيبتك</div>
-      <h1 data-i18n="sellback.title">بيع حقيبتك المستعملة</h1>
-      <p data-i18n="sellback.lead">خلصت من حقيبة اشتريتها من رحّال؟ بيعها لنا بنص السعر اللي دفعتيه، وننظّفها ونفحصها ونعيد بيعها لعميل ثاني.</p>
+      <h1 data-i18n="sellback.title">اعرضي حقيبتك المستعملة للبيع</h1>
+      <p data-i18n="sellback.lead">خلصتِ من حقيبة اشتريتها من رحّال؟ اعرضيها للبيع بعد الفحص — رحّال يفحصها ويعرضها بشارة "مفحوصة من رحّال"، وياخذ عمولة 20% بس من سعر البيع لما تتباع فعلاً.</p>
     </div>
   </section>
 
@@ -88,8 +90,8 @@
                 </select>
               </div>
               <div class="field">
-                <label data-i18n="sellback.purchasePrice">كم دفعت فيها وقت الشراء (ر.ع)؟</label>
-                <input type="number" id="sellbackPrice" min="1" step="0.5" required placeholder="مثال: 45">
+                <label data-i18n="sellback.purchasePrice">بأي سعر تبين تعرضينها للبيع (ر.ع)؟</label>
+                <input type="number" id="sellbackPrice" min="1" step="0.5" required placeholder="مثال: 30">
               </div>
               <div class="field">
                 <label data-i18n="sellback.condition">حالة الحقيبة الآن</label>
@@ -102,19 +104,20 @@
               <div class="field full"><label data-i18n="sellback.notes">ملاحظات إضافية (اختياري)</label><textarea placeholder="أي تفاصيل عن حالة العناصر داخل الحقيبة" data-i18n-placeholder="sellback.notesPlaceholder"></textarea></div>
             </div>
             <div class="summary-card" style="margin-top:20px" id="sellbackEstimate" hidden>
-              <h3 data-i18n="sellback.estimateHeading">السعر التقديري لإعادة الشراء</h3>
-              <div class="summary-row total"><span data-i18n="sellback.estimateLabel">تقريباً (نصف سعر الشراء)</span><span id="sellbackEstimateValue">0 ر.ع</span></div>
-              <p style="font-size:12.5px;color:#6b7268;margin-top:8px" data-i18n="sellback.estimateNote">السعر النهائي يتأكد بعد ما فريقنا يفحص الحقيبة فعلياً.</p>
+              <h3 data-i18n="sellback.estimateHeading">لما تتباع، بتستلمين تقريباً</h3>
+              <div class="summary-row"><span data-i18n="sellback.commissionLabel">عمولة رحّال (20%)</span><span id="sellbackCommissionValue">0 ر.ع</span></div>
+              <div class="summary-row total"><span data-i18n="sellback.estimateLabel">صافي المبلغ لك</span><span id="sellbackEstimateValue">0 ر.ع</span></div>
+              <p style="font-size:12.5px;color:#6b7268;margin-top:8px" data-i18n="sellback.estimateNote">السعر النهائي يتأكد بعد ما فريقنا يفحص الحقيبة فعلياً، والمبلغ يوصلك بعد إتمام عملية البيع.</p>
             </div>
-            <button type="submit" class="btn btn-primary btn-block" style="margin-top:24px" data-i18n="sellback.submit">أرسل طلب البيع</button>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:24px" data-i18n="sellback.submit">أرسل طلب العرض</button>
           </form>
         </div>
         <div class="summary-card">
           <h3 data-i18n="sellback.howHeading">كيف تشتغل الخطوات؟</h3>
-          <div class="summary-row"><span data-i18n="sellback.step1">١. تعبّي بيانات الحقيبة وسعرها الأصلي</span></div>
-          <div class="summary-row"><span data-i18n="sellback.step2">٢. نتواصل معك لتأكيد موعد استلامها</span></div>
-          <div class="summary-row"><span data-i18n="sellback.step3">٣. نفحصها وننظّفها، ونحوّل لك نصف السعر</span></div>
-          <div class="summary-row"><span data-i18n="sellback.step4">٤. نعيد بيعها لعميل ثاني بسعر أقل من الجديدة</span></div>
+          <div class="summary-row"><span data-i18n="sellback.step1">١. تعبّي بيانات الحقيبة والسعر اللي تبين تعرضينها فيه</span></div>
+          <div class="summary-row"><span data-i18n="sellback.step2">٢. فريقنا يتواصل معك ويفحص الحقيبة</span></div>
+          <div class="summary-row"><span data-i18n="sellback.step3">٣. نعرضها للبيع بشارة "مفحوصة من رحّال"</span></div>
+          <div class="summary-row"><span data-i18n="sellback.step4">٤. لما تنباع، يوصلك سعرها ناقص عمولة رحّال (20%)</span></div>
         </div>
       </div>
     </div>
@@ -127,24 +130,29 @@
 
     document.getElementById('sellbackPhoneRow').insertAdjacentHTML('afterbegin', countryCodeSelectHtml('sellbackCountryCode'));
 
+    const SELLBACK_COMMISSION_RATE = 0.20;
     const priceInput = document.getElementById('sellbackPrice');
     const estimateBox = document.getElementById('sellbackEstimate');
     const estimateValue = document.getElementById('sellbackEstimateValue');
+    const commissionValue = document.getElementById('sellbackCommissionValue');
     priceInput.addEventListener('input', () => {
       const val = parseFloat(priceInput.value);
       if (!val || val <= 0) { estimateBox.hidden = true; return; }
       estimateBox.hidden = false;
-      estimateValue.textContent = (val / 2).toFixed(1) + ' ر.ع';
+      const commission = val * SELLBACK_COMMISSION_RATE;
+      commissionValue.textContent = commission.toFixed(1) + ' ر.ع';
+      estimateValue.textContent = (val - commission).toFixed(1) + ' ر.ع';
     });
 
     document.getElementById('sellbackForm').addEventListener('submit', e => {
       e.preventDefault();
       const val = parseFloat(priceInput.value) || 0;
+      const net = (val * (1 - SELLBACK_COMMISSION_RATE)).toFixed(1);
       document.querySelector('main .section .container').innerHTML = `
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="#4F7A66" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
           <h2 style="color:#16241F">تم استلام طلبك 🎉</h2>
-          <p>راح يتواصل معك فريقنا قريباً لتنسيق استلام الحقيبة وتأكيد السعر النهائي (تقريباً ${(val / 2).toFixed(1)} ر.ع).</p>
+          <p>راح يتواصل معك فريقنا قريباً لتنسيق فحص الحقيبة وعرضها للبيع. لما تتباع، بيوصلك تقريباً ${net} ر.ع بعد خصم عمولة رحّال (20%).</p>
         </div>`;
     });
   </script>
@@ -153,12 +161,13 @@
     <div class="container footer-grid">
       <div>
         <h4>رحّال</h4>
-        <p data-i18n="footer.about">متجر رحّال — حقائب رحلات جاهزة من مخزوننا الخاص، تقدر تشتريها جديدة أو مستعملة نظيفة ضمن برنامج إعادة الشراء.</p>
+        <p data-i18n="footer.about">منصة رحّال — تجمّع موردين موثوقين لمعدات الرحلات وتنظّمهم بحقائب جاهزة مفحوصة حسب نوع الرحلة.</p>
       </div>
       <div>
         <h4 data-i18n="footer.browseHeading">تصفح</h4>
         <a href="trips.html" data-i18n="footer.trips">الحقيبة الجاهزة</a>
         <a href="sell-back.html" data-i18n="footer.sellback">بيع حقيبتك</a>
+        <a href="join-supplier.html" data-i18n="footer.joinSupplier">انضم كمورد</a>
       </div>
       <div>
         <h4 data-i18n="footer.accountHeading">حسابي</h4>
