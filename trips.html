@@ -114,6 +114,15 @@
             <p style="font-size:12.5px;color:#8b9188;margin-bottom:12px" data-i18n="trips.catalogLead">منتجات إضافية مناسبة لنوع رحلتك من موردين مفحوصين — أضيفي أي شي تحتاجينه فوق محتوى الحقيبة الأصلي.</p>
             <div id="catalogPicker"></div>
           </div>
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line,#e6e1d3)">
+            <h4 style="margin-bottom:4px" data-i18n="trips.itemSearchHeading">ناقصك شي أو تبين بديل أرخص؟</h4>
+            <p style="font-size:12.5px;color:#8b9188;margin-bottom:12px" data-i18n="trips.itemSearchLead">اكتب اسم أي غرض — النتائج تطلع مرتبة من الأرخص للأغلى من كامل الكتالوج.</p>
+            <div class="item-search" id="itemSearchWrap">
+              <input type="text" id="itemSearchInput" placeholder="مثال: كرسي، ولاعة، حذاء..." data-i18n-placeholder="trips.itemSearchPlaceholder" autocomplete="off">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+              <div class="search-results" id="itemSearchResults"></div>
+            </div>
+          </div>
         </div>
         <div class="summary-card">
           <h3 data-i18n="trips.summaryHeading">ملخص الحقيبة</h3>
@@ -256,6 +265,8 @@
       }
       renderBuilder();
       renderCatalogPicker();
+      const searchInput = document.getElementById('itemSearchInput');
+      if (searchInput) { searchInput.value = ''; document.getElementById('itemSearchResults').classList.remove('show'); }
       document.getElementById('builderSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -288,6 +299,57 @@
       builderState[id] = (builderState[id] || 0) + 1;
       renderBuilder();
       renderCatalogPicker();
+    });
+
+    // البحث الحر عن أي غرض ناقص أو بديل أرخص — يبحث بكامل الكتالوج، مرتب من الأرخص للأغلى
+    function normalizeItemSearch(text) {
+      return (text || '').toLowerCase()
+        .replace(/[إأآا]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه')
+        .replace(/[ًٌٍَُِّْ]/g, '').trim();
+    }
+
+    function renderItemSearch(query) {
+      const box = document.getElementById('itemSearchResults');
+      const q = normalizeItemSearch(query);
+      if (!q) { box.classList.remove('show'); box.innerHTML = ''; return; }
+      const matches = PRODUCTS
+        .filter(p => !builderState[p.id])
+        .filter(p => normalizeItemSearch(p.name + ' ' + p.desc).includes(q))
+        .sort((a, b) => a.price - b.price)
+        .slice(0, 8);
+      box.innerHTML = matches.length
+        ? matches.map(p => `
+          <div class="sr-row" data-add-id="${p.id}">
+            <span style="font-size:20px">${p.emoji}</span>
+            <div style="flex:1">
+              <div style="font-weight:700;font-size:14px">${p.name}</div>
+              <div style="font-size:12px;color:#8b9188">${p.price} ر.ع / ${p.unit}${p.supplier ? ' · ' + p.supplier : ''}</div>
+            </div>
+            <button class="btn btn-outline btn-sm js-item-search-add" data-i18n="trips.addExtra">+ إضافة</button>
+          </div>`).join('')
+        : `<div class="sr-empty" data-i18n="trips.itemSearchEmpty">ما لقينا نتائج مطابقة — جرّبي كلمة ثانية</div>`;
+      box.classList.add('show');
+      if (window.RahalI18n) RahalI18n.applyI18n();
+    }
+
+    const itemSearchInput = document.getElementById('itemSearchInput');
+    const itemSearchResults = document.getElementById('itemSearchResults');
+    itemSearchInput.addEventListener('input', () => renderItemSearch(itemSearchInput.value));
+    itemSearchInput.addEventListener('focus', () => { if (itemSearchInput.value) renderItemSearch(itemSearchInput.value); });
+    itemSearchResults.addEventListener('click', e => {
+      const row = e.target.closest('[data-add-id]');
+      if (!row) return;
+      const id = row.dataset.addId;
+      builderState[id] = (builderState[id] || 0) + 1;
+      renderBuilder();
+      renderCatalogPicker();
+      itemSearchInput.value = '';
+      itemSearchResults.classList.remove('show');
+      showToast('تمت إضافة الغرض للحقيبة');
+    });
+    document.addEventListener('click', e => {
+      const wrap = document.getElementById('itemSearchWrap');
+      if (wrap && !wrap.contains(e.target)) itemSearchResults.classList.remove('show');
     });
 
     function renderBuilder() {

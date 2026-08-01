@@ -128,6 +128,23 @@ input,select,textarea{ font-family:inherit; }
 .cart-item .info .supplier-line{ font-size:11.5px; color:#8b9188; margin-top:2px; }
 .rating-line{ font-size:12.5px; font-weight:700; color:var(--gold-dark); margin:2px 0 6px; }
 .rating-line span{ font-weight:500; color:#8b9188; }
+
+/* شريط بحث عن غرض ناقص/بديل أرخص داخل منشئ الحقيبة */
+.item-search{ position:relative; }
+.item-search input{
+  width:100%; padding:12px 44px 12px 14px; border-radius:999px; border:1.5px solid var(--line);
+  background:#fff; font-size:14.5px; color:var(--ink-text);
+}
+.item-search input:focus{ outline:none; border-color: var(--gold); }
+.item-search svg{ position:absolute; inset-inline-end:16px; top:50%; transform:translateY(-50%); width:16px; height:16px; opacity:.5; pointer-events:none; }
+.item-search .search-results{
+  position:absolute; top:calc(100% + 8px); right:0; left:0; background:#fff; border:1px solid var(--line);
+  border-radius:14px; box-shadow: var(--shadow); max-height:320px; overflow:auto; display:none; z-index:20;
+}
+.item-search .search-results.show{ display:block; }
+.item-search .search-results .sr-row{ display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--line); }
+.item-search .search-results .sr-row:last-child{ border-bottom:none; }
+.item-search .search-results .sr-empty{ padding:16px; text-align:center; color:#8b9188; font-size:13.5px; }
 .trip-notice{
   margin-top:12px; padding:12px 14px; border-radius:10px;
   background: rgba(193,81,47,.08); border: 1px solid rgba(193,81,47,.25);
