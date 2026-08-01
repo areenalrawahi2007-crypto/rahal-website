@@ -86,6 +86,7 @@
             <h3 data-i18n="cart.summaryHeading">ملخص الطلب</h3>
             <div class="summary-row"><span data-i18n="cart.itemCount">عدد القطع</span><span id="sumCount">0</span></div>
             <div class="summary-row"><span data-i18n="cart.subtotal">المجموع الفرعي</span><span id="sumSubtotal">0 ر.ع</span></div>
+            <div class="summary-row" id="sumGroupDiscountRow" style="display:none;color:var(--moss)"><span data-i18n="cart.groupDiscount">🎉 خصم الحجز العائلي/الجماعي (10%)</span><span id="sumGroupDiscount">0 ر.ع</span></div>
             <div class="summary-row"><span data-i18n="cart.serviceFee">رسوم الخدمة</span><span id="sumFee">0 ر.ع</span></div>
             <div class="summary-row total"><span data-i18n="cart.total">الإجمالي</span><span id="sumTotal">0 ر.ع</span></div>
             <a href="checkout.html" class="btn btn-primary btn-block" id="checkoutBtn" style="margin-top:16px" data-i18n="cart.checkoutBtn">إتمام الطلب ←</a>
@@ -136,11 +137,16 @@
           </div>`;
       }).join('');
 
-      const fee = subtotal * FEE_RATE;
+      const bagsInCart = getBagCount();
+      const groupDiscount = bagsInCart >= GROUP_DISCOUNT_MIN_BAGS ? subtotal * GROUP_DISCOUNT_RATE : 0;
+      const discountedSubtotal = subtotal - groupDiscount;
+      const fee = discountedSubtotal * FEE_RATE;
       document.getElementById('sumCount').textContent = count;
       document.getElementById('sumSubtotal').textContent = subtotal.toFixed(1) + ' ر.ع';
+      document.getElementById('sumGroupDiscountRow').style.display = groupDiscount > 0 ? 'flex' : 'none';
+      document.getElementById('sumGroupDiscount').textContent = '−' + groupDiscount.toFixed(1) + ' ر.ع';
       document.getElementById('sumFee').textContent = fee.toFixed(1) + ' ر.ع';
-      document.getElementById('sumTotal').textContent = (subtotal+fee).toFixed(1) + ' ر.ع';
+      document.getElementById('sumTotal').textContent = (discountedSubtotal+fee).toFixed(1) + ' ر.ع';
       if (window.RahalI18n) RahalI18n.applyI18n();
     }
 

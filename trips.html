@@ -101,6 +101,7 @@
         <div class="eyebrow" data-i18n="trips.customizeEyebrow">تخصيص الحقيبة</div>
         <h2 id="builderTitle"></h2>
         <p id="builderDesc" style="color:#6b7268"></p>
+        <div id="builderReviews" class="rating-line" style="margin-bottom:6px"></div>
         <div id="builderNotice" class="trip-notice" hidden></div>
       </div>
 
@@ -108,6 +109,11 @@
         <div class="card-surface">
           <div id="builderItems"></div>
           <button class="btn btn-outline btn-sm" id="resetBuilder" style="margin-top:16px" data-i18n="trips.resetPackage">إعادة الحقيبة لوضعها الأصلي</button>
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line,#e6e1d3)">
+            <h4 style="margin-bottom:4px" data-i18n="trips.catalogHeading">إضافة عناصر أخرى من الكتالوج</h4>
+            <p style="font-size:12.5px;color:#8b9188;margin-bottom:12px" data-i18n="trips.catalogLead">منتجات إضافية مناسبة لنوع رحلتك من موردين مفحوصين — أضيفي أي شي تحتاجينه فوق محتوى الحقيبة الأصلي.</p>
+            <div id="catalogPicker"></div>
+          </div>
         </div>
         <div class="summary-card">
           <h3 data-i18n="trips.summaryHeading">ملخص الحقيبة</h3>
@@ -185,12 +191,14 @@
           '<span class="trip-badge trip-badge-verified">✅ مفحوص من رحّال</span>',
           meta.condition === 'مستعمل' ? '<span class="trip-badge trip-badge-used">🔁 مُعادة بيع — نُظّفت وفُحصت بالكامل</span>' : '',
         ].filter(Boolean).join('');
+        const ratingLine = trip.rating ? `<div class="rating-line">⭐ ${trip.rating} <span>(${trip.reviewCount} تقييم موثّق)</span></div>` : '';
         return `
         <div class="product-card">
           <div class="product-media">${trip.emoji}</div>
           <div class="product-body">
             <div class="product-cat">${tags}</div>
             <div class="product-name">${trip.name}</div>
+            ${ratingLine}
             <p class="product-desc">${meta.desc}</p>
             ${badges ? `<div class="trip-badges">${badges}</div>` : ''}
             <div class="product-foot">
@@ -230,6 +238,13 @@
       document.getElementById('builderTitle').textContent = selectedTrip.name;
       const meta = parseTripMeta(selectedTrip);
       document.getElementById('builderDesc').textContent = `${meta.desc}`;
+      const reviewsEl = document.getElementById('builderReviews');
+      if (selectedTrip.rating) {
+        const sampleReviews = (selectedTrip.reviews || []).map(r => `"${r}"`).join(' · ');
+        reviewsEl.innerHTML = `⭐ ${selectedTrip.rating} <span>(${selectedTrip.reviewCount} تقييم موثّق)</span>${sampleReviews ? ' — ' + sampleReviews : ''}`;
+      } else {
+        reviewsEl.innerHTML = '';
+      }
       const noticeParts = [];
       if (meta.condition === 'مستعمل') noticeParts.push('🔁 هذي حقيبة مُعادة بيع ضمن برنامج إعادة الشراء — نُظّفت وفُحصت بالكامل قبل عرضها.');
       const noticeEl = document.getElementById('builderNotice');
@@ -240,8 +255,40 @@
         noticeEl.hidden = true;
       }
       renderBuilder();
+      renderCatalogPicker();
       document.getElementById('builderSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+
+    function renderCatalogPicker() {
+      if (!selectedTrip) return;
+      const meta = parseTripMeta(selectedTrip);
+      const container = document.getElementById('catalogPicker');
+      const extras = PRODUCTS.filter(p => p.tags.includes(meta.category) && !builderState[p.id]);
+      if (!extras.length) {
+        container.innerHTML = `<p style="color:#8b9188;font-size:13px">ما فيه عناصر إضافية بهذا النوع حالياً — كل شي متوفر مضاف بالحقيبة.</p>`;
+        return;
+      }
+      container.innerHTML = extras.map(p => `
+        <div class="cart-item" data-add-id="${p.id}">
+          <div class="thumb">${p.emoji}</div>
+          <div class="info">
+            <h4>${p.name}</h4>
+            <div class="unit-price">${p.price} ر.ع / ${p.unit}</div>
+            <div class="supplier-line">✅ ${p.supplier || 'مورد مفحوص'} · آخر فحص جودة: ${p.qcDate || '—'}</div>
+          </div>
+          <button class="btn btn-outline btn-sm js-add-extra" data-i18n="trips.addExtra">+ إضافة</button>
+        </div>`).join('');
+      if (window.RahalI18n) RahalI18n.applyI18n();
+    }
+
+    document.getElementById('catalogPicker').addEventListener('click', e => {
+      const btn = e.target.closest('.js-add-extra');
+      if (!btn) return;
+      const id = btn.closest('[data-add-id]').dataset.addId;
+      builderState[id] = (builderState[id] || 0) + 1;
+      renderBuilder();
+      renderCatalogPicker();
+    });
 
     function renderBuilder() {
       const ids = Object.keys(builderState);
@@ -291,6 +338,7 @@
       }
       if (e.target.closest('.remove-link')) delete builderState[id];
       renderBuilder();
+      renderCatalogPicker();
     });
 
     document.getElementById('resetBuilder').addEventListener('click', () => {
@@ -298,13 +346,17 @@
       builderState = {};
       selectedTrip.items.forEach(item => { builderState[item.id] = item.qty; });
       renderBuilder();
+      renderCatalogPicker();
     });
 
     document.getElementById('addTripToCart').addEventListener('click', () => {
       const ids = Object.keys(builderState);
       if (!ids.length) { showToast('اختر عنصر واحد على الأقل قبل الإضافة للسلة'); return; }
       ids.forEach(id => addToCart(id, builderState[id]));
-      showToast(`تمت إضافة عناصر "${selectedTrip.name}" إلى السلة`);
+      incrementBagCount();
+      const bagsNow = getBagCount();
+      const groupHint = bagsNow >= GROUP_DISCOUNT_MIN_BAGS ? ` — خصم الحجز العائلي/الجماعي (${GROUP_DISCOUNT_RATE * 100}%) صار مفعّل بسلتك 🎉` : '';
+      showToast(`تمت إضافة عناصر "${selectedTrip.name}" إلى السلة${groupHint}`);
     });
 
     renderFilters();

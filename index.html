@@ -224,6 +224,7 @@
         <div class="product-body">
           <div class="product-cat">${meta.category || ''}</div>
           <div class="product-name">${trip.name}</div>
+          ${trip.rating ? `<div class="rating-line">⭐ ${trip.rating} <span>(${trip.reviewCount} تقييم موثّق)</span></div>` : ''}
           <p class="product-desc">${meta.desc}</p>
           <div class="product-foot">
             <div class="price">من ${tripBasePriceHome(trip)} ر.ع</div>

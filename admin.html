@@ -166,6 +166,14 @@
             <label>الوسوم (مفصولة بفاصلة)</label>
             <input type="text" id="productTags" placeholder="تخييم، عائلي">
           </div>
+          <div class="field">
+            <label>المورد (اختياري)</label>
+            <input type="text" id="productSupplier" placeholder="متجر الصحراء للتخييم">
+          </div>
+          <div class="field">
+            <label>تاريخ آخر فحص جودة (اختياري)</label>
+            <input type="text" id="productQcDate" placeholder="15 يوليو 2026">
+          </div>
         </div>
         <p id="productFormError" style="color:var(--rust);font-size:13px;display:none"></p>
         <div style="display:flex;gap:10px;margin-top:12px">
@@ -177,7 +185,7 @@
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>المعرّف</th><th>الاسم</th><th>القسم</th><th>السعر</th><th>الوحدة</th><th>الوسوم</th><th></th></tr>
+            <tr><th>المعرّف</th><th>الاسم</th><th>القسم</th><th>السعر</th><th>الوحدة</th><th>الوسوم</th><th>المورد</th><th></th></tr>
           </thead>
           <tbody id="productsTable"></tbody>
         </table>
@@ -216,6 +224,18 @@
             <label>عناصر الحزمة (معرّف المنتج:الكمية، مفصولة بفاصلة — مثال: e1:1,v3:1,f2:4)</label>
             <input type="text" id="tripItems" placeholder="e1:1,v3:1,f2:4">
           </div>
+          <div class="field">
+            <label>التقييم (اختياري، من 5)</label>
+            <input type="number" id="tripRating" step="0.1" min="0" max="5" placeholder="4.6">
+          </div>
+          <div class="field">
+            <label>عدد التقييمات (اختياري)</label>
+            <input type="number" id="tripReviewCount" placeholder="34">
+          </div>
+          <div class="field" style="grid-column:1/-1">
+            <label>عينات مراجعات (مفصولة بـ | ، اختياري)</label>
+            <input type="text" id="tripReviews" placeholder="تجربة ممتازة | وصلت بسرعة">
+          </div>
         </div>
         <p style="font-size:12.5px;color:#6b7268">استخدم معرّفات المنتجات الظاهرة بعمود "المعرّف" بجدول المنتجات أعلاه.</p>
         <p id="tripFormError" style="color:var(--rust);font-size:13px;display:none"></p>
@@ -228,7 +248,7 @@
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>الرحلة</th><th>المدة</th><th>عدد العناصر بالحزمة</th><th>السعر الأساسي</th><th></th></tr>
+            <tr><th>الرحلة</th><th>المدة</th><th>عدد العناصر بالحزمة</th><th>السعر الأساسي</th><th>التقييم</th><th></th></tr>
           </thead>
           <tbody id="tripsTable"></tbody>
         </table>
@@ -405,6 +425,7 @@
           <td>${p.price} ر.ع</td>
           <td>${p.unit}</td>
           <td>${p.tags.join('، ')}</td>
+          <td style="font-size:12px;color:#6b7268">${p.supplier || '—'}</td>
           <td style="white-space:nowrap">
             <button class="btn btn-ghost btn-sm" onclick="editProduct('${p.id}')">تعديل</button>
             <button class="btn btn-ghost btn-sm" onclick="deleteProduct('${p.id}')" style="color:var(--rust)">حذف</button>
@@ -421,6 +442,7 @@
           <td>${t.days} ${t.days === 1 ? 'يوم' : 'أيام'}</td>
           <td>${t.items.length}</td>
           <td>${tripBasePrice(t)} ر.ع</td>
+          <td>${t.rating ? '★ ' + t.rating + ' (' + (t.reviewCount || 0) + ')' : '—'}</td>
           <td style="white-space:nowrap">
             <button class="btn btn-ghost btn-sm" onclick="editTrip('${t.id}')">تعديل</button>
             <button class="btn btn-ghost btn-sm" onclick="deleteTrip('${t.id}')" style="color:var(--rust)">حذف</button>
@@ -456,6 +478,8 @@
       document.getElementById('productUnit').value = '';
       document.getElementById('productEmoji').value = '';
       document.getElementById('productTags').value = '';
+      document.getElementById('productSupplier').value = '';
+      document.getElementById('productQcDate').value = '';
       document.getElementById('productFormError').style.display = 'none';
       productForm.style.display = 'block';
       productForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -474,6 +498,8 @@
       document.getElementById('productUnit').value = p.unit;
       document.getElementById('productEmoji').value = p.emoji;
       document.getElementById('productTags').value = p.tags.join(', ');
+      document.getElementById('productSupplier').value = p.supplier || '';
+      document.getElementById('productQcDate').value = p.qcDate || '';
       document.getElementById('productFormError').style.display = 'none';
       productForm.style.display = 'block';
       productForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -495,6 +521,8 @@
         unit: document.getElementById('productUnit').value.trim(),
         emoji: document.getElementById('productEmoji').value.trim(),
         tags: document.getElementById('productTags').value.split(',').map(t => t.trim()).filter(Boolean),
+        supplier: document.getElementById('productSupplier').value.trim() || undefined,
+        qcDate: document.getElementById('productQcDate').value.trim() || undefined,
       };
       const errBox = document.getElementById('productFormError');
       if (!dto.name || !dto.desc || !dto.unit || !dto.emoji || !dto.price) {
@@ -524,6 +552,9 @@
       document.getElementById('tripEmoji').value = '';
       document.getElementById('tripDesc').value = '';
       document.getElementById('tripItems').value = '';
+      document.getElementById('tripRating').value = '';
+      document.getElementById('tripReviewCount').value = '';
+      document.getElementById('tripReviews').value = '';
       document.getElementById('tripFormError').style.display = 'none';
       tripForm.style.display = 'block';
       tripForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -540,6 +571,9 @@
       document.getElementById('tripEmoji').value = t.emoji;
       document.getElementById('tripDesc').value = t.desc;
       document.getElementById('tripItems').value = t.items.map(i => `${i.id}:${i.qty}`).join(',');
+      document.getElementById('tripRating').value = t.rating || '';
+      document.getElementById('tripReviewCount').value = t.reviewCount || '';
+      document.getElementById('tripReviews').value = (t.reviews || []).join(' | ');
       document.getElementById('tripFormError').style.display = 'none';
       tripForm.style.display = 'block';
       tripForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -568,12 +602,18 @@
         errBox.style.display = 'block';
         return;
       }
+      const ratingVal = document.getElementById('tripRating').value.trim();
+      const reviewCountVal = document.getElementById('tripReviewCount').value.trim();
+      const reviewsVal = document.getElementById('tripReviews').value.trim();
       const dto = {
         name: document.getElementById('tripName').value.trim(),
         days: Number(document.getElementById('tripDays').value),
         emoji: document.getElementById('tripEmoji').value.trim(),
         desc: document.getElementById('tripDesc').value.trim(),
         items,
+        rating: ratingVal ? Number(ratingVal) : undefined,
+        reviewCount: reviewCountVal ? Number(reviewCountVal) : undefined,
+        reviews: reviewsVal ? reviewsVal.split('|').map(r => r.trim()).filter(Boolean) : undefined,
       };
       if (!dto.name || !dto.emoji || !dto.days || !items.length) {
         errBox.textContent = 'عبّي كل الحقول وأضف عنصر واحد على الأقل';

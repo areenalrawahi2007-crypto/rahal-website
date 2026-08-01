@@ -125,6 +125,8 @@ input,select,textarea{ font-family:inherit; }
 .trip-badge-used{ background: rgba(217,164,65,.16); color: var(--gold-dark); }
 .trip-badge-verified{ background: rgba(79,122,102,.14); color: var(--moss); }
 .cart-item .info .supplier-line{ font-size:11.5px; color:#8b9188; margin-top:2px; }
+.rating-line{ font-size:12.5px; font-weight:700; color:var(--gold-dark); margin:2px 0 6px; }
+.rating-line span{ font-weight:500; color:#8b9188; }
 .trip-notice{
   margin-top:12px; padding:12px 14px; border-radius:10px;
   background: rgba(193,81,47,.08); border: 1px solid rgba(193,81,47,.25);

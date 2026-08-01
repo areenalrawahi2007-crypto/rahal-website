@@ -74,6 +74,24 @@ function cartCount() {
   return Object.values(cart).reduce((sum, qty) => sum + qty, 0);
 }
 
+// عدّاد الحقائب الكاملة المضافة بالسلة بالجلسة الحالية — يُستخدم لخصم الحجز العائلي/الجماعي
+// (السلة نفسها قائمة عناصر مسطّحة بدون تجميع حسب الحقيبة، فنتتبع العدّاد لوحده)
+const CART_BAG_COUNT_KEY = 'rahalCartBagCount';
+const GROUP_DISCOUNT_RATE = 0.10;
+const GROUP_DISCOUNT_MIN_BAGS = 2;
+
+function getBagCount() {
+  return parseInt(localStorage.getItem(CART_BAG_COUNT_KEY), 10) || 0;
+}
+
+function incrementBagCount() {
+  localStorage.setItem(CART_BAG_COUNT_KEY, String(getBagCount() + 1));
+}
+
+function resetBagCount() {
+  localStorage.removeItem(CART_BAG_COUNT_KEY);
+}
+
 function updateCartBadges() {
   const count = cartCount();
   document.querySelectorAll('.js-cart-badge').forEach(badge => {
