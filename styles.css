@@ -32,6 +32,7 @@ body{
   direction: rtl;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 html[dir="ltr"] body{ direction: ltr; }
 img{ max-width:100%; display:block; }
@@ -272,6 +273,7 @@ input,select,textarea{ font-family:inherit; }
 
 /* ---------- Cart page ---------- */
 .cart-layout{ display:grid; grid-template-columns: 1fr 340px; gap:32px; align-items:flex-start; }
+.cart-layout > *{ min-width:0; }
 .cart-item{ display:flex; gap:16px; align-items:center; padding:18px 0; border-bottom:1px solid var(--line); }
 .cart-item .thumb{ width:64px;height:64px; border-radius:12px; background:var(--paper-2); display:flex; align-items:center; justify-content:center; font-size:28px; flex-shrink:0; }
 .cart-item .info{ flex:1; min-width:0; }
@@ -290,20 +292,21 @@ input,select,textarea{ font-family:inherit; }
 
 /* ---------- Forms ---------- */
 .form-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
-.field{ display:flex; flex-direction:column; gap:6px; }
+.field{ display:flex; flex-direction:column; gap:6px; min-width:0; }
 .field.full{ grid-column: 1 / -1; }
 .field label{ font-size:13.5px; font-weight:700; color:#3f463b; }
 .field input, .field select, .field textarea{
   padding:12px 14px; border-radius:12px; border:1.5px solid var(--line); font-size:14.5px; background:#fff;
+  width:100%; min-width:0;
 }
 .field input:focus, .field select:focus, .field textarea:focus{ outline:none; border-color: var(--gold); }
 .field textarea{ resize:vertical; min-height:110px; }
-.phone-field-row{ display:flex; gap:8px; }
+.phone-field-row{ display:flex; gap:8px; min-width:0; }
 .phone-field-row .country-code-select{
   flex:0 0 128px; padding:12px 8px; border-radius:12px; border:1.5px solid var(--line); font-size:13.5px; background:#fff;
 }
 .phone-field-row .country-code-select:focus{ outline:none; border-color: var(--gold); }
-.phone-field-row input{ flex:1; }
+.phone-field-row input{ flex:1; min-width:0; }
 @media (max-width:480px){
   .phone-field-row .country-code-select{ flex-basis:104px; }
 }
@@ -370,11 +373,15 @@ input,select,textarea{ font-family:inherit; }
   .contact-grid{ grid-template-columns: 1fr; }
   .footer-grid{ grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 760px){
+/* دون 1200px، الشريط الكامل (روابط + بحث + عمولة + دخول) ما يكفي عرضه —
+   نطويه بقائمة الهامبرغر عشان ما يصير تمرير أفقي أو تداخل بأي مقاس تابلت/لابتوب صغير */
+@media (max-width: 1240px){
   .main-nav{ display:none; }
   .nav-search{ display:none; }
-  .menu-toggle{ display:flex; }
-  .nav-row{ padding:12px 16px; }
+  .menu-toggle{ display:flex; flex-shrink:0; }
+  .nav-row{ padding:12px 16px; gap:8px; }
+}
+@media (max-width: 760px){
   .form-grid{ grid-template-columns: 1fr; }
   .footer-grid{ grid-template-columns: 1fr 1fr; }
   .hero{ padding:56px 0 70px; }
@@ -382,11 +389,20 @@ input,select,textarea{ font-family:inherit; }
   .assistant-input-row{ flex-direction:column; }
   .assistant-box{ padding:22px; margin-top:-10px; }
 }
+@media (max-width: 600px){
+  .nav-row{ padding:10px 14px; gap:6px; }
+  .nav-actions{ gap:6px; flex-shrink:0; }
+  .nav-actions .js-lang-toggle{ display:none; }
+  .nav-actions a.btn-primary{ display:none; }
+  .brand{ gap:8px; font-size:16px; min-width:0; }
+  .brand .stamp{ width:40px; height:40px; }
+  .brand span.tag{ display:none; }
+}
 @media (max-width: 480px){
   .footer-grid{ grid-template-columns: 1fr; }
   .cart-fab{ width:52px;height:52px; bottom:16px; left:16px; }
-  .stamp-grid{ grid-template-columns: 1fr 1fr; }
-  .product-grid{ grid-template-columns: 1fr 1fr; }
+  .stamp-grid{ grid-template-columns: 1fr; }
+  .product-grid{ grid-template-columns: 1fr; }
   .toolbar{ flex-direction:column; align-items:stretch; }
 }
 
