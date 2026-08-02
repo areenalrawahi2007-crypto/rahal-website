@@ -212,6 +212,97 @@
     'الجازر': ['البر'],
   };
 
+  // إحداثيات لأهم الأماكن اللي المساعد يعرفها — تُستخدم لجلب طقس استرشادي (نصيحة تجهيز فقط، مو نظام تحذير سلامة).
+  // الأماكن غير الموجودة هنا ما يظهر لها طقس (بدل تخمين إحداثيات غير دقيقة).
+  const PLACE_COORDS = {
+    'مسقط': { lat: 23.5880, lon: 58.3829 },
+    'مطرح': { lat: 23.6142, lon: 58.5661 },
+    'السيب': { lat: 23.6703, lon: 58.1891 },
+    'قريات': { lat: 23.2597, lon: 58.9114 },
+    'ظفار': { lat: 17.0151, lon: 54.0924 },
+    'صلالة': { lat: 17.0151, lon: 54.0924 },
+    'طاقة': { lat: 17.0333, lon: 54.4000 },
+    'مرباط': { lat: 16.9833, lon: 54.7000 },
+    'مسندم': { lat: 26.1799, lon: 56.2477 },
+    'خصب': { lat: 26.1799, lon: 56.2477 },
+    'البريمي': { lat: 24.2506, lon: 55.7933 },
+    'نزوى': { lat: 22.9333, lon: 57.5333 },
+    'بهلاء': { lat: 22.9667, lon: 57.3000 },
+    'حصن بهلا': { lat: 22.9667, lon: 57.3000 },
+    'قلعة بهلا': { lat: 22.9667, lon: 57.3000 },
+    'حصن نزوى': { lat: 22.9333, lon: 57.5333 },
+    'سوق نزوى': { lat: 22.9333, lon: 57.5333 },
+    'إبراء': { lat: 22.6906, lon: 58.5334 },
+    'صور': { lat: 22.5667, lon: 59.5289 },
+    'قلعة صور': { lat: 22.5667, lon: 59.5289 },
+    'عبري': { lat: 23.2238, lon: 56.5127 },
+    'الرستاق': { lat: 23.3903, lon: 57.4222 },
+    'قلعة الرستاق': { lat: 23.3903, lon: 57.4222 },
+    'حصن الرستاق': { lat: 23.3903, lon: 57.4222 },
+    'صحار': { lat: 24.3459, lon: 56.7073 },
+    'حصن صحار': { lat: 24.3459, lon: 56.7073 },
+    'سوق صحار': { lat: 24.3459, lon: 56.7073 },
+    'بركاء': { lat: 23.6836, lon: 57.8886 },
+    'الدقم': { lat: 19.6664, lon: 57.7057 },
+    'هيماء': { lat: 19.9333, lon: 56.2667 },
+    'جبل شمس': { lat: 23.0956, lon: 57.2661 },
+    'الجبل الأخضر': { lat: 23.0667, lon: 57.6667 },
+    'بلاد سيت': { lat: 23.0833, lon: 57.5500 },
+    'المسفاة العبريين': { lat: 23.2167, lon: 57.5167 },
+    'مسفاة العبريين': { lat: 23.2167, lon: 57.5167 },
+    'وادي شاب': { lat: 22.8300, lon: 59.2500 },
+    'وادي بني خالد': { lat: 22.5833, lon: 59.1167 },
+    'وادي بني عوف': { lat: 23.2333, lon: 57.5833 },
+    'رأس الحد': { lat: 22.5333, lon: 59.7833 },
+    'رأس الجنز': { lat: 22.5167, lon: 59.8167 },
+    'جزيرة مصيرة': { lat: 20.6167, lon: 58.8833 },
+    'مغارة الهوتة': { lat: 23.1167, lon: 57.3333 },
+  };
+
+  const WEATHER_CODE_LABELS = {
+    0: 'صافي', 1: 'صافي غالباً', 2: 'غائم جزئياً', 3: 'غائم',
+    45: 'ضباب', 48: 'ضباب كثيف',
+    51: 'رذاذ خفيف', 53: 'رذاذ', 55: 'رذاذ كثيف',
+    61: 'أمطار خفيفة', 63: 'أمطار', 65: 'أمطار غزيرة',
+    80: 'زخات مطر خفيفة', 81: 'زخات مطر', 82: 'زخات مطر غزيرة',
+    95: 'رعد وبرق', 96: 'عاصفة رعدية', 99: 'عاصفة رعدية قوية',
+  };
+
+  function findPlaceWithCoords(rawText) {
+    const text = normalize(rawText);
+    const match = Object.keys(PLACE_COORDS).find(place => text.includes(normalize(place)));
+    return match || null;
+  }
+
+  function weatherTip(tempC, code) {
+    if (code >= 51 && code <= 99) return 'متوقع مطر — خذي جاكيت مطر واحترسي من مجاري السيول بالوديان.';
+    if (tempC >= 38) return 'الجو حار جداً — خذي مويه كافية وواقي شمس.';
+    if (tempC <= 15) return 'الجو بارد — خذي طبقة دافئة خصوصاً بالليل.';
+    return 'الجو مناسب للرحلة 🙂';
+  }
+
+  async function fetchWeatherLine(placeName) {
+    const coords = PLACE_COORDS[placeName];
+    if (!coords || typeof AbortController === 'undefined') return null;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 2500);
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=temperature_2m,weather_code&timezone=auto`;
+      const res = await fetch(url, { signal: controller.signal });
+      if (!res.ok) return null;
+      const data = await res.json();
+      const temp = data && data.current && data.current.temperature_2m;
+      const code = data && data.current && data.current.weather_code;
+      if (typeof temp !== 'number') return null;
+      const label = WEATHER_CODE_LABELS[code] || '';
+      return `🌡️ الجو بـ${placeName} الآن ${Math.round(temp)}°${label ? ' — ' + label : ''}. ${weatherTip(temp, code || 0)}`;
+    } catch (e) {
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   function normalize(text) {
     return (text || '')
       .toLowerCase()
@@ -317,7 +408,7 @@
     return 'تكمّل احتياجات رحلتك';
   }
 
-  function localAssistantReply(message, session) {
+  async function localAssistantReply(message, session) {
     const faqAnswer = matchFAQ(message);
     if (faqAnswer) return { clarify: faqAnswer };
 
@@ -345,9 +436,16 @@
       };
     }
 
-    const note = session.includeTags.includes('عائلي')
-      ? 'إذا رحلتكم أكثر من حقيبة بنفس الطلب، خصم الحجز العائلي/الجماعي (10%) يتفعّل تلقائياً 🎉'
-      : null;
+    const notes = [];
+    const placeName = findPlaceWithCoords(message);
+    if (placeName) {
+      const weatherLine = await fetchWeatherLine(placeName);
+      if (weatherLine) notes.push(weatherLine);
+    }
+    if (session.includeTags.includes('عائلي')) {
+      notes.push('إذا رحلتكم أكثر من حقيبة بنفس الطلب، خصم الحجز العائلي/الجماعي (10%) يتفعّل تلقائياً 🎉');
+    }
+    const note = notes.length ? notes : null;
 
     return {
       items: trips.map(t => ({ trip_id: t.id, reason: buildReason(t, session) })),
@@ -396,7 +494,7 @@
 
     let reply;
     try {
-      reply = (await fetchBackendReply(message, session)) || localAssistantReply(message, session);
+      reply = (await fetchBackendReply(message, session)) || (await localAssistantReply(message, session));
     } catch (e) {
       reply = { clarify: 'صار خلل بسيط، جرّب تكتبها بطريقة ثانية.' };
     }
@@ -444,7 +542,8 @@
         </div>`;
       })
       .join('');
-    const noteHtml = note ? `<p style="margin-top:10px;font-size:13.5px;color:var(--gold-dark)">${escapeHtml(note)}</p>` : '';
+    const notes = Array.isArray(note) ? note : (note ? [note] : []);
+    const noteHtml = notes.map(n => `<p style="margin-top:10px;font-size:13.5px;color:var(--gold-dark)">${escapeHtml(n)}</p>`).join('');
     return `<div class="chat-bubble assistant"><p>هذي الحقائب اللي تناسب رحلتك:</p><div class="assistant-cards">${cards}</div>${noteHtml}</div>`;
   }
 
