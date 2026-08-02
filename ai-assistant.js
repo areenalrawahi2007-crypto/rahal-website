@@ -30,6 +30,31 @@
 
   const NEG_TRIGGERS = ['بدون', 'بلا', 'ما احتاج', 'ما ابي', 'ما أبي', 'ما ابغى', 'مو محتاج'];
 
+  // فئات الحقائب اللي تناسب رحلة عائلية بشكل عام — 'عائلي' مو نوع حقيبة مستقل بالكتالوج،
+  // فنخليه يرفع تقييم هالأنواع بدل ما يكون فلتر صارم يرجّع صفر نتائج
+  const FAMILY_FRIENDLY_CATEGORIES = ['السهول', 'الشاطئ', 'البر'];
+
+  // الأسئلة الشائعة وسياسات المنصة — تُفحص قبل منطق ترشيح الحقائب،
+  // عشان أسئلة زي "كم العمولة؟" ما تروح لمنطق اقتراح حقيبة بالغلط
+  const FAQ = [
+    { triggers: ['عمول', 'كم تاخذون', 'نسبة رحال', 'نسبتكم'], answer: 'عمولة رحّال على بيع منتجات الموردين تتراوح بين 15% و25% حسب نوع المنتج. ولو تبيعين حقيبة مستعملة عبر "بيع حقيبتك"، العمولة 20% بس من سعر البيع لما تتباع فعلاً.' },
+    { triggers: ['توصيل', 'التوصيل', 'وصول الطلب', 'كم ياخذ التوصيل'], answer: 'تقدرين تختارين توصيل لبيتك أو توصيل مباشر لموقع الرحلة (نقطة تجمع الوادي أو الشاطئ) وقت إتمام الطلب.' },
+    { triggers: ['ارجاع', 'إرجاع', 'استرجاع', 'استبدال'], answer: 'الحقائب الجديدة تقدرين ترجعينها خلال 3 أيام بحالتها الأصلية. المستعملة تُباع كما هي بعد الفحص، وما ترجع إلا لو فيه عيب ما تم الإفصاح عنه وقت البيع.' },
+    { triggers: ['تخزين', 'خزن حقيبتي', 'اخزن حقيبتي'], answer: 'تقدرين تخزنين حقيبتك عندنا بدل أخذها معك مقابل 1 ر.ع بس شهرياً — فعّليها وقت إتمام طلبك من صفحة الدفع.' },
+    { triggers: ['اعادة تجهيز', 'إعادة التجهيز', 'نقص من حقيبتي', 'ناقص'], answer: 'لو ناقصك أي شي من حقيبة عندك، ادخلي صفحة "إعادة التجهيز" واختاري حقيبتك — تدفعين بس على العناصر اللي تحتاجينها، مو سعر الحقيبة كاملة.' },
+    { triggers: ['بيع حقيبت', 'بيع الحقيبة', 'حقيبتي المستعملة', 'اعرض حقيبتي'], answer: 'تقدرين تعرضين حقيبتك المستعملة للبيع من صفحة "بيع حقيبتك" — نفحصها ونعرضها بشارة "مفحوصة من رحّال"، ولما تتباع يوصلك سعرها ناقص عمولة رحّال (20%).' },
+    { triggers: ['انضم كمورد', 'أبيع منتجاتي', 'ابغى اسوق منتجاتي', 'ابي اسوق منتجاتي', 'مورد جديد'], answer: 'تقدر تنضم كمورد من صفحة "انضم كمورد" — نفحص عيّنة من منتجك، وعمولة رحّال تبدأ من 15% وحتى 25% حسب نوع المنتج.' },
+    { triggers: ['خصم جماعي', 'خصم عائلي', 'اكثر من حقيبة', 'حجز جماعي'], answer: 'لو أضفتي حقيبتين أو أكثر بنفس الطلب، خصم الحجز العائلي/الجماعي (10%) يتفعّل تلقائياً على سلتك.' },
+    { triggers: ['غوص احترافي', 'مرشد جبلي', 'اسطوانة غوص', 'مركز غوص', 'رخصة غوص'], answer: 'الخدمات اللي تحتاج ترخيص خاص (زي الغوص الاحترافي أو الإرشاد الجبلي التقني) ما تُباع مباشرة عبر رحّال — نعرّفك بمزوّد مرخّص تتواصلين معه مباشرة.' },
+    { triggers: ['مفحوص من رحال', 'كيف تفحصون', 'فحص الجودة', 'فحص المنتج'], answer: 'كل مورد ومنتج يمر بفحص جودة قبل قبوله على المنصة — تشوفين اسم المورد وتاريخ آخر فحص جودة تحت كل غرض بالحقيبة، وشارة "✅ مفحوص من رحّال" على كل بطاقة.' },
+  ];
+
+  function matchFAQ(rawText) {
+    const text = normalize(rawText);
+    const hit = FAQ.find(f => f.triggers.some(t => text.includes(normalize(t))));
+    return hit ? hit.answer : null;
+  }
+
   // معرفة بأماكن عُمان — تغطي كل المحافظات والولايات الـ11 بدون استثناء (مو بس الوجهات السياحية المعروفة)،
   // لربط اسم أي منطقة يذكرها العميل بنوع الحقيبة المناسبة تلقائياً.
   const PLACES = {
@@ -235,6 +260,10 @@
       include.forEach(tag => {
         if (itemTags.has(tag) && !exclude.has(tag)) score += 1;
       });
+      // 'عائلي' مو نوع حقيبة مستقل — يرفع تقييم الأنواع المناسبة للعائلة بدل ما يكون شرط صارم
+      if (include.includes('عائلي') && meta.category && FAMILY_FRIENDLY_CATEGORIES.includes(meta.category) && !exclude.has(meta.category)) {
+        score += 2;
+      }
       return { trip, score };
     })
       .filter(x => x.score > 0)
@@ -250,6 +279,9 @@
   }
 
   function localAssistantReply(message, session) {
+    const faqAnswer = matchFAQ(message);
+    if (faqAnswer) return { clarify: faqAnswer };
+
     const newTags = detectTags(message);
     const negTags = detectNegatedTags(message);
 
@@ -274,8 +306,13 @@
       };
     }
 
+    const note = session.includeTags.includes('عائلي')
+      ? 'إذا رحلتكم أكثر من حقيبة بنفس الطلب، خصم الحجز العائلي/الجماعي (10%) يتفعّل تلقائياً 🎉'
+      : null;
+
     return {
       items: trips.map(t => ({ trip_id: t.id, reason: buildReason(t, session) })),
+      note,
     };
   }
 
@@ -349,7 +386,7 @@
     return `<div class="chat-bubble assistant${isError ? ' error' : ''}"><p>${escapeHtml(text)}</p></div>`;
   }
 
-  function renderCards(items) {
+  function renderCards(items, note) {
     const cards = items
       .map(item => {
         const t = TRIPS.find(x => x.id === item.trip_id);
@@ -368,7 +405,8 @@
         </div>`;
       })
       .join('');
-    return `<div class="chat-bubble assistant"><p>هذي الحقائب اللي تناسب رحلتك:</p><div class="assistant-cards">${cards}</div></div>`;
+    const noteHtml = note ? `<p style="margin-top:10px;font-size:13.5px;color:var(--gold-dark)">${escapeHtml(note)}</p>` : '';
+    return `<div class="chat-bubble assistant"><p>هذي الحقائب اللي تناسب رحلتك:</p><div class="assistant-cards">${cards}</div>${noteHtml}</div>`;
   }
 
   function setupAssistantUI() {
@@ -412,7 +450,7 @@
       } else if (reply.clarify) {
         thread.insertAdjacentHTML('beforeend', renderMessage(reply.clarify, false));
       } else if (reply.items && reply.items.length) {
-        thread.insertAdjacentHTML('beforeend', renderCards(reply.items));
+        thread.insertAdjacentHTML('beforeend', renderCards(reply.items, reply.note));
       } else {
         thread.insertAdjacentHTML('beforeend', renderMessage('جرّب تكتبها بطريقة ثانية 🙂', true));
       }
