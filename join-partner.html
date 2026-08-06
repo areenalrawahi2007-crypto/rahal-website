@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>انضم كشريك نشاط مرخّص | رحّال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://rahal-backend-production.up.railway.app/data.js"></script>
+<script src="app.js"></script>
+<script src="i18n.js"></script>
+</head>
+<body>
+<header class="site-header">
+    <div class="nav-row">
+      <a href="index.html" class="brand">
+        <img src="assets/logo-icon.png" alt="رحّال" class="stamp">
+        <span>رحّال<span class="tag">دليلك لكل رحلة</span></span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html" data-nav="index" data-i18n="nav.home">الرئيسية</a>
+        <a href="trips.html" data-nav="trips" data-i18n="nav.trips">الحقيبة الجاهزة</a>
+        <a href="refill.html" data-nav="refill" data-i18n="nav.refill">إعادة التجهيز</a>
+        <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
+        <a href="join-supplier.html" data-nav="joinsupplier" data-i18n="nav.joinSupplier">انضم كمورد</a>
+        <a href="join-partner.html" data-nav="joinpartner" data-i18n="nav.joinPartner">انضم كشريك نشاط</a>
+        <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
+        <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
+      </nav>
+      <div class="nav-search">
+        <input type="text" class="js-search-input" placeholder="ابحث: حقيبة الشاطئ، حقيبة البر..." data-i18n-placeholder="search.placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <div class="search-results"></div>
+      </div>
+      <div class="nav-actions">
+        <button type="button" class="js-lang-toggle" data-i18n="lang.toggle">English</button>
+        <a href="register.html" class="btn btn-primary btn-sm" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+        <button class="menu-toggle icon-btn" aria-label="القائمة" data-i18n-aria="menu.aria">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <button class="cart-fab" onclick="location.href='cart.html'" aria-label="عرض السلة" data-i18n-aria="cart.viewAria">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.8h8.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg>
+    <span class="badge js-cart-badge" style="display:none">0</span>
+  </button>
+
+  <div class="mobile-drawer">
+    <div class="panel">
+      <button class="close-x" aria-label="إغلاق" data-i18n-aria="drawer.close">×</button>
+      <button type="button" class="js-lang-toggle" data-i18n="lang.toggle" style="margin-bottom:14px">English</button>
+      <div class="m-search">
+        <input type="text" class="js-search-input" placeholder="ابحث..." data-i18n-placeholder="search.placeholderShort">
+        <div class="search-results"></div>
+      </div>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="trips.html" data-i18n="nav.trips">الحقيبة الجاهزة</a>
+      <a href="refill.html" data-i18n="nav.refill">إعادة التجهيز</a>
+      <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
+      <a href="join-supplier.html" data-i18n="nav.joinSupplier">انضم كمورد</a>
+      <a href="join-partner.html" data-i18n="nav.joinPartner">انضم كشريك نشاط</a>
+      <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
+      <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
+      <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+      <a href="cart.html" data-i18n="nav.cart">سلتي</a>
+    </div>
+  </div>
+  <main>
+<section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">الرئيسية</a> / انضم كشريك نشاط</div>
+      <h1 data-i18n="joinPartner.title">قدّم نشاطك المرخّص لعملاء رحّال</h1>
+      <p data-i18n="joinPartner.lead">غوص، إرشاد جبلي، جولات سياحية — رحّال تعرّف عملاءها بك كمزوّد مرخّص وتاخذ عمولة إحالة فقط. الحجز والدفع وتنفيذ النشاط كله مباشرة بينك وبين العميل.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cart-layout">
+        <div class="card-surface">
+          <form id="joinPartnerForm">
+            <div class="form-grid">
+              <div class="field"><label data-i18n="joinPartner.businessName">اسم النشاط أو الشركة</label><input type="text" id="businessNameInput" required placeholder="مثال: مركز ظفار للغوص"></div>
+              <div class="field"><label data-i18n="joinPartner.contactName">اسم المسؤول</label><input type="text" id="contactNameInput" required placeholder="مثال: سالم الرواحي"></div>
+              <div class="field"><label data-i18n="joinPartner.phone">رقم الجوال</label><div class="phone-field-row" id="joinPartnerPhoneRow"><input type="tel" id="joinPartnerPhoneInput" required placeholder="9XXXXXXX"></div></div>
+              <div class="field">
+                <label data-i18n="joinPartner.activityCategory">نوع النشاط</label>
+                <select id="joinPartnerActivityCategory" required>
+                  <option value="" disabled selected data-i18n="joinPartner.chooseActivity">اختر النوع</option>
+                  <option value="diving" data-i18n="joinPartner.activityDiving">غوص</option>
+                  <option value="mountain-guide" data-i18n="joinPartner.activityMountainGuide">إرشاد جبلي</option>
+                  <option value="tours" data-i18n="joinPartner.activityTours">جولات سياحية</option>
+                  <option value="camping-guide" data-i18n="joinPartner.activityCampingGuide">إرشاد تخييم/رحلات برية</option>
+                  <option value="other" data-i18n="joinPartner.activityOther">أخرى</option>
+                </select>
+              </div>
+              <div class="field"><label data-i18n="joinPartner.licenseNumber">رقم الترخيص (اختياري)</label><input type="text" id="licenseNumberInput" placeholder="مثال: OMD-2024-1123"></div>
+              <div class="field"><label data-i18n="joinPartner.licenseExpiry">تاريخ انتهاء الترخيص (اختياري)</label><input type="date" id="licenseExpiryInput"></div>
+              <div class="field full">
+                <label data-i18n="joinPartner.licenseFile">صورة أو PDF لمستند الترخيص (إجباري)</label>
+                <input type="file" id="licenseFileInput" accept="image/jpeg,image/png,image/webp,application/pdf" required>
+                <p style="font-size:12.5px;color:#8b9188;margin-top:4px" data-i18n="joinPartner.licenseFileNote">يفحصه نظام ذكاء اصطناعي أولاً استرشادياً، والقرار النهائي دايماً بمراجعة بشرية من فريق رحّال.</p>
+              </div>
+              <div class="field full"><label data-i18n="joinPartner.notes">ملاحظات إضافية (اختياري)</label><textarea id="joinPartnerNotes" placeholder="أي تفاصيل تحبّ تشاركها معنا" data-i18n-placeholder="joinPartner.notesPlaceholder"></textarea></div>
+              <div class="field full checkbox-field">
+                <label style="display:flex;align-items:flex-start;gap:8px;font-weight:400">
+                  <input type="checkbox" id="joinPartnerAgree" required style="margin-top:3px">
+                  <span>أفهم وأوافق أن رحّال <strong>وسيط إحالة فقط</strong> لهذا النشاط — لا تبيعه ولا تحجزه ولا تُشرف على تنفيذه، والحجز والدفع يتمّان مباشرة بيني وبين العميل، وأنا المسؤول القانوني الوحيد عن ترخيصي وتنفيذ النشاط.</span>
+                </label>
+              </div>
+            </div>
+            <p id="joinPartnerError" style="color:var(--rust);font-size:13px;display:none;margin-top:10px"></p>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px" id="joinPartnerSubmitBtn" data-i18n="joinPartner.submit">أرسل طلب الانضمام</button>
+          </form>
+        </div>
+        <div class="summary-card">
+          <h3 data-i18n="joinPartner.disclaimerHeading">رحّال وسيط إحالة فقط</h3>
+          <div class="summary-row"><span data-i18n="joinPartner.disclaimer1">✅ رحّال لا تبيع ولا تخزّن ولا توصّل هذا النشاط — تعريف وإحالة فقط</span></div>
+          <div class="summary-row"><span data-i18n="joinPartner.disclaimer2">✅ الحجز والدفع مباشرة بينك وبين العميل، خارج منصة رحّال</span></div>
+          <div class="summary-row"><span data-i18n="joinPartner.disclaimer3">✅ أنت المسؤول القانوني الوحيد عن ترخيصك وتنفيذ النشاط بأمان</span></div>
+          <div class="summary-row"><span data-i18n="joinPartner.disclaimer4">✅ عمولة إحالة على كل عميل يوصلك عن طريق رحّال فقط</span></div>
+          <h3 style="margin-top:22px" data-i18n="joinPartner.stepsHeading">كيف تشتغل الخطوات؟</h3>
+          <div class="summary-row"><span data-i18n="joinPartner.step1">١. تعبّي بيانات نشاطك وترفع مستند الترخيص</span></div>
+          <div class="summary-row"><span data-i18n="joinPartner.step2">٢. ذكاء اصطناعي يفحص المستند فوراً (استخراج بيانات + ملاحظات)</span></div>
+          <div class="summary-row"><span data-i18n="joinPartner.step3">٣. فريق رحّال يراجع الطلب ويتخذ القرار النهائي</span></div>
+          <div class="summary-row"><span data-i18n="joinPartner.step4">٤. نشاطك يظهر على المنصة بشارة "مفحوص من رحّال"</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const API_URL = 'https://rahal-backend-production.up.railway.app';
+
+    document.getElementById('joinPartnerPhoneRow').insertAdjacentHTML('afterbegin', countryCodeSelectHtml('joinPartnerCountryCode'));
+
+    const joinPartnerError = document.getElementById('joinPartnerError');
+    const joinPartnerSubmitBtn = document.getElementById('joinPartnerSubmitBtn');
+
+    function showJoinPartnerError(message) {
+      joinPartnerError.textContent = message;
+      joinPartnerError.style.display = 'block';
+    }
+
+    document.getElementById('joinPartnerForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      joinPartnerError.style.display = 'none';
+
+      const token = localStorage.getItem('rahalToken');
+      if (!token) {
+        showJoinPartnerError('لازم تسجّل حساب أو تدخل أول — سنحوّلك لصفحة التسجيل.');
+        setTimeout(() => { location.href = 'register.html'; }, 1500);
+        return;
+      }
+
+      const agree = document.getElementById('joinPartnerAgree').checked;
+      if (!agree) {
+        showJoinPartnerError('لازم توافق على إخلاء المسؤولية أولاً');
+        return;
+      }
+      const file = document.getElementById('licenseFileInput').files[0];
+      if (!file) {
+        showJoinPartnerError('رفع مستند الترخيص إجباري');
+        return;
+      }
+
+      const phoneCode = document.getElementById('joinPartnerCountryCode').value;
+      const phoneLocal = document.getElementById('joinPartnerPhoneInput').value.trim().replace(/^0+/, '');
+
+      const form = new FormData();
+      form.append('businessName', document.getElementById('businessNameInput').value.trim());
+      form.append('contactName', document.getElementById('contactNameInput').value.trim());
+      form.append('phone', phoneCode + phoneLocal);
+      form.append('activityCategory', document.getElementById('joinPartnerActivityCategory').value);
+      const licenseNumber = document.getElementById('licenseNumberInput').value.trim();
+      if (licenseNumber) form.append('licenseNumberInput', licenseNumber);
+      const licenseExpiry = document.getElementById('licenseExpiryInput').value;
+      if (licenseExpiry) form.append('licenseExpiryInput', licenseExpiry);
+      const notes = document.getElementById('joinPartnerNotes').value.trim();
+      if (notes) form.append('notes', notes);
+      form.append('agreementAccepted', 'true');
+      form.append('license', file);
+
+      joinPartnerSubmitBtn.disabled = true;
+      joinPartnerSubmitBtn.textContent = 'جاري الإرسال وفحص المستند...';
+      try {
+        // بدون Content-Type يدوياً — المتصفح يحطّه صح مع boundary الملف تلقائياً
+        const res = await fetch(`${API_URL}/applications/partner`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: form,
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          if (res.status === 401) {
+            showJoinPartnerError('انتهت صلاحية جلستك — سجّل دخول من جديد.');
+            setTimeout(() => { location.href = 'register.html'; }, 1500);
+            return;
+          }
+          throw new Error(Array.isArray(data.message) ? data.message[0] : (data.message || 'تعذّر إرسال الطلب'));
+        }
+
+        document.querySelector('main .section .container').innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4F7A66" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+            <h2 style="color:#16241F">تم استلام طلبك 🎉</h2>
+            <p>فحص الذكاء الاصطناعي لمستند الترخيص تم فوراً، وراح يراجع فريق رحّال طلبك ويتخذ القرار النهائي قريباً.</p>
+          </div>`;
+      } catch (err) {
+        showJoinPartnerError(err.message || 'تعذّر الاتصال بالخادم');
+      } finally {
+        joinPartnerSubmitBtn.disabled = false;
+        joinPartnerSubmitBtn.textContent = 'أرسل طلب الانضمام';
+      }
+    });
+  </script>
+  </main>
+<footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h4>رحّال</h4>
+        <p data-i18n="footer.about">منصة رحّال — تجمّع موردين موثوقين لمعدات الرحلات وتنظّمهم بحقائب جاهزة مفحوصة حسب نوع الرحلة.</p>
+      </div>
+      <div>
+        <h4 data-i18n="footer.browseHeading">تصفح</h4>
+        <a href="trips.html" data-i18n="footer.trips">الحقيبة الجاهزة</a>
+        <a href="sell-back.html" data-i18n="footer.sellback">بيع حقيبتك</a>
+        <a href="join-supplier.html" data-i18n="footer.joinSupplier">انضم كمورد</a>
+        <a href="join-partner.html" data-i18n="footer.joinPartner">انضم كشريك نشاط</a>
+      </div>
+      <div>
+        <h4 data-i18n="footer.accountHeading">حسابي</h4>
+        <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
+        <a href="cart.html" data-i18n="nav.cart">سلتي</a>
+        <a href="checkout.html" data-i18n="footer.checkout">إتمام الطلب</a>
+        <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
+      </div>
+      <div>
+        <h4 data-i18n="footer.supportHeading">الدعم والقانونية</h4>
+        <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
+        <a href="terms.html" data-i18n="footer.terms">الشروط والأحكام</a>
+        <a href="privacy.html" data-i18n="footer.privacy">سياسة الخصوصية</a>
+      </div>
+    </div>
+    <div class="footer-bottom container" data-i18n="footer.copyright">© 2026 رحّال — جميع الحقوق محفوظة</div>
+  </footer>
+</body>
+</html>

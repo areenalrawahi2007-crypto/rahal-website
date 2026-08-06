@@ -57,6 +57,26 @@
     return hit ? hit.answer : null;
   }
 
+  // حاجز أمان: أي سؤال فيه شكوى بطلب فعلي أو مشكلة دفع محدّدة (لا فرق بينه وبين سؤال سياسة عام بالـFAQ فوق)
+  // لازم يروح لموظف بشري مباشرة — المساعد ما يحاول يحلها أو يخمّن حالة طلب حقيقي أو معاملة دفع.
+  const SENSITIVE_TRIGGERS = [
+    'شكو', 'اشتكي', 'احتيال', 'نصب', 'خدعوني', 'انسرقت', 'نصبوا علي',
+    'ما وصلني', 'ما استلمت', 'ماوصلني', 'ماستلمت', 'طلبي ما وصل', 'الطلب متاخر', 'تاخر طلبي',
+    'المنتج تالف', 'المنتج معطوب', 'وصلني تالف', 'وصلني معطوب', 'وصلني خربان',
+    'خصموا مني', 'خصم زائد', 'خصم غلط', 'اتخصم مني', 'انخصم مبلغ',
+    'استرجاع فلوسي', 'ارجاع فلوسي', 'ابغى فلوسي', 'وين فلوسي', 'المبلغ ما رجع',
+    'مشكلة بالدفع', 'الدفع ما اشتغل', 'فشل الدفع', 'بطاقتي', 'فيزا', 'ماستركارد',
+    'رقم طلبي', 'حالة طلبي', 'تتبع طلبي', 'وين طلبي',
+  ];
+
+  function matchSensitive(rawText) {
+    const text = normalize(rawText);
+    return SENSITIVE_TRIGGERS.some(t => text.includes(normalize(t)));
+  }
+
+  const SENSITIVE_REPLY =
+    'هذا يخص طلب أو معاملة دفع فعلية، وأفضل شخص يساعدك فيها فريق رحّال مباشرة مو أنا — تواصل معنا من صفحة "تواصل معنا" وبنرد عليك بأسرع وقت 🙏';
+
   // معرفة بأماكن عُمان — تغطي كل المحافظات والولايات الـ11 بدون استثناء (مو بس الوجهات السياحية المعروفة)،
   // لربط اسم أي منطقة يذكرها العميل بنوع الحقيبة المناسبة تلقائياً.
   const PLACES = {
@@ -493,10 +513,15 @@
     session.messages = session.messages.slice(-MAX_HISTORY);
 
     let reply;
-    try {
-      reply = (await fetchBackendReply(message, session)) || (await localAssistantReply(message, session));
-    } catch (e) {
-      reply = { clarify: 'صار خلل بسيط، جرّب تكتبها بطريقة ثانية.' };
+    if (matchSensitive(message)) {
+      // حاجز الأمان أولوية قبل أي محاولة رد آلي (باك اند أو محلي) — ما نمرر شكاوى/مشاكل دفع فعلية للذكاء الاصطناعي إطلاقاً
+      reply = { clarify: SENSITIVE_REPLY };
+    } else {
+      try {
+        reply = (await fetchBackendReply(message, session)) || (await localAssistantReply(message, session));
+      } catch (e) {
+        reply = { clarify: 'صار خلل بسيط، جرّب تكتبها بطريقة ثانية.' };
+      }
     }
 
     session.messages.push({ role: 'assistant', text: reply.clarify || `اقترحت ${reply.items ? reply.items.length : 0} حقيبة` });

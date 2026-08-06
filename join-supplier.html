@@ -24,6 +24,7 @@
         <a href="refill.html" data-nav="refill" data-i18n="nav.refill">إعادة التجهيز</a>
         <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
         <a href="join-supplier.html" data-nav="joinsupplier" data-i18n="nav.joinSupplier">انضم كمورد</a>
+        <a href="join-partner.html" data-nav="joinpartner" data-i18n="nav.joinPartner">انضم كشريك نشاط</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
@@ -60,6 +61,7 @@
       <a href="refill.html" data-i18n="nav.refill">إعادة التجهيز</a>
       <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
       <a href="join-supplier.html" data-i18n="nav.joinSupplier">انضم كمورد</a>
+      <a href="join-partner.html" data-i18n="nav.joinPartner">انضم كشريك نشاط</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
@@ -81,18 +83,26 @@
         <div class="card-surface">
           <form id="joinSupplierForm">
             <div class="form-grid">
-              <div class="field"><label data-i18n="joinSupplier.shopName">اسم المتجر أو المورد</label><input type="text" required placeholder="مثال: متجر الصحراء للتخييم"></div>
-              <div class="field"><label data-i18n="joinSupplier.contactName">اسم المسؤول</label><input type="text" required placeholder="مثال: سالم الرواحي"></div>
-              <div class="field"><label data-i18n="joinSupplier.phone">رقم الجوال</label><div class="phone-field-row" id="joinSupplierPhoneRow"><input type="tel" required placeholder="9XXXXXXX"></div></div>
+              <div class="field"><label data-i18n="joinSupplier.shopName">اسم المتجر أو المورد</label><input type="text" id="shopNameInput" required placeholder="مثال: متجر الصحراء للتخييم"></div>
+              <div class="field"><label data-i18n="joinSupplier.contactName">اسم المسؤول</label><input type="text" id="contactNameInput" required placeholder="مثال: سالم الرواحي"></div>
+              <div class="field"><label data-i18n="joinSupplier.phone">رقم الجوال</label><div class="phone-field-row" id="joinSupplierPhoneRow"><input type="tel" id="joinSupplierPhoneInput" required placeholder="9XXXXXXX"></div></div>
+              <div class="field"><label data-i18n="joinSupplier.city">المدينة</label><input type="text" id="joinSupplierCity" required placeholder="مثال: مسقط"></div>
               <div class="field">
                 <label data-i18n="joinSupplier.category">نوع المنتجات اللي تقدّمها</label>
                 <select id="joinSupplierCategory" required>
                   <option value="" disabled selected data-i18n="joinSupplier.chooseCategory">اختر النوع</option>
                 </select>
               </div>
-              <div class="field full"><label data-i18n="joinSupplier.notes">وصف مختصر لمنتجاتك (اختياري)</label><textarea placeholder="مثال: خيام وكراسي تخييم، تصنيع محلي" data-i18n-placeholder="joinSupplier.notesPlaceholder"></textarea></div>
+              <div class="field full"><label data-i18n="joinSupplier.notes">وصف مختصر لمنتجاتك (اختياري)</label><textarea id="joinSupplierNotes" placeholder="مثال: خيام وكراسي تخييم، تصنيع محلي" data-i18n-placeholder="joinSupplier.notesPlaceholder"></textarea></div>
+              <div class="field full checkbox-field">
+                <label style="display:flex;align-items:flex-start;gap:8px;font-weight:400">
+                  <input type="checkbox" id="joinSupplierAgree" required style="margin-top:3px">
+                  <span>أوافق على <a href="terms.html" target="_blank">اتفاقية الانضمام كمورد</a> — بما فيها نسبة العمولة والمراجعة قبل القبول.</span>
+                </label>
+              </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-block" style="margin-top:24px" data-i18n="joinSupplier.submit">أرسل طلب الانضمام</button>
+            <p id="joinSupplierError" style="color:var(--rust);font-size:13px;display:none;margin-top:10px"></p>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px" id="joinSupplierSubmitBtn" data-i18n="joinSupplier.submit">أرسل طلب الانضمام</button>
           </form>
         </div>
         <div class="summary-card">
@@ -112,20 +122,82 @@
   </section>
 
   <script>
+    const API_URL = 'https://rahal-backend-production.up.railway.app';
+
+    // نبني قائمة التصنيفات من CATEGORIES الحقيقية (تصل من data.js) عشان categoryId يطابق
+    // فعلياً تصنيف موجود بقاعدة البيانات — القائمة القديمة كانت أسماء وجهات (الشاطئ، البر...) مو تصنيفات فعلية.
     const joinCategorySelect = document.getElementById('joinSupplierCategory');
-    const JOIN_CATEGORIES = ['السيارة', 'البر', 'الشاطئ', 'الوادي', 'الجبال', 'السهول', 'التسلق', 'الغوص'];
-    joinCategorySelect.insertAdjacentHTML('beforeend', JOIN_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join(''));
+    joinCategorySelect.insertAdjacentHTML('beforeend',
+      (typeof CATEGORIES !== 'undefined' ? CATEGORIES : []).map(c => `<option value="${c.id}">${c.name}</option>`).join(''));
 
     document.getElementById('joinSupplierPhoneRow').insertAdjacentHTML('afterbegin', countryCodeSelectHtml('joinSupplierCountryCode'));
 
-    document.getElementById('joinSupplierForm').addEventListener('submit', e => {
+    const joinSupplierError = document.getElementById('joinSupplierError');
+    const joinSupplierSubmitBtn = document.getElementById('joinSupplierSubmitBtn');
+
+    function showJoinSupplierError(message) {
+      joinSupplierError.textContent = message;
+      joinSupplierError.style.display = 'block';
+    }
+
+    document.getElementById('joinSupplierForm').addEventListener('submit', async e => {
       e.preventDefault();
-      document.querySelector('main .section .container').innerHTML = `
-        <div class="empty-state">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#4F7A66" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
-          <h2 style="color:#16241F">تم استلام طلب الانضمام 🎉</h2>
-          <p>راح يتواصل معك فريقنا قريباً لمراجعة عينة من منتجاتك وترتيب خطوات الانضمام.</p>
-        </div>`;
+      joinSupplierError.style.display = 'none';
+
+      const token = localStorage.getItem('rahalToken');
+      if (!token) {
+        showJoinSupplierError('لازم تسجّلي حساب أو تدخلي أول — سنحوّلك لصفحة التسجيل.');
+        setTimeout(() => { location.href = 'register.html'; }, 1500);
+        return;
+      }
+
+      const phoneCode = document.getElementById('joinSupplierCountryCode').value;
+      const phoneLocal = document.getElementById('joinSupplierPhoneInput').value.trim().replace(/^0+/, '');
+      const payload = {
+        shopName: document.getElementById('shopNameInput').value.trim(),
+        contactName: document.getElementById('contactNameInput').value.trim(),
+        phone: phoneCode + phoneLocal,
+        categoryId: joinCategorySelect.value,
+        city: document.getElementById('joinSupplierCity').value.trim(),
+        notes: document.getElementById('joinSupplierNotes').value.trim() || undefined,
+        agreementAccepted: document.getElementById('joinSupplierAgree').checked,
+      };
+
+      if (!payload.agreementAccepted) {
+        showJoinSupplierError('لازم توافقي على اتفاقية الانضمام أولاً');
+        return;
+      }
+
+      joinSupplierSubmitBtn.disabled = true;
+      joinSupplierSubmitBtn.textContent = 'جاري الإرسال...';
+      try {
+        const res = await fetch(`${API_URL}/applications/supplier`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          if (res.status === 401) {
+            showJoinSupplierError('انتهت صلاحية جلستك — سجّلي دخول من جديد.');
+            setTimeout(() => { location.href = 'register.html'; }, 1500);
+            return;
+          }
+          throw new Error(Array.isArray(data.message) ? data.message[0] : (data.message || 'تعذّر إرسال الطلب'));
+        }
+
+        document.querySelector('main .section .container').innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4F7A66" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+            <h2 style="color:#16241F">تم استلام طلب الانضمام 🎉</h2>
+            <p>راح يراجع فريقنا طلبك قريباً — تقدرين تتابعين حالته من صفحة حسابك.</p>
+          </div>`;
+      } catch (err) {
+        showJoinSupplierError(err.message || 'تعذّر الاتصال بالخادم');
+      } finally {
+        joinSupplierSubmitBtn.disabled = false;
+        joinSupplierSubmitBtn.textContent = 'أرسل طلب الانضمام';
+      }
     });
   </script>
   </main>
@@ -140,6 +212,7 @@
         <a href="trips.html" data-i18n="footer.trips">الحقيبة الجاهزة</a>
         <a href="sell-back.html" data-i18n="footer.sellback">بيع حقيبتك</a>
         <a href="join-supplier.html" data-i18n="footer.joinSupplier">انضم كمورد</a>
+        <a href="join-partner.html" data-i18n="footer.joinPartner">انضم كشريك نشاط</a>
       </div>
       <div>
         <h4 data-i18n="footer.accountHeading">حسابي</h4>

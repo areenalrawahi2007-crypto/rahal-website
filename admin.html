@@ -24,6 +24,7 @@
         <a href="refill.html" data-nav="refill" data-i18n="nav.refill">إعادة التجهيز</a>
         <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
         <a href="join-supplier.html" data-nav="joinsupplier" data-i18n="nav.joinSupplier">انضم كمورد</a>
+        <a href="join-partner.html" data-nav="joinpartner" data-i18n="nav.joinPartner">انضم كشريك نشاط</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
@@ -60,6 +61,7 @@
       <a href="refill.html" data-i18n="nav.refill">إعادة التجهيز</a>
       <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
       <a href="join-supplier.html" data-i18n="nav.joinSupplier">انضم كمورد</a>
+      <a href="join-partner.html" data-i18n="nav.joinPartner">انضم كشريك نشاط</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
@@ -124,6 +126,17 @@
       </div>
 
       <div class="dash-stats" id="dashStats" style="margin-top:40px"></div>
+
+      <!-- تنبيهات تراخيص شركاء الأنشطة -->
+      <div id="licenseAlertsBox" style="display:none;margin-top:32px"></div>
+
+      <!-- طلبات الانضمام -->
+      <div class="section-head" style="text-align:right;margin:40px 0 16px">
+        <div class="eyebrow">مراجعة الطلبات</div>
+        <h2>طلبات الانضمام (<span id="applicationsCount">0</span> قيد المراجعة)</h2>
+      </div>
+      <div id="supplierApplicationsList"></div>
+      <div id="partnerApplicationsList" style="margin-top:14px"></div>
 
       <!-- المنتجات -->
       <div class="section-head" style="text-align:right;margin:40px 0 16px;display:flex;align-items:center;justify-content:space-between">
@@ -467,6 +480,147 @@
       `).join('');
     }
 
+    // ---- طلبات الانضمام (موردين + شركاء أنشطة مرخّصة) ----
+    // نصوص هالقسم (اسم المتجر، الملاحظات...) يكتبها أي عميل مسجّل عبر نموذج عام بالموقع — لازم تُهرَّب
+    // قبل الحقن بـinnerHTML، لأنها تُعرض داخل جلسة الأدمن (تحمل مفتاح الإدارة بـsessionStorage).
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+      })[ch]);
+    }
+
+    const ACTIVITY_LABELS = {
+      'diving': 'غوص', 'mountain-guide': 'إرشاد جبلي', 'tours': 'جولات سياحية',
+      'camping-guide': 'إرشاد تخييم/رحلات برية', 'other': 'أخرى',
+    };
+    const STATUS_LABELS = {
+      PENDING: '<span style="color:#a8710f">قيد المراجعة</span>',
+      APPROVED: '<span style="color:#2f6b4f">مقبول</span>',
+      REJECTED: '<span style="color:var(--rust)">مرفوض</span>',
+    };
+
+    async function loadApplications() {
+      const res = await adminFetch('/admin/applications?status=PENDING');
+      if (!res.ok) return;
+      const data = await res.json();
+      document.getElementById('applicationsCount').textContent =
+        data.supplierApplications.length + data.partnerApplications.length;
+      renderSupplierApplications(data.supplierApplications);
+      renderPartnerApplications(data.partnerApplications);
+    }
+
+    function renderSupplierApplications(list) {
+      const box = document.getElementById('supplierApplicationsList');
+      if (!list.length) { box.innerHTML = ''; return; }
+      box.innerHTML = list.map(a => `
+        <div class="card-surface" style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <h4 style="margin:0">🏪 ${escapeHtml(a.shopName)} <span style="font-size:12px;font-weight:400;color:#8b9188">— طلب مورد</span></h4>
+            ${STATUS_LABELS[a.status] || a.status}
+          </div>
+          <div class="summary-row"><span>المسؤول: ${escapeHtml(a.contactName)} · ${escapeHtml(a.phone)}</span></div>
+          <div class="summary-row"><span>التصنيف: ${escapeHtml(categoryName(a.categoryId))} · المدينة: ${escapeHtml(a.city)}</span></div>
+          ${a.notes ? `<div class="summary-row"><span>ملاحظات: ${escapeHtml(a.notes)}</span></div>` : ''}
+          <div class="summary-row"><span style="font-size:12px;color:#8b9188">تاريخ الطلب: ${new Date(a.createdAt).toLocaleDateString('ar')}</span></div>
+          <div style="display:flex;gap:10px;margin-top:12px">
+            <button class="btn btn-primary btn-sm" onclick="approveSupplierApp('${a.id}')">✅ قبول</button>
+            <button class="btn btn-ghost btn-sm" onclick="rejectSupplierApp('${a.id}')" style="color:var(--rust)">رفض</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderPartnerApplications(list) {
+      const box = document.getElementById('partnerApplicationsList');
+      if (!list.length) { box.innerHTML = ''; return; }
+      box.innerHTML = list.map(a => {
+        const aiBox = a.aiProcessedAt
+          ? (a.aiError
+              ? `<div class="summary-row"><span style="color:var(--rust)">⚠️ فشل فحص الذكاء الاصطناعي: ${escapeHtml(a.aiError)}</span></div>`
+              : `<div class="summary-row"><span>🤖 ملخص الذكاء الاصطناعي: ${escapeHtml(a.aiSummary) || '—'}</span></div>` +
+                (a.aiFlags && a.aiFlags.length ? `<div class="summary-row"><span style="color:#a8710f">⚠️ ملاحظات: ${a.aiFlags.map(escapeHtml).join(' · ')}</span></div>` : ''))
+          : `<div class="summary-row"><span style="color:#8b9188">فحص الذكاء الاصطناعي لم يكتمل بعد</span></div>`;
+        const docBtn = a.documents && a.documents.length
+          ? `<button class="btn btn-outline btn-sm" onclick="viewPartnerDocument('${a.documents[0].id}')">📄 معاينة مستند الترخيص</button>`
+          : '';
+        return `
+        <div class="card-surface" style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <h4 style="margin:0">🧭 ${escapeHtml(a.businessName)} <span style="font-size:12px;font-weight:400;color:#8b9188">— طلب شريك نشاط (${escapeHtml(ACTIVITY_LABELS[a.activityCategory] || a.activityCategory)})</span></h4>
+            ${STATUS_LABELS[a.status] || a.status}
+          </div>
+          <div class="summary-row"><span>المسؤول: ${escapeHtml(a.contactName)} · ${escapeHtml(a.phone)}</span></div>
+          ${a.licenseNumberInput ? `<div class="summary-row"><span>رقم الترخيص: ${escapeHtml(a.licenseNumberInput)}${a.licenseExpiryInput ? ' · ينتهي: ' + new Date(a.licenseExpiryInput).toLocaleDateString('ar') : ''}</span></div>` : ''}
+          ${a.notes ? `<div class="summary-row"><span>ملاحظات: ${escapeHtml(a.notes)}</span></div>` : ''}
+          ${aiBox}
+          <div class="summary-row"><span style="font-size:12px;color:#8b9188">تاريخ الطلب: ${new Date(a.createdAt).toLocaleDateString('ar')}</span></div>
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+            ${docBtn}
+            <button class="btn btn-primary btn-sm" onclick="approvePartnerApp('${a.id}')">✅ قبول</button>
+            <button class="btn btn-ghost btn-sm" onclick="rejectPartnerApp('${a.id}')" style="color:var(--rust)">رفض</button>
+          </div>
+        </div>
+      `;
+      }).join('');
+    }
+
+    async function approveSupplierApp(id) {
+      const reviewNote = prompt('ملاحظة مراجعة (اختياري):') || undefined;
+      const res = await adminFetch(`/admin/applications/supplier/${id}/approve`, { method: 'POST', body: JSON.stringify({ reviewNote }) });
+      if (!res.ok) { alert('تعذّر قبول الطلب'); return; }
+      await loadApplications();
+      await loadState();
+    }
+
+    async function rejectSupplierApp(id) {
+      const reviewNote = prompt('سبب الرفض (اختياري):') || undefined;
+      const res = await adminFetch(`/admin/applications/supplier/${id}/reject`, { method: 'POST', body: JSON.stringify({ reviewNote }) });
+      if (!res.ok) { alert('تعذّر رفض الطلب'); return; }
+      await loadApplications();
+    }
+
+    async function approvePartnerApp(id) {
+      const reviewNote = prompt('ملاحظة مراجعة (اختياري):') || undefined;
+      const res = await adminFetch(`/admin/applications/partner/${id}/approve`, { method: 'POST', body: JSON.stringify({ reviewNote }) });
+      if (!res.ok) { alert('تعذّر قبول الطلب'); return; }
+      await loadApplications();
+      await loadState();
+      await loadLicenseAlerts();
+    }
+
+    async function rejectPartnerApp(id) {
+      const reviewNote = prompt('سبب الرفض (اختياري):') || undefined;
+      const res = await adminFetch(`/admin/applications/partner/${id}/reject`, { method: 'POST', body: JSON.stringify({ reviewNote }) });
+      if (!res.ok) { alert('تعذّر رفض الطلب'); return; }
+      await loadApplications();
+    }
+
+    async function viewPartnerDocument(documentId) {
+      const res = await adminFetch(`/admin/applications/documents/${documentId}/url`);
+      if (!res.ok) { alert('تعذّر جلب رابط المستند'); return; }
+      const data = await res.json();
+      window.open(data.url, '_blank');
+    }
+
+    // تنبيهات تراخيص شركاء الأنشطة — قريبة الانتهاء أو مُعلّقة فعلياً (بجانب الفحص اليومي التلقائي بالخادم)
+    async function loadLicenseAlerts() {
+      const res = await adminFetch('/admin/applications/license-alerts');
+      if (!res.ok) return;
+      const data = await res.json();
+      const box = document.getElementById('licenseAlertsBox');
+      const rows = [
+        ...data.expiringSoon.map(s => `<div class="summary-row"><span style="color:#a8710f">⏳ "${escapeHtml(s.name)}" — ترخيصه ينتهي ${new Date(s.licenseExpiry).toLocaleDateString('ar')}</span></div>`),
+        ...data.suspended.map(s => `<div class="summary-row"><span style="color:var(--rust)">⛔ "${escapeHtml(s.name)}" — مُعلّق تلقائياً (ترخيص منتهي)</span></div>`),
+      ];
+      if (!rows.length) { box.style.display = 'none'; return; }
+      box.style.display = 'block';
+      box.innerHTML = `
+        <div class="card-surface" style="border-color:rgba(217,164,65,.4)">
+          <h3 style="margin:0 0 8px">⚠️ تنبيهات تراخيص شركاء الأنشطة</h3>
+          ${rows.join('')}
+        </div>`;
+    }
+
     // ---- نموذج المنتج ----
     const productForm = document.getElementById('productForm');
     document.getElementById('addProductBtn').addEventListener('click', () => {
@@ -767,6 +921,8 @@
 
     function initDashboard() {
       loadState();
+      loadApplications();
+      loadLicenseAlerts();
       refreshWaStatus();
       refreshOtpStats();
       setInterval(refreshWaStatus, 4000);

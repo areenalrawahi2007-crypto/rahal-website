@@ -24,6 +24,7 @@
         <a href="refill.html" data-nav="refill" data-i18n="nav.refill">إعادة التجهيز</a>
         <a href="sell-back.html" data-nav="sellback" data-i18n="nav.sellback">بيع حقيبتك</a>
         <a href="join-supplier.html" data-nav="joinsupplier" data-i18n="nav.joinSupplier">انضم كمورد</a>
+        <a href="join-partner.html" data-nav="joinpartner" data-i18n="nav.joinPartner">انضم كشريك نشاط</a>
         <a href="contact.html" data-nav="contact" data-i18n="nav.contact">تواصل معنا</a>
         <a href="admin.html" data-nav="admin" data-i18n="nav.admin">لوحة الإدارة</a>
       </nav>
@@ -60,6 +61,7 @@
       <a href="refill.html" data-i18n="nav.refill">إعادة التجهيز</a>
       <a href="sell-back.html" data-i18n="nav.sellback">بيع حقيبتك</a>
       <a href="join-supplier.html" data-i18n="nav.joinSupplier">انضم كمورد</a>
+      <a href="join-partner.html" data-i18n="nav.joinPartner">انضم كشريك نشاط</a>
       <a href="contact.html" data-i18n="nav.contact">تواصل معنا</a>
       <a href="admin.html" data-i18n="nav.admin">لوحة الإدارة</a>
       <a href="register.html" data-i18n="nav.registerLogin">تسجيل / دخول</a>
@@ -170,6 +172,32 @@
       }, 0);
     }
 
+    // شارة "مفحوص من رحّال" تظهر بس لو كل عناصر الحقيبة من موردين معتمدين فعلياً (supplier.verified)
+    // — مو ثابتة على كل الحقائب، عشان ما نعرض شارة اعتماد لمنتج ما اجتاز مراجعة حقيقية.
+    function findSupplier(supplierId) {
+      const suppliers = typeof SUPPLIERS !== 'undefined' ? SUPPLIERS : [];
+      return suppliers.find(s => s.id === supplierId);
+    }
+
+    function tripIsVerified(trip) {
+      if (!trip.items || !trip.items.length) return false;
+      return trip.items.every(item => {
+        const p = findProduct(item.id);
+        if (!p || !p.supplier) return false;
+        const supplier = findSupplier(p.supplier);
+        return !!(supplier && supplier.verified);
+      });
+    }
+
+    // سطر المورد أسفل كل غرض بالحقيبة — الاسم الحقيقي من SUPPLIERS (لا نعرض معرّف داخلي كـ"s1")،
+    // والعلامة ✅ تظهر بس لو المورد معتمد فعلياً.
+    function supplierLineHtml(p) {
+      const supplier = p.supplier ? findSupplier(p.supplier) : null;
+      const name = supplier ? supplier.name : 'مورد رحّال';
+      const mark = supplier && supplier.verified ? '✅ ' : '';
+      return `<div class="supplier-line">${mark}${name} · آخر فحص جودة: ${p.qcDate || '—'}</div>`;
+    }
+
     function renderFilters() {
       document.getElementById('categoryChips').innerHTML =
         `<button class="chip${!activeCategory ? ' active' : ''}" data-category="" data-i18n="section.all">الكل</button>` +
@@ -197,7 +225,7 @@
           meta.condition === 'مستعمل' ? '🔁 مستعملة' : '🆕 جديدة',
         ].filter(Boolean).join(' · ');
         const badges = [
-          '<span class="trip-badge trip-badge-verified">✅ مفحوص من رحّال</span>',
+          tripIsVerified(trip) ? '<span class="trip-badge trip-badge-verified">✅ مفحوص من رحّال</span>' : '',
           meta.condition === 'مستعمل' ? '<span class="trip-badge trip-badge-used">🔁 مُعادة بيع — نُظّفت وفُحصت بالكامل</span>' : '',
         ].filter(Boolean).join('');
         const ratingLine = trip.rating ? `<div class="rating-line">⭐ ${trip.rating} <span>(${trip.reviewCount} تقييم موثّق)</span></div>` : '';
@@ -285,7 +313,7 @@
           <div class="info">
             <h4>${p.name}</h4>
             <div class="unit-price">${p.price} ر.ع / ${p.unit}</div>
-            <div class="supplier-line">✅ ${p.supplier || 'مورد مفحوص'} · آخر فحص جودة: ${p.qcDate || '—'}</div>
+            ${supplierLineHtml(p)}
           </div>
           <button class="btn btn-outline btn-sm js-add-extra" data-i18n="trips.addExtra">+ إضافة</button>
         </div>`).join('');
@@ -367,7 +395,7 @@
             <div class="info">
               <h4>${p.name}</h4>
               <div class="unit-price">${p.price} ر.ع / ${p.unit}</div>
-              <div class="supplier-line">✅ ${p.supplier || 'مورد مفحوص'} · آخر فحص جودة: ${p.qcDate || '—'}</div>
+              ${supplierLineHtml(p)}
             </div>
             <div class="qty-control">
               <button class="qty-minus">−</button>
@@ -436,6 +464,7 @@
         <a href="trips.html" data-i18n="footer.trips">الحقيبة الجاهزة</a>
         <a href="sell-back.html" data-i18n="footer.sellback">بيع حقيبتك</a>
         <a href="join-supplier.html" data-i18n="footer.joinSupplier">انضم كمورد</a>
+        <a href="join-partner.html" data-i18n="footer.joinPartner">انضم كشريك نشاط</a>
       </div>
       <div>
         <h4 data-i18n="footer.accountHeading">حسابي</h4>
